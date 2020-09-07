@@ -1,0 +1,27 @@
+{
+  "name": "gics-3d",
+  "version": "1.0.0",
+  "description": "Extension of GICS for 3D declarative drawing",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node app/gics3d.js",
+    "test": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jorr/gics-3D.git"
+  },
+  "author": "Joro Penchev",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jorr/gics-3D/issues"
+  },
+  "homepage": "https://github.com/jorr/gics-3D#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "chevrotain": "^7.0.1",
+    "express": "^4.17.1",
+    "serve-favicon": "^2.5.0"
+  }
+}

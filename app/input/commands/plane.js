@@ -14,6 +14,7 @@ export default class PlaneCommand extends Command {
   }
 
   check(params, pattern) {
+    console.log('plane check')
     //throw if incorrect params supplied or pattern is required but not supplied
     if (!pattern) {
       throw new MissingPatternException(this);
@@ -21,6 +22,7 @@ export default class PlaneCommand extends Command {
   }
 
   createItem(params) {
+    console.log('plane item')
     this.item = new Plane(params);
   }
 

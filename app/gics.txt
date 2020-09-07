@@ -1,1 +1,1 @@
-plane(test, test2)
+plane(test, test2) -> p

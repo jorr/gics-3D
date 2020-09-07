@@ -3,6 +3,7 @@ const { createToken, Lexer, EmbeddedActionsParser } = chevrotain;
 
 import * as fs from 'fs';
 import * as path from 'path';
+import { chooseLiteralConstructor } from './command.js';
 
 /****************** COMMANDS ******************/
 
@@ -19,14 +20,14 @@ for (let file of files) {
 
 /****************** LEXER ******************/
 
-const COMMAND = createToken({
-  name: 'COMMAND',
-  pattern: RegExp(`${Object.keys(commands).join('|')}`,'i'),
-  longer_alt: 'IDENTIFIER'
-});
 const IDENTIFIER = createToken({
   name: 'IDENTIFIER',
   pattern: /[a-zA-z0-9]+(\.[a-zA-z0-9]+)?/
+});
+const COMMAND = createToken({
+  name: 'COMMAND',
+  pattern: RegExp(`${Object.keys(commands).join('|')}`,'i'),
+  longer_alt: IDENTIFIER
 });
 const LPAREN = createToken({ name: 'LPAREN', pattern: /\(/ });
 const RPAREN = createToken({ name: 'RPAREN', pattern: /\)/ });
@@ -58,32 +59,47 @@ export class GicsParser extends EmbeddedActionsParser {
     $.RULE('PROGRAM', () => {
       $.MANY(() => {
         $.SUBRULE($.STATEMENT);
-        $.CONSUME(SEPARATOR);
+        $.CONSUME(SEPARATOR, {
+          ERR_MSG: 'New line or semicolon must separate statements in the input'
+        });
       });
     })
 
     $.RULE('STATEMENT', () => {
       let command, params, pattern;
 
-      ({ command, params } = $.SUBRULE($.COMMAND));
-      $.CONSUME(TO);
+      ({ command, params } = $.SUBRULE($.COMMANDINVOCATION));
+
       $.OPTION(() => {
+        $.CONSUME(TO, {
+          ERR_MSG: 'Missing -> at pattern definition'
+        });
         pattern = $.SUBRULE($.PATTERN);
       });
 
-      //TODO: try/catch?
-      commands[command].execute(params, pattern);
+      $.ACTION(() => {
+        try {
+          commands[command].execute(params, pattern);
+        }
+        catch (e) {
+          //TODO: Global error handling
+          console.log(`Command syntax error: ${e.message}`);
+        }
+      });
     });
 
-    $.RULE('COMMAND', () => {
-      let command, params = [];
+    $.RULE('COMMANDINVOCATION', () => {
+      let command = $.CONSUME(COMMAND).image,
+          params = [];
 
-      command = $.CONSUME(COMMAND).image;
       $.CONSUME(LPAREN);
       $.MANY_SEP({
         SEP: COMMA,
         DEF: () => {
-          params.push($.SUBRULE($.EXPRESSION))
+          let expression = $.SUBRULE($.EXPRESSION);
+          $.ACTION(() => {
+            params.push(expression);
+          });
         }
       });
       $.CONSUME(RPAREN);
@@ -92,7 +108,7 @@ export class GicsParser extends EmbeddedActionsParser {
     });
 
     $.RULE('PATTERN', () => {
-      let suppress, name, elements = [];
+      let suppress, name, pattern, elements = [];
 
       $.OPTION(() => {
         suppress = $.CONSUME(SUPPRESS);
@@ -106,12 +122,15 @@ export class GicsParser extends EmbeddedActionsParser {
           name = null;
         }},
       ]);
-      $.OPTION(() => {
+      $.OPTION2(() => {
         $.CONSUME(LBRAC);
         $.MANY_SEP({
           SEP: COMMA,
           DEF: () => {
-            elements.push($.SUBRULE($.PATTERN))
+            pattern = $.SUBRULE($.PATTERN);
+            $.ACTION(() => {
+              elements.push(pattern);
+            });
           }
         });
         $.CONSUME(RBRAC);
@@ -128,7 +147,10 @@ export class GicsParser extends EmbeddedActionsParser {
           $.MANY_SEP({
             SEP: COMMA,
             DEF: () => {
-              params.push($.SUBRULE($.EXPRESSION))
+              let param = $.SUBRULE($.EXPRESSION);
+              $.ACTION(() => {
+                params.push(param);
+              });
             }
           });
           $.CONSUME(RBRAC);
@@ -136,8 +158,7 @@ export class GicsParser extends EmbeddedActionsParser {
           return chooseLiteralConstructor(params);
         } },
         { ALT: () => $.CONSUME(IDENTIFIER) },
-        { ALT: () => $.SUBRULE($.COMMAND) },
-        { ALT: () => $.SUBRULE($.EXPRESSION) },
+        { ALT: () => $.SUBRULE($.COMMANDINVOCATION) }
       ]);
     });
 

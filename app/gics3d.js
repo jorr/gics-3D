@@ -11,7 +11,7 @@ const lexingResult = gicsLexer.tokenize(inputText);
 gicsParser.input = lexingResult.tokens;
 
 //TODO: Change everything to proper logging, add verbose option
-console.log('-----PARSING gics.txt-------');
+console.log('-----PARSING-------');
 gicsParser.PROGRAM();
 if (gicsParser.errors.length > 0) {
   console.log(inspect(gicsParser.errors, false, null));

@@ -58,7 +58,6 @@ export class Scene{
       values().
       flatten().
       value();
-    console.log(projectedElements);
     outputOption.render(projectedElements, this.screen);
   }
 

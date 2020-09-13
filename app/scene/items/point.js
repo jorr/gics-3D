@@ -26,7 +26,6 @@ export class Point extends Item {
 
    project(camera, screen, volume, projection, label) {
     let projected = projection.projectPoint(this, camera, screen, volume);
-    console.log(projected);
     projected.label = label;
     return projected;
    }

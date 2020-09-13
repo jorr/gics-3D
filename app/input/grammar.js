@@ -1,8 +1,8 @@
 import chevrotain from 'chevrotain';
-const { createToken, Lexer, EmbeddedActionsParser } = chevrotain;
+const { createToken, tokenMatcher, Lexer, EmbeddedActionsParser } = chevrotain;
 
-import * as fs from 'fs';
-import * as path from 'path';
+import fs from 'fs';
+import path from 'path';
 import { literalConstruct, resolveIdentifier, convertAngle } from './command.js';
 import { GicsError } from '../errors.js';
 
@@ -37,16 +37,21 @@ const COMMA = createToken({ name: 'COMMA', pattern: /,/ });
 const LBRAC = createToken({ name: 'LBRAC', pattern: /\[/ });
 const RBRAC = createToken({ name: 'RBRAC', pattern: /\]/ });
 const TO = createToken({ name: 'TO', pattern: /->/ });
-const SUPPRESS = createToken({ name: 'SUPPRESS', pattern: /-/ });
 const ANON = createToken({ name: 'ANON', pattern: /\./ });
 const ANGLE = createToken({ name: 'ANGLE', pattern: /(r:|d:|g:)([0-9]+)/ });
 const SEPARATOR = createToken({ name: 'SEPARATOR', pattern: /;/ });
 const WHITESPACE = createToken({ name: 'WHITESPACE', pattern: /\s+/, group: Lexer.SKIPPED });
+const ADDOP = createToken({ name: 'ADDOP', pattern: Lexer.NA });
+const PLUS = createToken({ name: 'PLUS', pattern: /\+/, categories: ADDOP });
+const MINUS = createToken({ name: 'MINUS', pattern: /-/, categories: ADDOP });
+const MULTOP = createToken({ name: 'MULTOP', pattern: Lexer.NA });
+const MULT = createToken({ name: 'MULT', pattern: /\*/, categories: MULTOP });
+const DIV = createToken({ name: 'DIV', pattern: /\//, categories: MULTOP });
 
 const tokens = [
-  WHITESPACE, NUMBER, COMMAND, LPAREN, RPAREN, COMMA,
-  RBRAC, LBRAC, IDENTIFIER, TO, ANON,
-  SUPPRESS, ANGLE, SEPARATOR
+  WHITESPACE, MULT, DIV, NUMBER, COMMAND, LPAREN, RPAREN, COMMA,
+  RBRAC, LBRAC, IDENTIFIER, TO, ANON, PLUS, MINUS,
+  ANGLE, SEPARATOR, MULTOP, ADDOP
 ];
 
 export const gicsLexer = new Lexer(tokens);
@@ -116,7 +121,7 @@ export class GicsParser extends EmbeddedActionsParser {
       let suppress = false, name, elements = [];
 
       $.OPTION(() => {
-        suppress = !!$.CONSUME(SUPPRESS);
+        suppress = !!$.CONSUME(MINUS);
       })
       $.OR([
         { ALT: () => {
@@ -162,18 +167,72 @@ export class GicsParser extends EmbeddedActionsParser {
 
           return $.ACTION(() => literalConstruct(params));
         } },
+        // { ALT: () => {
+        //   let identifier = $.CONSUME(IDENTIFIER).image;
+        //   return $.ACTION(() => resolveIdentifier(identifier));
+        // } },
+        // { ALT: () => {
+        //   let number = $.CONSUME(NUMBER).image;
+        //   return $.ACTION(() => parseFloat(number));
+        // } },
+        { ALT: () => convertAngle($.CONSUME(ANGLE).image) },
+        { ALT: () => $.SUBRULE($.ARITHMEXPRESSION) },
+        { ALT: () => $.SUBRULE($.COMMANDINVOCATION) }
+      ]);
+    });
+
+    $.RULE('ARITHMEXPRESSION', () => {
+      let value, op, rhs;
+      value = $.SUBRULE($.MULTIPLICATION);
+      $.MANY(() => {
+        op = $.CONSUME(ADDOP);
+        rhs = $.SUBRULE2($.MULTIPLICATION);
+        if (tokenMatcher(op, PLUS)) {
+          value += rhs;
+        } else {
+          value -= rhs;
+        }
+      });
+      return value;
+    });
+
+    $.RULE('MULTIPLICATION', () => {
+      let value, op, rhs;
+      value = $.SUBRULE($.ATOMIC);
+      $.MANY(() => {
+        op = $.CONSUME(MULTOP);
+        rhs = $.SUBRULE2($.ATOMIC);
+        if (tokenMatcher(op, MULT)) {
+          value *= rhs;
+        } else {
+          value /= rhs;
+        }
+      });
+      return value;
+    });
+
+    $.RULE('ATOMIC', () => {
+      return $.OR([
+        { ALT: () => {
+          let expression;
+          $.CONSUME(LPAREN);
+          expression = $.SUBRULE($.ARITHMEXPRESSION);
+          $.CONSUME(RPAREN);
+          return expression;
+        } },
         { ALT: () => {
           let identifier = $.CONSUME(IDENTIFIER).image;
           return $.ACTION(() => resolveIdentifier(identifier));
         } },
         { ALT: () => {
-          let number = $.CONSUME(NUMBER).image;
-          return $.ACTION(() => parseFloat(number));
-        } },
-        { ALT: () => convertAngle($.CONSUME(ANGLE).image) },
-        // TODO: arithmetics
-        { ALT: () => $.SUBRULE($.COMMANDINVOCATION) }
-      ]);
+          let sign = 1;
+          $.OPTION(() => {
+            $.CONSUME(MINUS);
+            sign = -1;
+          });
+          return sign * parseFloat($.CONSUME(NUMBER).image);
+        } }
+      ])
     });
 
     this.performSelfAnalysis();

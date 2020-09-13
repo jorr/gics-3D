@@ -2,7 +2,7 @@ import path from 'path';
 import fs from 'fs';
 
 export class Item {
-  project(camera, screen, volume, label) {}
+  project(camera, screen, volume, projection, label) {}
 };
 
 export class Vector {
@@ -32,6 +32,29 @@ export class Vector {
     });
    }
 };
+
+export class Matrix {
+  /**
+   * Matrix type definition
+   * @property {number[][]} matrix
+   */
+  matrix;
+
+  multiplyBy(m) {
+    let result = new Array(this.matrix.length).fill(0).map(row => new Array(m[0].length).fill(0));
+
+    return result.map((row, i) => {
+        return row.map((val, j) => {
+            return this.matrix[i].reduce((sum, elm, k) => sum + (elm*m[k][j]) ,0)
+        })
+    })
+  }
+
+  inverse() {
+    return matrix;
+    //TODO: inverse
+  }
+}
 
 class Element2D {
   label;

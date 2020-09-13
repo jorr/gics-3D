@@ -18,3 +18,10 @@ export function midpoint(p1, p2) {
     z: (p1.z + p2.z) / 2
   };
 }
+
+export function pointInVolume(p, v) {
+  console.log("point ",p);
+  return Math.abs(p.x) <= v.w/2 &&
+    Math.abs(p.y) <= v.h/2 &&
+    Math.abs(p.z) <= v.d/2;
+}

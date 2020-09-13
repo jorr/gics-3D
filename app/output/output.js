@@ -7,8 +7,7 @@ export class OutputOption {
     for (let element of elements) {
       if (element instanceof Point2D) this.renderPoint(element);
       else if (element instanceof Segment2D) this.renderSegment(element);
-      else if (element instanceof Quad2D) this.renderQuad(element);
-      else if (element instanceof Tri2D) this.renderTri(element);
+      else if (element instanceof Polygon2D) this.renderPoly(element);
       else if (element instanceof Ellipse2D) this.renderEllipse(element);
     }
     this.flushOutput();

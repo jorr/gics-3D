@@ -1,8 +1,8 @@
 import _ from 'lodash';
 import { Vector } from './item.js';
+import { CabinetProjection } from './projections.js';
 
 export class Scene{
-
   // switch to smarter storage
   items = {};
   anonIndex = 0;
@@ -16,9 +16,10 @@ export class Scene{
     d: 2000,
   };
   camera = new Vector(0,0,-1000);
+  projection = new CabinetProjection();
 
   addItem(item, name) {
-    //TODO: check if suppressing drawing makes sense in 3D
+    //TODO: check if suppressing drawing makes sense in 3D, implement as a flag
 
     console.log(`Adding ${item.constructor.name} to scene`);
     if (!name) {
@@ -47,10 +48,17 @@ export class Scene{
     this.camera.z = z;
   }
 
+  set projection(projection) {
+    this.projection = projection;
+  }
+
   draw(outputOption) {
-    let projectedElements = _.values(
-      _.mapValues(this.items, (item,name) => item.project(this.camera, this.screen, this.volume, name))
-    );
+    let projectedElements = _(this.items).
+      mapValues((item, name) => item.project(this.camera, this.screen, this.volume, this.projection, name)).
+      values().
+      flatten().
+      value();
+    console.log(projectedElements);
     outputOption.render(projectedElements, this.screen);
   }
 

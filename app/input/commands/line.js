@@ -4,8 +4,8 @@
 
 import { Command } from '../command.js';
 import { globalScene } from '../../scene/scene.js';
-import { Plane } from '../../scene/items/plane.js';
-import { MissingPatternException } from '../exceptions.js';
+import { Line } from '../../scene/items/line.js';
+import { MissingPatternError, WrongParamsError } from '../../errors.js';
 
 export default class LineCommand extends Command {
 
@@ -13,23 +13,24 @@ export default class LineCommand extends Command {
     return 'line';
   }
 
-  check(params, pattern) {
-    //throw if incorrect params supplied or pattern is required but not supplied
-    if (!pattern) {
-      throw new MissingPatternException(this);
-    }
+  requiresPattern() {
+    return true;
   }
 
   createItem(params) {
-    this.item = new Plane(params);
-  }
+    this.item = new Line(params);
+    // line(dst,slp[,plane]) - distance to the origin, slope of the line with respect to plane or 0xy
+    // line(<segment>) - a line coinciding with the segment
+    if (params.length === 1 && params[0] instanceof Segment) {
+      this.item = new Line(params[0].p1, params[0].p1.vectorTo(params[0].p2));
+    }
 
-  bind(pattern) {
-    //bind command results to storage identifiers
-  }
+    else {
+      throw new WrongParamsError(params, this);
+    }
 
-  draw() {
-    //draw unless suppressed
+    // line(<point>,<line|segment|plane>,off) - a line through the point, offset at angle off in regard to the second argument (use 0 for parallel, 90 for perpendicular)
+    // line(<plane>,<plane>) - a line that is the intersection of two planes
   }
 
 };

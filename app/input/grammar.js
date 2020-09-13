@@ -3,7 +3,8 @@ const { createToken, Lexer, EmbeddedActionsParser } = chevrotain;
 
 import * as fs from 'fs';
 import * as path from 'path';
-import { chooseLiteralConstructor } from './command.js';
+import { literalConstruct, resolveIdentifier, convertAngle } from './command.js';
+import { GicsError } from '../errors.js';
 
 /****************** COMMANDS ******************/
 
@@ -20,9 +21,10 @@ for (let file of files) {
 
 /****************** LEXER ******************/
 
+const NUMBER = createToken({ name: 'NUMBER', pattern: /\d+/});//(\.\d*)/});
 const IDENTIFIER = createToken({
   name: 'IDENTIFIER',
-  pattern: /[a-zA-z0-9]+(\.[a-zA-z0-9]+)?/
+  pattern: /[a-zA-Z]+[a-zA-Z\d]*(\.[a-zA-Z]+[a-zA-Z\d]*)?/
 });
 const COMMAND = createToken({
   name: 'COMMAND',
@@ -38,11 +40,11 @@ const TO = createToken({ name: 'TO', pattern: /->/ });
 const SUPPRESS = createToken({ name: 'SUPPRESS', pattern: /-/ });
 const ANON = createToken({ name: 'ANON', pattern: /\./ });
 const ANGLE = createToken({ name: 'ANGLE', pattern: /(r:|d:|g:)([0-9]+)/ });
-const SEPARATOR = createToken({ name: 'SEPARATOR', pattern: /;|\n/ });
+const SEPARATOR = createToken({ name: 'SEPARATOR', pattern: /;/ });
 const WHITESPACE = createToken({ name: 'WHITESPACE', pattern: /\s+/, group: Lexer.SKIPPED });
 
 const tokens = [
-  WHITESPACE, COMMAND, LPAREN, RPAREN, COMMA,
+  WHITESPACE, NUMBER, COMMAND, LPAREN, RPAREN, COMMA,
   RBRAC, LBRAC, IDENTIFIER, TO, ANON,
   SUPPRESS, ANGLE, SEPARATOR
 ];
@@ -52,16 +54,14 @@ export const gicsLexer = new Lexer(tokens);
 /****************** PARSER ******************/
 
 export class GicsParser extends EmbeddedActionsParser {
-  constructor(tokens) {
+  constructor() {
     super(tokens);
     const $ = this;
 
     $.RULE('PROGRAM', () => {
       $.MANY(() => {
         $.SUBRULE($.STATEMENT);
-        $.CONSUME(SEPARATOR, {
-          ERR_MSG: 'New line or semicolon must separate statements in the input'
-        });
+        $.OPTION(() => $.CONSUME(SEPARATOR));
       });
     })
 
@@ -80,10 +80,15 @@ export class GicsParser extends EmbeddedActionsParser {
       $.ACTION(() => {
         try {
           commands[command].execute(params, pattern);
+          //TODO: must take care of commands that return a result (or treat them as expressions)
         }
         catch (e) {
+          if (e instanceof GicsError) {
+            console.log(`PARSING ERROR: ${e.message}`);
+          } else {
+            throw e;
+          }
           //TODO: Global error handling
-          console.log(`Command syntax error: ${e.message}`);
         }
       });
     });
@@ -108,14 +113,14 @@ export class GicsParser extends EmbeddedActionsParser {
     });
 
     $.RULE('PATTERN', () => {
-      let suppress, name, pattern, elements = [];
+      let suppress = false, name, elements = [];
 
       $.OPTION(() => {
-        suppress = $.CONSUME(SUPPRESS);
+        suppress = !!$.CONSUME(SUPPRESS);
       })
       $.OR([
         { ALT: () => {
-          name = $.CONSUME(IDENTIFIER);
+          name = $.CONSUME(IDENTIFIER).image;
         }},
         { ALT: () => {
           $.CONSUME(ANON);
@@ -127,7 +132,7 @@ export class GicsParser extends EmbeddedActionsParser {
         $.MANY_SEP({
           SEP: COMMA,
           DEF: () => {
-            pattern = $.SUBRULE($.PATTERN);
+            let pattern = $.SUBRULE($.PATTERN);
             $.ACTION(() => {
               elements.push(pattern);
             });
@@ -140,7 +145,7 @@ export class GicsParser extends EmbeddedActionsParser {
     });
 
     $.RULE('EXPRESSION', () => {
-      $.OR([
+      return $.OR([
         { ALT: () => {
           let params = [];
           $.CONSUME(LBRAC);
@@ -155,9 +160,18 @@ export class GicsParser extends EmbeddedActionsParser {
           });
           $.CONSUME(RBRAC);
 
-          return chooseLiteralConstructor(params);
+          return $.ACTION(() => literalConstruct(params));
         } },
-        { ALT: () => $.CONSUME(IDENTIFIER) },
+        { ALT: () => {
+          let identifier = $.CONSUME(IDENTIFIER).image;
+          return $.ACTION(() => resolveIdentifier(identifier));
+        } },
+        { ALT: () => {
+          let number = $.CONSUME(NUMBER).image;
+          return $.ACTION(() => parseFloat(number));
+        } },
+        { ALT: () => convertAngle($.CONSUME(ANGLE).image) },
+        // TODO: arithmetics
         { ALT: () => $.SUBRULE($.COMMANDINVOCATION) }
       ]);
     });
@@ -166,7 +180,7 @@ export class GicsParser extends EmbeddedActionsParser {
   }
 }
 
-export const gicsParser = new GicsParser(tokens);
+export const gicsParser = new GicsParser();
 
 /*
 

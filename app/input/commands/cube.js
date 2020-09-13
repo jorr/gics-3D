@@ -4,8 +4,8 @@
 
 import { Command } from '../command.js';
 import { globalScene } from '../../scene/scene.js';
-import { Plane } from '../../scene/items/plane.js';
-import { MissingPatternException } from '../exceptions.js';
+import { Cube } from '../../scene/items/cube.js';
+import { MissingPatternError } from '../../errors.js';
 
 export default class CubeCommand extends Command {
 
@@ -13,23 +13,12 @@ export default class CubeCommand extends Command {
     return 'cube';
   }
 
-  check(params, pattern) {
-    //throw if incorrect params supplied or pattern is required but not supplied
-    if (!pattern) {
-      throw new MissingPatternException(this);
-    }
+  requiresPattern() {
+    return true;
   }
 
   createItem(params) {
-    this.item = new Plane(params);
-  }
-
-  bind(pattern) {
-    //bind command results to storage identifiers
-  }
-
-  draw() {
-    //draw unless suppressed
+    //TODO: this.item = new Cube(params);
   }
 
 };

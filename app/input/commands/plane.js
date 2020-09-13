@@ -5,7 +5,8 @@
 import { Command } from '../command.js';
 import { globalScene } from '../../scene/scene.js';
 import { Plane } from '../../scene/items/plane.js';
-import { MissingPatternException } from '../exceptions.js';
+import { Point } from '../../scene/items/point.js';
+import { MissingPatternError, WrongParamsError } from '../../errors.js';
 
 export default class PlaneCommand extends Command {
 
@@ -13,25 +14,22 @@ export default class PlaneCommand extends Command {
     return 'plane';
   }
 
-  check(params, pattern) {
-    console.log('plane check')
-    //throw if incorrect params supplied or pattern is required but not supplied
-    if (!pattern) {
-      throw new MissingPatternException(this);
-    }
+  requiresPattern() {
+    return true;
   }
 
   createItem(params) {
-    console.log('plane item')
-    this.item = new Plane(params);
+    let n, pt;
+
+    //plane(<point>, <segment>) - a plane through the point with the segment as normal vector
+    if (params[0] instanceof Point && params[1] instanceof Line) {
+      pt = params[0];
+      n = new Vector(params[1].p1, params[2].p2);
+      this.item = new Plane(pt, n);
+    }
+
+    throw new WrongParamsError(params, this);
   }
 
-  bind(pattern) {
-    //bind command results to storage identifiers
-  }
-
-  draw() {
-    //draw unless suppressed
-  }
 
 };

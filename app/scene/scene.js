@@ -1,22 +1,26 @@
 import _ from 'lodash';
-import { Item, Vector } from './item.js';
+import { Vector } from './item.js';
 
 export class Scene{
 
   // switch to smarter storage
   items = {};
   anonIndex = 0;
-  limts = {
+  screen = {
     w: 1000,
     h: 1000,
   };
-  camera = new Vector(0,0,-100);
+  volume = {
+    w: 2000,
+    h: 2000,
+    d: 2000,
+  };
+  camera = new Vector(0,0,-1000);
 
   addItem(item, name) {
     //TODO: check if suppressing drawing makes sense in 3D
 
-
-    console.log(`Adding ${item.constructor.name}`);
+    console.log(`Adding ${item.constructor.name} to scene`);
     if (!name) {
       name = `${anonIndex++}-obj`;
     }
@@ -35,12 +39,19 @@ export class Scene{
     return this.items[name];
   }
 
-  setLimits(w,h) {
-    this.limits = { w, h };
+  set screen({w,h}) {
+    this.screen = { w, h };
   }
 
-  setViewPoint(z) {
+  set viewPoint(z) {
     this.camera.z = z;
+  }
+
+  draw(outputOption) {
+    let projectedElements = _.values(
+      _.mapValues(this.items, (item,name) => item.project(this.camera, this.screen, this.volume, name))
+    );
+    outputOption.render(projectedElements, this.screen);
   }
 
 };

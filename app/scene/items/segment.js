@@ -1,4 +1,4 @@
-import { Item } from '../item.js';
+import { Item, Segment2D } from '../item.js';
 import { Point } from './point.js';
 import { dist } from '../util.js';
 
@@ -20,5 +20,13 @@ export class Segment extends Item {
 
    get len() {
     return dist(p2,p1);
+   }
+
+   project(camera, screen, volume, label) {
+      return Object.assign(new Segment2D,{
+        p1: this.p1,
+        p2: this.p2,
+        label
+      });
    }
 }

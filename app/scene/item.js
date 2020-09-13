@@ -1,4 +1,8 @@
+import path from 'path';
+import fs from 'fs';
+
 export class Item {
+  project(camera, screen, volume, label) {}
 };
 
 export class Vector {
@@ -28,3 +32,23 @@ export class Vector {
     });
    }
 };
+
+class Element2D {
+  label;
+}
+
+export class Point2D extends Element2D {
+  x; y;
+}
+
+export class Segment2D extends Element2D {
+  p1; p2;
+}
+
+export class Polygon2D extends Element2D {
+  points;
+}
+
+export class Ellipse2D extends Element2D {
+  c; rx; ry; rot;
+}

@@ -16,6 +16,8 @@ export class Cube extends Item {
     this.d2 = d2;
    }
 
+   /** INTERFACE */
+
    get cen() {
     return new Point(midpoint(this.d1, this.d2));
    }
@@ -25,4 +27,7 @@ export class Cube extends Item {
   // baseA - base closer to the origin
   // baseB - base farther to the origin
   // wallAB, wallAC.. - walls (squares)
+
+  /** DRAWING */
+  
 }

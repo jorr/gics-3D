@@ -1,5 +1,4 @@
-import { Item, Vector } from '../item.js';
-
+import { Item, Vector, Point2D } from '../item.js';
 
 export class Point extends Item {
     /**
@@ -23,5 +22,13 @@ export class Point extends Item {
       y: p.y - this.y,
       z: p.z - this.y
     });
+   }
+
+   project(camera, screen, volume, label) {
+      return Object.assign(new Point2D,{
+        x: this.x,
+        y: this.y,
+        label
+      });
    }
 }

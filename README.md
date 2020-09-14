@@ -2,14 +2,14 @@
 
 ## Installation
 
-Requires Node v12+ (tested with Node v14)
-Install, clone, run `npm install`
-Edit file `app/gics.txt` (for now)
+Requires Node v12+ (tested with Node v14)  
+Install, clone, run `npm install`  
+Edit file `app/gics.txt` (for now)  
 Run `npm start`
 
 ## Environment
 
-Vanilla JS client - for demo purposes
+Vanilla JS client - for demo purposes  
 Node.js server w/ Express; Single endpoint
 
 ## Modules

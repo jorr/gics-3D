@@ -1,11 +1,11 @@
 Basic plan for GICS-3D
 
-#Environment
+# Environment
 
 Vanilla JS client - for demo purposes
 Node.js server w/ Express; Single endpoint
 
-#Modules
+# Modules
 
 1. Input
 --1a. Server w/ API
@@ -23,9 +23,9 @@ Node.js server w/ Express; Single endpoint
 --3b. Projections
 --3c. Generate 2D output
 
-#Planning
+# Planning
 
-##MVP
+## MVP
 
 1. ~~Working pipeline: input, storage, output (SVG)~~
 2. Basic primitives: plane, ~~line, point, segment~~, cube, parallelogram, cone, cyllinder, sphere
@@ -36,7 +36,7 @@ Node.js server w/ Express; Single endpoint
 7. 2D primitives port
 8. Demo/Clientside
 
-##Nice to have
+## Nice to have
 
 1. Complete constructor options for all primitives
 2. Move camera
@@ -45,7 +45,7 @@ Node.js server w/ Express; Single endpoint
 5. Output - canvas
 6. Output - Gics2D
 
-##Text
+## Text
 
 1. Other solutions
 2. Motivation & choices

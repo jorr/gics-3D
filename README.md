@@ -8,9 +8,9 @@ Node.js server w/ Express; Single endpoint
 # Modules
 
 1. Input
-  1a. Server w/ API
-  1b. Parser
-  1c. Commands interpreter
+   1.1. Server w/ API
+   1.2. Parser
+   1.3. Commands interpreter
 
 2. Storage & Scene
 --2a. Data structure

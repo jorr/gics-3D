@@ -1,31 +1,38 @@
-Basic plan for GICS-3D
+# Extending GICS to 3D
 
-#Environment
+## Installation
 
-Vanilla JS client - for demo purposes
+Requires Node v12+ (tested with Node v14)  
+Install, clone, run `npm install`  
+Edit file `app/gics.txt` (for now)  
+Run `npm start`
+
+## Environment
+
+Vanilla JS client - for demo purposes  
 Node.js server w/ Express; Single endpoint
 
-#Modules
+## Modules
 
 1. Input
---1a. Server w/ API
---1b. Parser
---1c. Commands interpreter
+   1. Server w/ API
+   2. Parser
+   3. Commands interpreter
 
 2. Storage & Scene
---2a. Data structure
---2b. Recall
---2c. Camera & Canvas operations
---2d. Transformations
+   1. Data structure
+   2. Recall
+   3. Camera & Canvas operations
+   4. Transformations
 
 3. Output
---3a. Calculate visibility
---3b. Projections
---3c. Generate 2D output
+   1. Calculate visibility
+   2. Projections
+   3. Generate 2D output
 
-#Planning
+## Planning
 
-##MVP
+### MVP
 
 1. ~~Working pipeline: input, storage, output (SVG)~~
 2. Basic primitives: plane, ~~line, point, segment~~, cube, parallelogram, cone, cyllinder, sphere
@@ -36,7 +43,7 @@ Node.js server w/ Express; Single endpoint
 7. 2D primitives port
 8. Demo/Clientside
 
-##Nice to have
+### Nice to have
 
 1. Complete constructor options for all primitives
 2. Move camera
@@ -45,7 +52,7 @@ Node.js server w/ Express; Single endpoint
 5. Output - canvas
 6. Output - Gics2D
 
-##Text
+### Text
 
 1. Other solutions
 2. Motivation & choices

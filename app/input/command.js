@@ -2,6 +2,7 @@ import _ from 'lodash';
 
 import { globalScene } from '../scene/scene.js';
 import { Point } from '../scene/items/point.js';
+import { Segment } from '../scene/items/segment.js';
 import { SyntaxError } from '../errors.js';
 
 export class Command {
@@ -46,7 +47,7 @@ export function literalConstruct(params) {
   if (params.length === 2) {
     // two points => segment
     if (params.every(param => param instanceof Point)) {
-      return new Segment(params[0], params[2]);
+      return new Segment(params[0], params[1]);
     }
     // point and segment => line
     // two lines => plane

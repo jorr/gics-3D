@@ -18,7 +18,7 @@ export class CabinetProjection extends Projection {
     let px = p.x + this.shortening*p.z*Math.cos(this.angle),
         py = p.y + this.shortening*p.z*Math.sin(this.angle);
 
-    //TODO: do we need the lines below for SVG?
+    // TODO: do we need the lines below for SVG?
     // normalize px and py to [0,1]
     px = (px + 0.5*screen.w) / screen.w;
     py = (py + 0.5*screen.h) / screen.h;

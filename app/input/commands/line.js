@@ -5,6 +5,7 @@
 import { Command } from '../command.js';
 import { globalScene } from '../../scene/scene.js';
 import { Line } from '../../scene/items/line.js';
+import { Segment } from '../../scene/items/segment.js';
 import { MissingPatternError, WrongParamsError } from '../../errors.js';
 
 export default class LineCommand extends Command {
@@ -18,7 +19,6 @@ export default class LineCommand extends Command {
   }
 
   createItem(params) {
-    this.item = new Line(params);
     // line(dst,slp[,plane]) - distance to the origin, slope of the line with respect to plane or 0xy
     // line(<segment>) - a line coinciding with the segment
     if (params.length === 1 && params[0] instanceof Segment) {

@@ -1,3 +1,4 @@
-point(-100,200,300) -> p1
+point(0,200,300) -> p1
 point(200,200,100) -> p2
 segment(p1,p2) -> s
+line([p1,p2]) -> l

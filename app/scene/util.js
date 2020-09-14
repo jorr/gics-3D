@@ -22,5 +22,5 @@ export function midpoint(p1, p2) {
 export function pointInVolume(p, v) {
   return Math.abs(p.x) <= v.w/2 &&
     Math.abs(p.y) <= v.h/2 &&
-    Math.abs(p.z) <= v.d/2;
+    Math.abs(p.z) <= v.d;
 }

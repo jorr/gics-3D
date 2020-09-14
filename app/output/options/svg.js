@@ -9,15 +9,21 @@ export class SvgOutput extends OutputOption {
     stroke = 'black';
     strokeWidth = 1;
     labelOffset = {x: 2, y: -2};
+    width;
+    height;
 
-    constructor(fileName) {
+    //TODO: pass viewbox from the client
+    constructor(fileName, width = 750, height = 750) {
       super();
       this.fileName = fileName;
+      this.width = width;
+      this.height = height;
     }
 
     initScreen(screen) {
       this.svg = `<?xml version="1.0" standalone="no"?>
-<svg version="1.1" baseProfile="full" width="${screen.w}" height="${screen.h}" xmlns="http://www.w3.org/2000/svg">`;
+<svg version="1.1" baseProfile="full" width="${this.width}" height="${this.height}" viewBox="0 0 ${screen.w} ${screen.h}" xmlns="http://www.w3.org/2000/svg">
+<rect width="100%" height="100%" fill="#eee" />`;
     }
 
     renderPoint(p) {
@@ -53,7 +59,7 @@ export class SvgOutput extends OutputOption {
 
     renderEllipse(e) {
       this.svg = `${this.svg}
-<ellipse cx="${e.c.x}" cy="${e.c.y}" rx="${e.rx}" ry="${e.ry}" stroke="${this.stroke}" stroke-width="${this.strokeWidth}"/>`;
+<ellipse cx="${e.c.x}" cy="${e.c.y}" rx="${e.rx}" ry="${e.ry}" transform="rotate(${e.rotate})" stroke="${this.stroke}" stroke-width="${this.strokeWidth}"/>`;
       if (e.label) {
         this.svg = `${this.svg}
 <text x="${e.c.x}" y="${e.c.y + e.ry + this.labelOffset.y}">${e.label}</text>`;
@@ -62,6 +68,7 @@ export class SvgOutput extends OutputOption {
 
     flushOutput() {
       this.svg = `${this.svg}
+</g>
 </svg>`;
       fs.writeFileSync(this.fileName, this.svg, 'utf-8');
     }

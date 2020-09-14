@@ -17,11 +17,11 @@ export class Point extends Item {
    get z() { return this.rvector.z; }
 
    vectorTo(p) {
-    return new Vector({
-      x: p.x - this.x,
-      y: p.y - this.y,
-      z: p.z - this.y
-    });
+    return new Vector(
+      p.x - this.x,
+      p.y - this.y,
+      p.z - this.z
+    );
    }
 
    project(camera, screen, volume, projection, label) {

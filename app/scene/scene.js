@@ -11,9 +11,9 @@ export class Scene{
     h: 1000,
   };
   volume = {
-    w: 2000,
-    h: 2000,
-    d: 2000,
+    w: 1000,
+    h: 1000,
+    d: 1000,
   };
   camera = new Vector(0,0,-1000);
   projection = new CabinetProjection();
@@ -54,6 +54,7 @@ export class Scene{
 
   draw(outputOption) {
     let projectedElements = _(this.items).
+    //TODO: label should be done the GICS way going forward
       mapValues((item, name) => item.project(this.camera, this.screen, this.volume, this.projection, name)).
       values().
       flatten().

@@ -1,32 +1,31 @@
 import _ from 'lodash';
-import { Vector } from './item.js';
-import { CabinetProjection } from './projections.js';
+import { Point } from './items/point.js';
+import { Plane } from './items/plane.js';
+import { Vector } from './vectors.js';
+import { CabinetProjection, PerspectiveProjection } from './projections.js';
 
 export class Scene{
   // switch to smarter storage
   items = {};
   anonIndex = 0;
-  screen = {
-    w: 1000,
-    h: 1000,
-  };
+  //the origin is assumed to be at (w/2, h/2, 0), the volume extends towards Oz+
   volume = {
     w: 1000,
     h: 1000,
     d: 1000,
   };
-  camera = new Vector(0,0,-1000);
-  projection = new CabinetProjection();
+  camera = new Point(0,0,-300);
+  projection = new PerspectiveProjection();
 
   addItem(item, name) {
     //TODO: check if suppressing drawing makes sense in 3D, implement as a flag
 
-    console.log(`Adding ${item.constructor.name} to scene`);
+    console.log(`Adding ${item.constructor.name} with name '${name}' to scene`);
     if (!name) {
       name = `${anonIndex++}-obj`;
     }
     //TODO: rebinding should be possible, check!
-    if (!!this.items.name) throw new Error('Repeating name binding attempt');
+    if (!!this.items[name]) throw new Error('Repeating name binding attempt');
 
     this.items[name] = item;
     return name;
@@ -40,10 +39,6 @@ export class Scene{
     return this.items[name];
   }
 
-  set screen({w,h}) {
-    this.screen = { w, h };
-  }
-
   set viewPoint(z) {
     this.camera.z = z;
   }
@@ -53,13 +48,19 @@ export class Scene{
   }
 
   draw(outputOption) {
+
+    //TODO: for debugging purposes
+    this.items['origin'] = new Point(0,0,0);
+
     let projectedElements = _(this.items).
     //TODO: label should be done the GICS way going forward
-      mapValues((item, name) => item.project(this.camera, this.screen, this.volume, this.projection, name)).
+      mapValues((item, name) => item.project(
+        { camera: this.camera, volume: this.volume },
+      this.projection, name)).
       values().
       flatten().
       value();
-    outputOption.render(projectedElements, this.screen);
+    outputOption.render(projectedElements, this.projection.screenSize(this.camera, this.volume));
   }
 
 };

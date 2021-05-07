@@ -2,6 +2,13 @@ import { inspect } from 'util';
 
 export class GicsError extends Error {}
 
+export class MethodNotImplemented extends Error {
+  constructor(method, item) {
+    super();
+    this.message = `Method "${method}" not implemented for object ${item.constructor.name}`;
+  }
+}
+
 export class WrongParamsError extends GicsError {
   constructor(params, command) {
     super();

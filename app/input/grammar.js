@@ -41,6 +41,7 @@ const ANON = createToken({ name: 'ANON', pattern: /\./ });
 const ANGLE = createToken({ name: 'ANGLE', pattern: /(r:|d:|g:)([0-9]+)/ });
 const SEPARATOR = createToken({ name: 'SEPARATOR', pattern: /;/ });
 const WHITESPACE = createToken({ name: 'WHITESPACE', pattern: /\s+/, group: Lexer.SKIPPED });
+const COMMENT = createToken({ name: "COMMENT", pattern: /#.+/, group: Lexer.SKIPPED });
 const ADDOP = createToken({ name: 'ADDOP', pattern: Lexer.NA });
 const PLUS = createToken({ name: 'PLUS', pattern: /\+/, categories: ADDOP });
 const MINUS = createToken({ name: 'MINUS', pattern: /-/, categories: ADDOP });
@@ -49,7 +50,7 @@ const MULT = createToken({ name: 'MULT', pattern: /\*/, categories: MULTOP });
 const DIV = createToken({ name: 'DIV', pattern: /\//, categories: MULTOP });
 
 const tokens = [
-  WHITESPACE, MULT, DIV, NUMBER, COMMAND, LPAREN, RPAREN, COMMA,
+  WHITESPACE, COMMENT, MULT, DIV, NUMBER, COMMAND, LPAREN, RPAREN, COMMA,
   RBRAC, LBRAC, IDENTIFIER, TO, ANON, PLUS, MINUS,
   ANGLE, SEPARATOR, MULTOP, ADDOP
 ];

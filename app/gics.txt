@@ -1,4 +1,7 @@
-point(0,200,300) -> p1
-point(200,200,100) -> p2
-segment(p1,p2) -> s
-line([p1,p2]) -> l
+point(100,200,300) -> p1
+point(100,300,300) -> p2
+segment(p1,[100,100,300]) -> s[.,p3]
+#translate(s,10,10,0)
+#line([p1,p2]) -> l
+
+cube(p1,100) -> cb

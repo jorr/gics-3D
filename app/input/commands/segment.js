@@ -2,14 +2,14 @@
 //import scene manipulation
 //import drawing for side-effects
 
-import { Command } from '../command.js';
+import { CreationCommand } from '../command.js';
 import { globalScene } from '../../scene/scene.js';
 import { Segment } from '../../scene/items/segment.js';
 import { Point } from '../../scene/items/point.js';
 import { dist } from '../../scene/util.js';
 import { WrongParamsError, WrongPatternError, NotFeasibleError } from '../../errors.js';
 
-export default class SegmentCommand extends Command {
+export default class SegmentCommand extends CreationCommand {
 
   get name() {
     return 'segment';

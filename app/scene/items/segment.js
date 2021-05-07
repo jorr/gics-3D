@@ -22,12 +22,16 @@ export class Segment extends Item {
     return dist(p2,p1);
    }
 
-   project(camera, screen, volume, projection, label) {
+   pointsToTransform() {
+    return [this.p1, this.p2];
+  }
+
+   project(projectionData, projection, label) {
     //TODO: there is a redundancy here because the endpoints are bound and we are drawing them twice. Solve?
     //can do a flag
-    let projectedP1 = projection.projectPoint(this.p1, camera, screen, volume),
-        projectedP2 = projection.projectPoint(this.p2, camera, screen, volume);
-    return Object.assign(new Segment2D,{
+    let projectedP1 = projection.projectPoint(this.p1, projectionData),
+        projectedP2 = projection.projectPoint(this.p2, projectionData);
+    return Object.assign(new Segment2D, {
       p1: projectedP1,
       p2: projectedP2,
       label

@@ -3,14 +3,14 @@ import _ from 'lodash';
 import { globalScene } from '../scene/scene.js';
 import { Point } from '../scene/items/point.js';
 import { Segment } from '../scene/items/segment.js';
-import { SyntaxError } from '../errors.js';
+import { SyntaxError, MethodNotImplemented, WrongPatternError, MissingPatternError } from '../errors.js';
 
 export class Command {
   item;
   itemIndex;
 
   get name() {
-    return '';
+    throw new MethodNotImplemented('name', this);
   }
 
   requiresPattern() {
@@ -20,14 +20,22 @@ export class Command {
   execute(params, pattern) {
     console.log(`Executing ${this.name}`);
     if (this.requiresPattern() && !pattern) {
-      throw new MissingPatternException(this);
+      throw new MissingPatternError(this);
     }
+  }
+}
+
+export class CreationCommand extends Command {
+
+  execute(params, pattern) {
+    super.execute(params, pattern);
     this.createItem(params);
     this.bind(pattern);
   }
 
   createItem(params) {
     //construct the geometric object
+    throw new MethodNotImplemented('createItem', this);
   }
 
   bind(pattern) {
@@ -39,9 +47,9 @@ export class Command {
 
   bindElements(elems) {
     //bind item's elements to storage
+    throw new WrongPatternError(this, 'no pattern expected');
   }
-
-};
+}
 
 export function literalConstruct(params) {
   if (params.length === 2) {
@@ -54,15 +62,14 @@ export function literalConstruct(params) {
   } else if (params.length === 3) {
     // three coords => point
     if (params.every(param => typeof(param) === 'number')) {
-      return new Point({
-        x: params[0], y: params[1], z: params[2]
-      });
-    // three points => plane
-    } else if (params.every(param => param instanceof Point)) {
-      return new Plane({
-        pt: params[0], n: new Vector(params[1], params[2])
-      });
+      return new Point(params[0], params[1], params[2]);
     }
+    // three points => plane
+    // else if (params.every(param => param instanceof Point)) {
+    //   return new Plane({
+    //     pt: params[0], n: 
+    //   });
+    // }
   } else if (params.length === 4) {
     // ...
   }

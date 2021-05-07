@@ -18,16 +18,17 @@ export class Line extends Item {
    }
 
    getPointAtParam(s) {
-    return new Point({
-      x: this.pt.x + s*this.u.x,
-      y: this.pt.y + s*this.u.y,
-      z: this.pt.z + s*this.u.z
-    });
+    return new Point(
+      this.pt.x + s*this.u.x,
+      this.pt.y + s*this.u.y,
+      this.pt.z + s*this.u.z
+    );
    }
 
-   project(camera, screen, volume, projection, label) {
+   project(projectionData, projection, label) {
     //We need to project the points where the line crosses the volume walls
     let p, crossings = [];
+    let { volume } = { ...projectionData };
 
     //calculations use the parametric equation of the line: p = pt + s.u
     if (this.u.y !== 0) {
@@ -58,12 +59,13 @@ export class Line extends Item {
     }
 
     //we should now have two points in crossings
-    const projectedP1 = projection.projectPoint(crossings[0], camera, screen, volume),
-        projectedP2 = projection.projectPoint(crossings[1], camera, screen, volume);
-    return Object.assign(new Segment2D,{
+    const projectedP1 = projection.projectPoint(crossings[0], projectionData),
+        projectedP2 = projection.projectPoint(crossings[1], projectionData);
+    return Object.assign(new Segment2D, {
       p1: projectedP1,
       p2: projectedP2,
       label
     });
    }
+
 }

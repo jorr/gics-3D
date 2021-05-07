@@ -11,12 +11,12 @@ const lexingResult = gicsLexer.tokenize(inputText);
 gicsParser.input = lexingResult.tokens;
 
 //TODO: Change everything to proper logging, add verbose option
-console.log('-----PARSING-------');
+console.log('-----PARSING-----');
 gicsParser.PROGRAM();
 if (gicsParser.errors.length > 0) {
   console.log(inspect(gicsParser.errors, false, null));
 }
 
-console.log('-----DRAWING SCENE--------');
-let svgOutput = new SvgOutput('./test.svg');
+console.log('-----DRAWING SCENE-----');
+const svgOutput = new SvgOutput('./test.svg');
 globalScene.draw(svgOutput);

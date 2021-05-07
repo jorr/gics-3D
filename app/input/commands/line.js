@@ -2,13 +2,13 @@
 //import scene manipulation
 //import drawing for side-effects
 
-import { Command } from '../command.js';
+import { CreationCommand } from '../command.js';
 import { globalScene } from '../../scene/scene.js';
 import { Line } from '../../scene/items/line.js';
 import { Segment } from '../../scene/items/segment.js';
 import { MissingPatternError, WrongParamsError } from '../../errors.js';
 
-export default class LineCommand extends Command {
+export default class LineCommand extends CreationCommand {
 
   get name() {
     return 'line';

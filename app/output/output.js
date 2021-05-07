@@ -5,6 +5,7 @@ export class OutputOption {
   render(elements, screen) {
     this.initScreen(screen);
     for (let element of elements) {
+      //console.log(element);
       if (element instanceof Point2D) this.renderPoint(element);
       else if (element instanceof Segment2D) this.renderSegment(element);
       else if (element instanceof Polygon2D) this.renderPoly(element);

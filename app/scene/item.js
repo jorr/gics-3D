@@ -2,8 +2,9 @@ import path from 'path';
 import fs from 'fs';
 
 import { MethodNotImplemented } from '../errors.js';
-import { translate as translatePoint,
-  scale as scalePoint, rotate as rotatePoint } from './util.js';
+// import { translate as translatePoint,
+//   scale as scalePoint, rotate as rotatePoint } from './util.js';
+// TODO: delegate these to a transformer class (can be here) to avoid circular dependencies
 
 export class Item {
 

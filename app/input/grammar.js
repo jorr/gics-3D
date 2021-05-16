@@ -178,7 +178,10 @@ export class GicsParser extends EmbeddedActionsParser {
         // } },
         { ALT: () => convertAngle($.CONSUME(ANGLE).image) },
         { ALT: () => $.SUBRULE($.ARITHMEXPRESSION) },
-        { ALT: () => $.SUBRULE($.COMMANDINVOCATION) }
+        { ALT: () => {
+          let {command, params} = $.SUBRULE($.COMMANDINVOCATION);
+          return $.ACTION(() => commands[command].execute(params));
+        } }
       ]);
     });
 

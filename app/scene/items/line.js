@@ -1,5 +1,7 @@
 import { Item, Segment2D } from '../item.js';
 import { Point } from './point.js';
+import { Plane } from './plane.js';
+import { ImpossibleOperationError } from '../../errors.js';
 import _ from 'lodash';
 
 
@@ -25,6 +27,21 @@ export class Line extends Item {
     );
    }
 
+   intersectWith(x) {
+    if (x instanceof Line) {
+      //check if the lines actually intersect
+      if (!this.u.cross(x.u).isNonZero() || this.u.triple(x.u, this.pt.vectorTo(x.pt)) === 0) {
+        throw new ImpossibleOperationError('Attempt to intersect non-intersecting lines');
+      }
+
+      return this.getPointAtParam(
+        x.u.triple(this.u.cross(x.u),this.pt.vectorTo(x.pt))/(this.u.cross(x.u).dot(this.u.cross(x.u)))
+      );
+    } else if (x instanceof Plane) {
+      return this.pt.add(this.u.scale(-x.n.dot(x.pt.vectorTo(this.pt))/x.n.dot(this.u)));
+    }
+   }
+
    project(projectionData, projection, label) {
     //We need to project the points where the line crosses the volume walls
     let p, crossings = [];
@@ -37,7 +54,7 @@ export class Line extends Item {
       if (Math.abs(p.x) <= volume.w/2 && p.z > 0) crossings.push(p);
       //crossing bottom wall (y = -volume.h/2)
       p = this.getPointAtParam((-volume.h/2 - this.pt.y) / this.u.y);
-      if (Math.abs(p.x) <= volume.w/2 && p.z > 0) crossing.push(p);
+      if (Math.abs(p.x) <= volume.w/2 && p.z > 0) crossings.push(p);
     }
     //no need to continue if we have two crossings
     if (this.u.x !== 0 && crossings.length < 2) {

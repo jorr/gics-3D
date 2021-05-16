@@ -2,6 +2,11 @@ point(100,200,300) -> p1
 point(100,300,300) -> p2
 segment(p1,[100,100,300]) -> s[.,p3]
 #translate(s,10,10,0)
-#line([p1,p2]) -> l
+line([p1,p2]) -> l
 
-cube(p1,100) -> cb
+cube(100) -> cb
+
+#todo: check dist
+#segment(p1,[dist(p2,l),0,0]) -> s2
+
+point() -> p4

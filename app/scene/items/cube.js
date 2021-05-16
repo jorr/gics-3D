@@ -3,6 +3,8 @@ import { Point } from './point.js';
 import { Vector } from '../vectors.js';
 import { midpoint } from '../util.js';
 
+const DEFAULT_SIDE = 100;
+
 export class Cube extends Item {
 /**
  * Cube type definition
@@ -54,6 +56,10 @@ A—————B
     return this.C.add(this.A.vectorTo(this.A1));
   }
 
+  get cen() {
+    return this.A.add(this.side/2, this.side/2, this.side/2);
+  }
+
   // get faces() {
   //   return [
   //   ];
@@ -87,10 +93,14 @@ A—————B
 
   static fromCentreAndParallelToAxi(cen, len) {
     //if the cube is parallel to the axi then the vector from A to CEN is radius times the unit vector
+    len = len ?? DEFAULT_SIDE;
     let A = cen.add(new Vector(-len/2,-len/2,-len/2));
     let B = cen.add(new Vector(len/2,-len/2,-len/2));
     let v = A.vectorTo(cen.add(new Vector(len/2,-len/2,len/2))); //let's use C
     return new Cube(A, B, v);
+  }
+
+  static fromBaseAndLength(base, len, direction) {
   }
 
   //  cen - centre

@@ -1,5 +1,6 @@
 import { Item, Segment2D } from '../item.js';
 import { Point } from './point.js';
+import { Line } from './line.js';
 import { dist } from '../util.js';
 
 
@@ -20,6 +21,10 @@ export class Segment extends Item {
 
    get len() {
     return dist(p2,p1);
+   }
+
+   get lineOn() {
+    return new Line(this.p1, this.p1.vectorTo(this.p2));
    }
 
    pointsToTransform() {

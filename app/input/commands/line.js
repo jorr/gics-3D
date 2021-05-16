@@ -20,7 +20,7 @@ export default class LineCommand extends CreationCommand {
 
   createItem(params) {
     // line(dst,slp[,plane]) - distance to the origin, slope of the line with respect to plane or 0xy
-    // line(<segment>) - a line coinciding with the segment
+    // line(<segment>) - a line coinciding with the segment (or a line through two points)
     if (params.length === 1 && params[0] instanceof Segment) {
       this.item = new Line(params[0].p1, params[0].p1.vectorTo(params[0].p2));
     }

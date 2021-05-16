@@ -47,6 +47,7 @@ export class PerspectiveProjection extends Projection {
     let plane = this.screenPlane(camera, volume);
 
     // console.log('camera to p, ', direction);
+    //TODO: use intersect line and plane for better readability
     let projection = p.add(direction.scale(-plane.n.dot(plane.pt.vectorTo(p))/plane.n.dot(direction)));
     // console.log('projected: ', projection);
 

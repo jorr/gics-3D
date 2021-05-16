@@ -37,5 +37,12 @@ export class WrongPatternError extends GicsError {
   }
 }
 
+export class ImpossibleOperationError extends GicsError {
+  constructor(text) {
+    super();
+    this.message = `${text}`;
+  }
+}
+
 export class SyntaxError extends GicsError {
 }

@@ -17,6 +17,10 @@ export class Vector {
     return Math.sqrt(this.x**2 + this.y**2 + this.z**2);
   }
 
+  isNonZero() {
+    return this.x !=0 || this.y !=0 || this.z != 0;
+  }
+
   dot(v) {
     return this.x*v.x + this.y*v.y + this.z*v.z;
   }

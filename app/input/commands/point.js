@@ -5,6 +5,9 @@
 import { CreationCommand } from '../command.js';
 import { globalScene } from '../../scene/scene.js';
 import { Point } from '../../scene/items/point.js';
+import { Segment } from '../../scene/items/segment.js';
+import { Line } from '../../scene/items/line.js';
+import { Plane } from '../../scene/items/plane.js';
 import { MissingPatternError } from '../../errors.js';
 
 export default class PointCommand extends CreationCommand {
@@ -31,7 +34,7 @@ export default class PointCommand extends CreationCommand {
       );
     }
     // point(<point>,dx,dy,dz) - a point distanced at the vector(dx,dy,dz) from the given point
-    else if (params.length === 2 && params[0] instanceof Point 
+    else if (params.length === 4 && params[0] instanceof Point 
       && params.slice(1).every(p => typeof p === 'number')) {
       this.item = new Point(
         params[0].x + params[1],
@@ -39,8 +42,17 @@ export default class PointCommand extends CreationCommand {
         params[0].z + params[3]
       );
     }
-
-    else throw new WrongParamsError(params, this);
+    // a random point, optionally on a plane, line or segment
+    else {
+      let container = params[1];
+      if (!container) this.item = globalScene.getRandomPointInGoodView();
+      else if (container instanceof Plane) {
+        //BOYKO: how to find u,v for a plane when we only have n
+        //then use parametric equation
+      } else if (container instanceof Line) this.item = container.getPointAtParam(Math.random());
+      else if (container instanceof Segment) this.item = container.p1.add(Math.random()*container.p1.vectorTo(container.p2));
+      else throw new WrongParamsError(params, this);
+    }
   }
 
   //point can't decompose to elements for binding

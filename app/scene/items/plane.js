@@ -1,5 +1,4 @@
 import { Item } from '../item.js';
-import { Point } from './point.js';
 
 
 export class Plane extends Item {

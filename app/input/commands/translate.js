@@ -1,4 +1,4 @@
-// COMMAND SYNTAX: translate(<object>,tx,ty,tz) - translate any kind of object by tx,ty,tz
+// COMMAND SYNTAX: translate(<object>,tx,ty,tz) - translate any kind of object by tx,ty,tz and constructs the new object
 
 import { Command } from '../command.js';
 import { WrongParamsError } from '../../errors.js';
@@ -11,14 +11,14 @@ export default class SegmentCommand extends Command {
   }
 
   requiresPattern() {
-    return false;
+    return true;
   }
 
   execute(params, pattern) {
     if (params.length !== 4) {
       throw new WrongParamsError(params, this);
     }
-    params[0].translate(new Vector(params[1], params[2], params[3]))
+    return params[0].translate(new Vector(params[1], params[2], params[3]))
   }
 
 };

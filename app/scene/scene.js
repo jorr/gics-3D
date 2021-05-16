@@ -39,6 +39,14 @@ export class Scene{
     return this.items[name];
   }
 
+  getRandomPointInGoodView() {
+    return new Point(
+      Math.random() * this.volume.w/2 - this.volume.w/4,
+      Math.random() * this.volume.h/2 - this.volume.h/4,
+      Math.random() * this.volume.d/4
+    );
+  }
+
   set viewPoint(z) {
     this.camera.z = z;
   }

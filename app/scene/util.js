@@ -17,7 +17,7 @@ export function dist(arg1, arg2) {
   } else if (arg1 instanceof Point && arg2 instanceof Plane) {
     return arg2.n.unit().dot(arg2.pt.vectorTo(arg1)).norm();
   } else if (arg1 instanceof Point && arg2 instanceof Line) {
-    return arg2.pt.add(arg2.u.unit().scale(arg2.u.unit().dot(arg2.pt.vectorTo(arg1))));
+    return dist(arg1, arg2.pt.add(arg2.u.unit().scale(arg2.u.unit().dot(arg2.pt.vectorTo(arg1)))));
   } else if (arg1 instanceof Line && arg2 instanceof Line) {
     return Math.abs(arg1.u.cross(arg2.u).unit().dot(arg1.pt.vectorTo(arg2.pt)));
   } else if (arg1 instanceof Line && arg2 instanceof Plane) {

@@ -19,7 +19,6 @@ export default class CubeCommand extends CreationCommand {
   }
 
   createItem(params) {
-    console.log('creating cube: ', params)
     // cube(cen,len)
     if (params.length === 2 && params[0] instanceof Point && typeof params[1] === 'number') {
       this.item = Cube.fromCentreAndParallelToAxi(params[0], params[1]);

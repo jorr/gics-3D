@@ -1,5 +1,5 @@
 import _ from 'lodash';
-
+import log from 'loglevel';
 import { globalScene } from '../scene/scene.js';
 import { Point } from '../scene/items/point.js';
 import { Segment } from '../scene/items/segment.js';
@@ -18,7 +18,7 @@ export class Command {
   }
 
   execute(params, pattern) {
-    console.log(`Executing ${this.name}`);
+    log.info(`Executing command: ${this.name}`);
     if (this.requiresPattern() && !pattern) {
       throw new MissingPatternError(this);
     }

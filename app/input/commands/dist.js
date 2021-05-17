@@ -15,6 +15,7 @@ export default class SegmentCommand extends Command {
   }
 
   execute(params, pattern) {
+    super.execute(params, pattern);
     if (params.length !== 2) {
       throw new WrongParamsError(params, this);
     }

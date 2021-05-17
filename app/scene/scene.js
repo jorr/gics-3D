@@ -1,4 +1,5 @@
 import _ from 'lodash';
+import log from 'loglevel';
 import { Point } from './items/point.js';
 import { Plane } from './items/plane.js';
 import { Vector } from './vectors.js';
@@ -20,7 +21,7 @@ export class Scene{
   addItem(item, name) {
     //TODO: check if suppressing drawing makes sense in 3D, implement as a flag
 
-    console.log(`Adding ${item.constructor.name} with name '${name}' to scene`);
+    log.info(`Adding ${item.constructor.name} with name '${name}' to scene`);
     if (!name) {
       name = `${anonIndex++}-obj`;
     }

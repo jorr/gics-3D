@@ -3,6 +3,7 @@ const { createToken, tokenMatcher, Lexer, EmbeddedActionsParser } = chevrotain;
 
 import fs from 'fs';
 import path from 'path';
+import log from 'loglevel';
 import { literalConstruct, resolveIdentifier, convertAngle } from './command.js';
 import { GicsError } from '../errors.js';
 
@@ -90,7 +91,7 @@ export class GicsParser extends EmbeddedActionsParser {
         }
         catch (e) {
           if (e instanceof GicsError) {
-            console.log(`PARSING ERROR: ${e.message}`);
+            log.error(`PARSING ERROR: ${e.message}`);
           } else {
             throw e;
           }

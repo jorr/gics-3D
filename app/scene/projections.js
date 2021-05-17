@@ -72,7 +72,7 @@ export class PerspectiveProjection extends Projection {
       w: projectedEndpoints[1].x - projectedEndpoints[0].x,
       h: projectedEndpoints[3].y - projectedEndpoints[2].y
     };
-    console.log(size);
+    console.debug(size);
     return size;
   }
 }

@@ -34,6 +34,10 @@ class Element2D {
 
 export class Point2D extends Element2D {
   x; y;
+
+  equals(p) {
+    return this.x === p.x && this.y === p.y;
+  }
 }
 
 export class Segment2D extends Element2D {
@@ -45,5 +49,5 @@ export class Polygon2D extends Element2D {
 }
 
 export class Ellipse2D extends Element2D {
-  c; rx; ry; rot;
+  c; rx; ry; rotate;
 }

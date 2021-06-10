@@ -1,6 +1,8 @@
 import { Item, Point2D } from '../item.js';
 import { Vector } from '../vectors.js';
 
+import log from 'loglevel';
+
 export class Point extends Item {
     /**
    * Point type definition
@@ -33,8 +35,18 @@ export class Point extends Item {
     return new Point(this.rvector.add(v));
    }
 
+   equals(p) {
+    return this.x === p.x && this.y === p.y && this.z === p.z;
+   }
+
+   static get Origin() {
+    return new Point(0,0,0);
+   }
+
    project(projectionData, projection, label) {
+    log.debug(`projecting point ${label}`);
     let projected = projection.projectPoint(this, projectionData);
+    log.debug(projected)
     projected.label = label;
     return projected;
    }

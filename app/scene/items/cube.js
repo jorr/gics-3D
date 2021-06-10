@@ -3,6 +3,8 @@ import { Point } from './point.js';
 import { Vector } from '../vectors.js';
 import { midpoint } from '../util.js';
 
+import log from 'loglevel';
+
 const DEFAULT_SIDE = 100;
 
 export class Cube extends Item {
@@ -18,22 +20,23 @@ A—————B
  *
  */
 
- //TODO: consider A,B,C
+ //TODO: consider A,B,C....also direction?
 
   A; B; v; // AB is a side of the cube, v is a vector that is not colinear with them, so that ABv is the wall ABCD
   side;
+  sign;
 
-  constructor(A, B, v) {
+  constructor(A, B, v, sign = 1) {
     super();
     this.A = A;
     this.B = B;
     this.v = v;
     this.side = A.vectorTo(B).norm;
+    this.sign = sign;
   }
 
   get A1() {
-    let Av = this.A.add(this.v);
-    return this.A.add(this.A.vectorTo(this.B).cross(Av, true).scale(-this.side));
+    return this.A.add(this.A.vectorTo(this.B).cross(this.v).unit().scale(this.sign*this.side));
   }
 
   get B1() {
@@ -41,7 +44,7 @@ A—————B
   }
 
   get D() {
-    return this.A.add(this.A.vectorTo(this.A1).cross(this.A.vectorTo(this.B), true).scale(-this.side));
+    return this.A.add(this.A.vectorTo(this.A1).cross(this.A.vectorTo(this.B)).unit().scale(this.sign*this.side));
   }
 
   get C() {
@@ -113,7 +116,11 @@ A—————B
     return [
       // first wall
       Object.assign(new Polygon2D, {
-        points: [this.A, this.B, this.C, this.D].map(v => projection.projectPoint(v, projectionData)),
+        points: [this.A, this.B, this.C, this.D].map(v => {
+          log.debug("vertex: ", v);
+          log.debug("projected as: ", projection.projectPoint(v, projectionData))
+          return projection.projectPoint(v, projectionData);
+        }),
         label
       }),
       // second wall

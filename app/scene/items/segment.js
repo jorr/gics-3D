@@ -20,11 +20,15 @@ export class Segment extends Item {
    }
 
    get len() {
-    return dist(p2,p1);
+    return dist(this.p1, this.p2);
    }
 
-   get lineOn() {
+   lineOn() {
     return new Line(this.p1, this.p1.vectorTo(this.p2));
+   }
+
+   asVector() {
+    return this.p1.vectorTo(this.p2);
    }
 
    pointsToTransform() {

@@ -35,6 +35,7 @@ const COMMAND = createToken({
 const LPAREN = createToken({ name: 'LPAREN', pattern: /\(/ });
 const RPAREN = createToken({ name: 'RPAREN', pattern: /\)/ });
 const COMMA = createToken({ name: 'COMMA', pattern: /,/ });
+const QUOTE = createToken({ name: 'QUOTE', pattern: /"/ });
 const LBRAC = createToken({ name: 'LBRAC', pattern: /\[/ });
 const RBRAC = createToken({ name: 'RBRAC', pattern: /\]/ });
 const TO = createToken({ name: 'TO', pattern: /->/ });
@@ -52,7 +53,7 @@ const DIV = createToken({ name: 'DIV', pattern: /\//, categories: MULTOP });
 
 const tokens = [
   WHITESPACE, COMMENT, MULT, DIV, NUMBER, COMMAND, LPAREN, RPAREN, COMMA,
-  RBRAC, LBRAC, IDENTIFIER, TO, ANON, PLUS, MINUS,
+  QUOTE, RBRAC, LBRAC, IDENTIFIER, TO, ANON, PLUS, MINUS,
   ANGLE, SEPARATOR, MULTOP, ADDOP
 ];
 
@@ -178,6 +179,12 @@ export class GicsParser extends EmbeddedActionsParser {
         //   return $.ACTION(() => parseFloat(number));
         // } },
         { ALT: () => convertAngle($.CONSUME(ANGLE).image) },
+        { ALT: () => {
+          $.CONSUME(QUOTE);
+          let identifier = $.CONSUME(IDENTIFIER).image;
+          $.CONSUME2(QUOTE);
+          return identifier;
+        } },
         { ALT: () => $.SUBRULE($.ARITHMEXPRESSION) },
         { ALT: () => {
           let {command, params} = $.SUBRULE($.COMMANDINVOCATION);

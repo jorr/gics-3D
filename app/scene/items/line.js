@@ -1,6 +1,7 @@
 import { Item, Segment2D } from '../item.js';
 import { Point } from './point.js';
 import { Plane } from './plane.js';
+import { Vector } from '../vectors.js';
 import { ImpossibleOperationError } from '../../errors.js';
 import _ from 'lodash';
 
@@ -25,6 +26,22 @@ export class Line extends Item {
       this.pt.y + s*this.u.y,
       this.pt.z + s*this.u.z
     );
+   }
+
+   hasPoint(p) {
+    return !this.u.cross(this.pt.vectorTo(p)).isNonZero();
+   }
+
+   static get Ox() {
+    return new Line(Point.Origin, new Vector(1,0,0));
+   }
+
+   static get Oy() {
+    return new Line(Point.Origin, new Vector(0,1,0));
+   }
+
+   static get Oz() {
+    return new Line(Point.Origin, new Vector(0,0,1));
    }
 
    intersectWith(x) {

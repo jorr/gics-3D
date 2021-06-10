@@ -30,7 +30,8 @@ export class CreationCommand extends Command {
   execute(params, pattern) {
     super.execute(params, pattern);
     this.createItem(params);
-    this.bind(pattern);
+    if (pattern) this.bind(pattern);
+    return this.item;
   }
 
   createItem(params) {
@@ -40,7 +41,7 @@ export class CreationCommand extends Command {
 
   bind(pattern) {
     this.itemIndex = globalScene.addItem(this.item, pattern?.name, pattern?.suppress);
-    if (pattern.elements?.length > 0) {
+    if (pattern?.elements?.length > 0) {
       this.bindElements(pattern.elements);
     }
   }
@@ -51,6 +52,7 @@ export class CreationCommand extends Command {
   }
 }
 
+//TODO: can we delegate these to the command classes?
 export function literalConstruct(params) {
   if (params.length === 2) {
     // two points => segment
@@ -65,11 +67,7 @@ export function literalConstruct(params) {
       return new Point(params[0], params[1], params[2]);
     }
     // three points => plane
-    // else if (params.every(param => param instanceof Point)) {
-    //   return new Plane({
-    //     pt: params[0], n: 
-    //   });
-    // }
+    // [cen, rad, plane] => circle
   } else if (params.length === 4) {
     // ...
   }
@@ -88,15 +86,21 @@ export function resolveIdentifier(identifier) {
   return item;
 }
 
+export class Angle {
+  value;
+
+  constructor(value) { this.value = value; }
+}
+
 export function convertAngle(angleToken) {
   const value = parseInt(angleToken.substr(2));
   if (angleToken.startsWith('d:')) {
-    return value;
+    return new Angle(value);
   } else if (angleToken.startsWith('r:')) {
     // convert radians to degrees
-    return value / Math.PI * 180;
+    return new Angle(value / Math.PI * 180);
   } else {
     // convert gradians to degrees
-    return value * 10 / 9;
+    return new Angle(value * 10 / 9);
   }
 }

@@ -15,7 +15,7 @@ export default class PlaneCommand extends CreationCommand {
   }
 
   requiresPattern() {
-    return true;
+    return false;
   }
 
   createItem(params) {
@@ -26,6 +26,11 @@ export default class PlaneCommand extends CreationCommand {
       pt = params[0];
       n = new Vector(params[1].p1, params[2].p2);
       this.item = new Plane(pt, n);
+    }
+    //plane(Oxy|Oxz|Oyz) - one of the axial planes
+    else if (typeof params[0] === "string") {
+      if (!Plane[params[0]]) throw new WrongParamsError(params, this);
+      else this.item = Plane[params[0]];
     }
     else throw new WrongParamsError(params, this);
   }

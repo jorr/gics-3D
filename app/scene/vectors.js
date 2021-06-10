@@ -1,3 +1,9 @@
+import { intersect } from './util.js';
+import { Plane } from './items/plane.js';
+import { Line } from './items/line.js';
+
+import log from 'loglevel';
+
 export class Vector {
   /**
    * Vector type definition
@@ -17,6 +23,10 @@ export class Vector {
     return Math.sqrt(this.x**2 + this.y**2 + this.z**2);
   }
 
+  isCollinearWith(v) {
+    return !this.cross(v).isNonZero();
+  }
+
   isNonZero() {
     return this.x !=0 || this.y !=0 || this.z != 0;
   }
@@ -25,17 +35,12 @@ export class Vector {
     return this.x*v.x + this.y*v.y + this.z*v.z;
   }
 
-  cross(v, unit=false) {
-    let cross = new Vector(
+  cross(v) {
+    return new Vector(
       this.y*v.z - this.z*v.y,
       this.z*v.x - this.x*v.z,
       this.x*v.y - this.y*v.x
     );
-    if (unit) {
-      return cross.unit();
-    } else {
-      return cross;
-    }
   }
 
   triple(v1, v2) {
@@ -71,8 +76,30 @@ export class Vector {
     );
   }
 
-  // perpendicularInPlane(v, p) {
-  // }
+  //finds a vector perpendicular to the current vector, lying in a plane
+  perpendicular(plane) {
+    if (!plane || plane.n.isCollinearWith(this)) {
+      // find the cross product with any vector, non-collinear with this
+      let v = Line.Oz.u;
+      if (this.isCollinearWith(v)) v = Line.Ox.u;
+      return this.cross(v).unit();
+    } else {
+      // build a plane with the given vector as normal
+      let normalPlane = new Plane(plane.pt, this);
+      let crossing = intersect(plane, normalPlane);
+      return crossing.u.unit();
+    }
+  }
+
+  rotate(axis, angle) {
+    let uaxis = axis.unit();
+    return uaxis.scale((1 - Math.cos(angle))*uaxis.dot(this))
+      .add(this.scale(Math.cos(angle))).add(uaxis.cross(this).scale(Math.sin(angle)));
+  }
+
+  static random() {
+    return new Vector(Math.random(), Math.random(), Math.random());
+  }
 
 };
 

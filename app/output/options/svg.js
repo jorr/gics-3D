@@ -77,7 +77,7 @@ export class SvgOutput extends OutputOption {
 
     renderEllipse(e) {
       this.svg = `${this.svg}
-<ellipse cx="${e.c.x}" cy="${-e.c.y}" rx="${e.rx}" ry="${e.ry}" transform="rotate(${e.rotate})" stroke="${this.stroke}" stroke-width="${this.strokeWidth}"/>`;
+<ellipse cx="${e.c.x}" cy="${-e.c.y}" rx="${e.rx}" ry="${e.ry}" transform="rotate(${e.rotate})" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" fill="none"/>`;
       if (e.label) {
         this.svg = `${this.svg}
 <text x="${e.c.x}" y="${-e.c.y + e.ry + this.labelOffset.y}">${e.label}</text>`;

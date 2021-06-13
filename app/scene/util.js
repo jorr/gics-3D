@@ -3,6 +3,7 @@ import { Segment } from './items/segment.js';
 import { Line } from './items/line.js';
 import { Plane } from './items/plane.js';
 import { Point2D, Segment2D } from './item.js';
+import { Vector } from './vectors.js';
 import { WrongParamsError } from '../errors.js';
 
 import log from 'loglevel';
@@ -86,6 +87,11 @@ export function midpoint(p1, p2) {
     (p1.y + p2.y) / 2,
     (p1.z + p2.z) / 2
   );
+}
+
+export function centroid(vertices) {
+  let sum = vertices.reduce((totalValue, currentValue) => totalValue.add(currentValue.rvector), new Vector(0,0,0));
+  return sum.scale(1/vertices.length).toPoint();
 }
 
 // CHECKS

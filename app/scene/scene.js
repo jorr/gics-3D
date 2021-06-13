@@ -72,7 +72,7 @@ export class Scene{
   draw(outputOption) {
 
     //TODO: for debugging purposes
-    this.items['origin'] = new Point(0,0,0);
+    this.items['О'] = new Point(0,0,0);
 
     let projectedElements = _(this.items).
     //TODO: label should be done the GICS way going forward
@@ -80,7 +80,7 @@ export class Scene{
         { camera: this.camera, volume: this.volume },
       this.projection, name.startsWith('obj-') ? '' : name)).
       values().
-      flatten().
+      flattenDeep().
       value();
     // outputOption.render(projectedElements, this.projection.screenSize(this.camera, this.volume));
 
@@ -90,7 +90,7 @@ export class Scene{
         { camera: this.camera, volume: this.volume },
       this.projection, name)).
       values().
-      flatten().
+      flattenDeep().
       value();
 
     outputOption.render(_.concat(projectedElements, bindings), this.projection.screenSize(this.camera, this.volume));

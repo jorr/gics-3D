@@ -1,6 +1,7 @@
 import { intersect } from './util.js';
 import { Plane } from './items/plane.js';
 import { Line } from './items/line.js';
+import { Point } from './items/point.js';
 
 import log from 'loglevel';
 
@@ -95,6 +96,10 @@ export class Vector {
     let uaxis = axis.unit();
     return uaxis.scale((1 - Math.cos(angle))*uaxis.dot(this))
       .add(this.scale(Math.cos(angle))).add(uaxis.cross(this).scale(Math.sin(angle)));
+  }
+
+  toPoint() {
+    return new Point(this.x, this.y, this.z);
   }
 
   static random() {

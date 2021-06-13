@@ -8,6 +8,7 @@ import { MethodNotImplemented } from '../errors.js';
 
 export class Item {
 
+  //TODO: implement
   get vertices() { throw new MethodNotImplemented('vertices', this); }
   get faces() { throw new MethodNotImplemented('faces', this); }
   get edges() { throw new MethodNotImplemented('edges', this); }
@@ -15,6 +16,7 @@ export class Item {
   project(camera, screen, volume, projection, label) { throw new MethodNotImplemented('project', this); }
   // pointsToTransform() { throw new MethodNotImplemented('pointsToTransform', this); }
 
+  // TODO: delegate transform to descendants
   // transform(transformation, data) {
   //   for (let p of this.pointsToTransform()) {
   //     transformation(p, ...data);

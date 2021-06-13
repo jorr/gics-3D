@@ -58,7 +58,7 @@ export class CabinetProjection extends Projection {
     // return Object.assign(new Point2D, {x: px, y: py});
     // let plane = this.screenPlane(camera, volume);
     // let projection = p.add(this.direction.scale(-plane.n.dot(plane.pt.vectorTo(p))/plane.n.dot(this.direction)));
-    log.debug('projected: ', p.x, p.y);
+    // log.debug('projected: ', p.x, p.y);
 
     return Object.assign(new Point2D, {x: projection.x, y: projection.y});
   }

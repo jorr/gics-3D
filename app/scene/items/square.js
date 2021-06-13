@@ -23,6 +23,10 @@ export class Square extends Item {
     return this.A.vectorTo(this.B).norm;
    }
 
+   get vertices() {
+    return [this.A, this.B, this.C, this.D];
+   }
+
    pointsToTransform() {
     return [this.A, this.B, this.C, this.D];
   }

@@ -44,9 +44,9 @@ export class Point extends Item {
    }
 
    project(projectionData, projection, label) {
-    log.debug(`projecting point ${label}`);
+    // log.debug(`projecting point ${label}`);
     let projected = projection.projectPoint(this, projectionData);
-    log.debug(projected)
+    // log.debug(projected)
     projected.label = label;
     return projected;
    }

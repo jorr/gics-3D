@@ -44,6 +44,7 @@ export default class CylinderCommand extends CreationCommand {
         params[0].p2.add(params[1].asVector())
       ));
     }
+    // TODO: right cylinder, by height only
     else throw new WrongParamsError(params, this);
   }
 

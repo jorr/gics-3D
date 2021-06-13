@@ -30,16 +30,19 @@ export class Plane extends Item {
     let x = Math.random() * 100;
     let y = Math.random() * 100;
     let A = this.n.x, B = this.n.y, C = this.n.z;
+    let D = -(A*this.pt.x + B*this.pt.y + C*this.pt.z);
 
+    //z is not constrained, any z would do
     if (C === 0) {
-      // n is parallel to Oxy, then the plane is either Oxz or Ozy
-      if (Plane.Oxz.hasPoint(this.pt)) // equation is y = d
-        return new Point(0,y,0);
-      else
-        return new Point(x,0,0);
+      if (B === 0) {
+        //plane is x=d, so parallel to Oyz, y can be random so we keep it
+        return new Point(D,y,Math.random() * 100);
+      }
+      //else, recalculate y to conform to the two-var equation
+      y = -(A*x +D)/B;
+      return new Point(x,y,Math.random() * 100);
     }
 
-    let D = -(A*this.pt.x + B*this.pt.y + C*this.pt.z);
     let z = -(A*x + B*x + D)/C;
     return new Point(x,y,z);
    }

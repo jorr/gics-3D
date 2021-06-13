@@ -28,4 +28,6 @@
 
 #triangle(p1,p2,d) -> tr
 
-triangle() -> .
+triangle([-100,0,0],[100,0,0],[100,0,100]) -> t
+point(0,95,0) -> d
+pyramid(t,150) -> p

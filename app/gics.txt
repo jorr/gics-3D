@@ -1,5 +1,5 @@
-#point(100,200,300) -> p1
-#point(100,300,300) -> p2
+point(100,200,300) -> p1
+point(200,300,300) -> p2
 #segment(p1,[100,100,300]) -> s[.,p3]
 #translate(s,10,10,0)
 #line([p1,p2]) -> l
@@ -13,7 +13,7 @@
 
 #point(100,100,30) -> p1
 #point(-100,-100,-30) -> p2
-#segment(p1,p2) -> s
+segment(p1,p2) -> s
 
 #point(0,95,0) -> d
 
@@ -21,13 +21,22 @@
 
 #square([300,0,300],[100,0,100],plane("Oxz")) -> sq[A,B,C,D]
 
-#square() -> sq[A,B,C,D]
+square(plane("Oxz")) -> sq[A,B,C,D]
+square([[A.x,A.y+200,A.z],[B.x,B.y+200,B.z]],plane(A, plane("Oxz"))) -> sq2[A1,B1,C1,D1]
+#prism(sq,100,"-") -> pr
+#prism(sq,s) -> pr2
+prism(sq,sq2) -> pr3
+
 #cube(sq) -> .
 
-#cylinder(c, [[0,0,0],d]) -> .
+#cylinder(c, 90) -> .
 
 #triangle(p1,p2,d) -> tr
 
-triangle([-100,0,0],[100,0,0],[100,0,100]) -> t
-point(0,95,0) -> d
-pyramid(t,150) -> p
+#triangle([-100,0,0],[100,0,0],[100,0,300]) -> t[.,.,Q]
+#point(0,95,0) -> d
+#pyramid(t,150) -> p
+
+#cone(c,d) -> CN
+#cone(c,200) -> CN
+#cone(t,"a") -> CN2

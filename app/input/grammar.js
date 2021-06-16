@@ -32,10 +32,14 @@ const COMMAND = createToken({
   pattern: RegExp(`${Object.keys(commands).join('|')}`,'i'),
   longer_alt: IDENTIFIER
 });
+const STRING = createToken({
+  name: 'COMMAND',
+  pattern: RegExp(`"[a-zA-Z-]+"`,'i'),
+});
 const LPAREN = createToken({ name: 'LPAREN', pattern: /\(/ });
 const RPAREN = createToken({ name: 'RPAREN', pattern: /\)/ });
 const COMMA = createToken({ name: 'COMMA', pattern: /,/ });
-const QUOTE = createToken({ name: 'QUOTE', pattern: /"/ });
+// const QUOTE = createToken({ name: 'QUOTE', pattern: /"/ });
 const LBRAC = createToken({ name: 'LBRAC', pattern: /\[/ });
 const RBRAC = createToken({ name: 'RBRAC', pattern: /\]/ });
 const TO = createToken({ name: 'TO', pattern: /->/ });
@@ -53,7 +57,7 @@ const DIV = createToken({ name: 'DIV', pattern: /\//, categories: MULTOP });
 
 const tokens = [
   WHITESPACE, COMMENT, MULT, DIV, NUMBER, COMMAND, LPAREN, RPAREN, COMMA,
-  QUOTE, RBRAC, LBRAC, IDENTIFIER, TO, ANON, PLUS, MINUS,
+  /*QUOTE,*/ RBRAC, LBRAC, STRING, IDENTIFIER, TO, ANON, PLUS, MINUS,
   ANGLE, SEPARATOR, MULTOP, ADDOP
 ];
 
@@ -180,10 +184,8 @@ export class GicsParser extends EmbeddedActionsParser {
         // } },
         { ALT: () => convertAngle($.CONSUME(ANGLE).image) },
         { ALT: () => {
-          $.CONSUME(QUOTE);
-          let identifier = $.CONSUME(IDENTIFIER).image;
-          $.CONSUME2(QUOTE);
-          return identifier;
+          let string = $.CONSUME(STRING).image;
+          return string.slice(1,-1);
         } },
         { ALT: () => $.SUBRULE($.ARITHMEXPRESSION) },
         { ALT: () => {

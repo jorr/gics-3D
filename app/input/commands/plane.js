@@ -6,6 +6,7 @@ import { CreationCommand } from '../command.js';
 import { globalScene } from '../../scene/scene.js';
 import { Plane } from '../../scene/items/plane.js';
 import { Point } from '../../scene/items/point.js';
+import { Segment } from '../../scene/items/segment.js';
 import { MissingPatternError, WrongParamsError } from '../../errors.js';
 
 export default class PlaneCommand extends CreationCommand {
@@ -14,18 +15,21 @@ export default class PlaneCommand extends CreationCommand {
     return 'plane';
   }
 
+  //TODO: ?
   requiresPattern() {
     return false;
   }
 
   createItem(params) {
-    let n, pt;
 
     //plane(<point>, <segment>) - a plane through the point with the segment as normal vector
-    if (params[0] instanceof Point && params[1] instanceof Line) {
-      pt = params[0];
-      n = new Vector(params[1].p1, params[2].p2);
-      this.item = new Plane(pt, n);
+    if (params.length === 2 && params[0] instanceof Point && params[1] instanceof Segment) {
+      this.item = new Plane(params[0], params[1].asVector());
+    }
+    //plane(<point>,<plane>,[angle]) - a plane through the point, at angle to the given plane (defaults to parallel)
+    else if (params.length >= 2 && params[0] instanceof Point && params[1] instanceof Plane) {
+      let angle = params[2] || 0;
+      this.item = new Plane(params[0], params[1].n.rotate(params[1].getCoplanarVector(), angle));
     }
     //plane(Oxy|Oxz|Oyz) - one of the axial planes
     else if (typeof params[0] === "string") {
@@ -35,20 +39,6 @@ export default class PlaneCommand extends CreationCommand {
     else throw new WrongParamsError(params, this);
   }
 
-  // bindElements(elems) {
-  //   // plane should support [p1,p2,p3] deconstruction
-  //   if (elems.length !== 3) {
-  //     throw new WrongPatternError('[p1,p2,p3]', this);
-  //   }
-  //   if (elems[0].name) {
-  //     globalScene.addItem(this.item.p1, elems[0].name);
-  //   }
-  //   if (elems[1].name) {
-  //     globalScene.addItem(this.item.p2, elems[1].name);
-  //   }
-  //   if (elems[2].name) {
-  //     globalScene.addItem(this.item.p3, elems[2].name);
-  //   }
-  // }
+  // bindElements(elems) - plane does not decompose
 
 };

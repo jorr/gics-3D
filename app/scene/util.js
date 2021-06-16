@@ -29,12 +29,6 @@ export function dist(arg1, arg2) {
   }
 }
 
-export function dist2D(arg1, arg2) {
-  if (arg1 instanceof Point2D && arg2 instanceof Point2D) {
-    return Math.sqrt((arg2.x - arg1.x)**2 + (arg2.y - arg1.y)**2);
-  }
-}
-
 export function angle(arg1, arg2) {
   // turn segments to vectors
   if (arg1 instanceof Segment) arg1 = arg1.p1.vectorTo(arg1.p2);
@@ -52,14 +46,9 @@ export function angle(arg1, arg2) {
     return 0;
 }
 
-export function angle2D(arg1, arg2) {
-  if (arg1 instanceof Segment2D && arg2 instanceof Segment2D) {
-    let norm1 = Math.sqrt((arg1.p2.x-arg1.p1.x)**2 + (arg1.p2.y-arg1.p1.y)**2);
-    let norm2 = Math.sqrt((arg2.p2.x-arg2.p1.x)**2 + (arg2.p2.y-arg2.p1.y)**2);
-    return Math.acos((arg1.p2.x-arg1.p1.x)/norm1*(arg2.p2.x-arg2.p1.x)/norm2 + (arg1.p2.y-arg1.p1.y)/norm1*(arg2.p2.y-arg2.p1.y)/norm2);
-  }
-}
+// CONSTRUCTS
 
+//TODO: finish
 export function intersect(arg1, arg2) {
   //segment and segment
   //segment and line
@@ -94,6 +83,15 @@ export function centroid(vertices) {
   return sum.scale(1/vertices.length).toPoint();
 }
 
+//TODO: finish
+export function project(arg1, arg2, direction) {
+  if (arg1 instanceof Point && arg2 instanceof Plane) {
+    direction = direction || arg2.n;
+    return arg1.add(direction.scale(-arg2.n.dot(arg2.pt.vectorTo(arg1))/arg2.n.dot(direction)));
+  }
+  //TODO: finish the rest
+}
+
 // CHECKS
 
 export function pointInVolume(p, v) {
@@ -105,7 +103,7 @@ export function pointInVolume(p, v) {
 // TRANSFORMATIONS
 
 
-//TODO: thiese must be nondestructive
+//TODO: these must be nondestructive
 export function translate(p, v) {
   p.rvector = p.rvector.add(v);
 }

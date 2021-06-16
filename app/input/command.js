@@ -75,6 +75,7 @@ export function literalConstruct(params) {
 }
 
 export function resolveIdentifier(identifier) {
+  log.debug('Resolving identifier: ', identifier)
   let propertyChain = identifier.split('.');
   let item = globalScene.getItem(propertyChain.shift());
   if (!item) {

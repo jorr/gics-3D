@@ -8,12 +8,14 @@ import { MethodNotImplemented } from '../errors.js';
 
 export class Item {
 
+  suppressed = false;
+
   //TODO: implement
   get vertices() { throw new MethodNotImplemented('vertices', this); }
   get faces() { throw new MethodNotImplemented('faces', this); }
   get edges() { throw new MethodNotImplemented('edges', this); }
 
-  project(camera, screen, volume, projection, label) { throw new MethodNotImplemented('project', this); }
+  project(projectionData, projection, label) { throw new MethodNotImplemented('project', this); }
   // pointsToTransform() { throw new MethodNotImplemented('pointsToTransform', this); }
 
   // TODO: delegate transform to descendants
@@ -29,9 +31,20 @@ export class Item {
   // rotate(axis, fi) { this.transform(rotatePoint, [axis, fi]); }
 };
 
+export class Polygon extends Item {
+  plane; n; // number of vertices
+
+  constructor(n, plane) {
+    super();
+    this.n = n;
+    this.plane = plane;
+  }
+}
+
 
 class Element2D {
   label;
+  color;
 }
 
 export class Point2D extends Element2D {

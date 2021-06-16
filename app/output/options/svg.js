@@ -2,6 +2,8 @@ import { OutputOption } from '../output.js';
 import { midpoint } from '../../scene/util.js';
 import fs from 'fs';
 
+import log from 'loglevel';
+
 export class SvgOutput extends OutputOption {
 
     fileName;
@@ -46,7 +48,7 @@ export class SvgOutput extends OutputOption {
 
     renderPoint(p) {
       this.svg = `${this.svg}
-<circle cx="${p.x}" cy="${-p.y}" r="${this.strokeWidth}" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" fill="${this.stroke}"/>`;
+<circle cx="${p.x}" cy="${-p.y}" r="${this.strokeWidth}" stroke="${p.color || this.stroke}" stroke-width="${this.strokeWidth}" fill="${this.stroke}"/>`;
       if (p.label) {
         this.svg = `${this.svg}
 <text x="${p.x+this.labelOffset.x}" y="${-p.y+this.labelOffset.y}">${p.label}</text>`;
@@ -55,7 +57,7 @@ export class SvgOutput extends OutputOption {
 
     renderSegment(s) {
       this.svg = `${this.svg}
-<line x1="${s.p1.x}" x2="${s.p2.x}" y1="${-s.p1.y}" y2="${-s.p2.y}" stroke="${this.stroke}" stroke-width="${this.strokeWidth}"/>`;
+<line x1="${s.p1.x}" x2="${s.p2.x}" y1="${-s.p1.y}" y2="${-s.p2.y}" stroke="${s.color || this.stroke}" stroke-width="${this.strokeWidth}"/>`;
       if (s.label) {
         //TODO: make this smarter
         let midPoint = midpoint(s.p1, s.p2);
@@ -76,6 +78,7 @@ export class SvgOutput extends OutputOption {
     }
 
     renderEllipse(e) {
+      log.debug('Drawing ellipse, ', e)
       this.svg = `${this.svg}
 <ellipse cx="${e.c.x}" cy="${-e.c.y}" rx="${e.rx}" ry="${e.ry}" transform="rotate(${e.rotate})" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" fill="none"/>`;
       if (e.label) {

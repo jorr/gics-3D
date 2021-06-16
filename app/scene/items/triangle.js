@@ -1,9 +1,10 @@
-import { Item, Polygon2D } from '../item.js';
+import { Polygon, Polygon2D } from '../item.js';
 import { Plane } from './plane.js';
+import { Segment } from './segment.js';
 
 import log from 'loglevel';
 
-export class Triangle extends Item {
+export class Triangle extends Polygon {
   /**
    * Square type definition
    * @property {Point} A, B, C
@@ -12,23 +13,34 @@ export class Triangle extends Item {
    plane;
 
    constructor(A, B, C) {
-    super();
-
-    this.A = A; this.B = B; this.C = C;
     let n = A.vectorTo(B).cross(A.vectorTo(C)).unit();
     if (n.y < 0) n = n.scale(-1); //TODO: check rhs vs lhs in a smarter way
-    this.plane = new Plane(A, n);
+    super(3, new Plane(A, n));
+
+    this.A = A; this.B = B; this.C = C;
    }
 
    //getters for centers
 
-   pointsToTransform() {
+  pointsToTransform() {
     return [this.A, this.B, this.C];
   }
 
   get vertices() {
     return [this.A, this.B, this.C];
-   }
+  }
+
+  get a() {
+    return new Segment(this.B, this.C);
+  }
+
+  get b() {
+    return new Segment(this.A, this.C);
+  }
+
+  get c() {
+    return new Segment(this.A, this.B);
+  }
 
    project(projectionData, projection, label) {
     return Object.assign(new Polygon2D, {

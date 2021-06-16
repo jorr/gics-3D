@@ -3,7 +3,9 @@ import { Point } from './point.js';
 import { Plane } from './plane.js';
 import { Vector } from '../vectors.js';
 import { ImpossibleOperationError } from '../../errors.js';
+
 import _ from 'lodash';
+import log from 'loglevel';
 
 
 export class Line extends Item {
@@ -32,6 +34,10 @@ export class Line extends Item {
     return !this.u.cross(this.pt.vectorTo(p)).isNonZero();
    }
 
+   isParallelTo(l) {
+    return this.u.isCollinearWith(l.u);
+   }
+
    static get Ox() {
     return new Line(Point.Origin, new Vector(1,0,0));
    }
@@ -47,7 +53,7 @@ export class Line extends Item {
    intersectWith(x) {
     if (x instanceof Line) {
       //check if the lines actually intersect
-      if (!this.u.cross(x.u).isNonZero() || this.u.triple(x.u, this.pt.vectorTo(x.pt)) === 0) {
+      if (!this.u.cross(x.u).isNonZero() || this.u.triple(x.u, this.pt.vectorTo(x.pt)) !== 0) {
         throw new ImpossibleOperationError('Attempt to intersect non-intersecting lines');
       }
 
@@ -59,7 +65,7 @@ export class Line extends Item {
     }
    }
 
-   project(projectionData, projection, label) {
+   project(projectionData, projection, label, color) {
     //We need to project the points where the line crosses the volume walls
     let p, crossings = [];
     let { volume } = { ...projectionData };
@@ -68,19 +74,19 @@ export class Line extends Item {
     if (this.u.y !== 0) {
       //crossing top wall (y = volume.h/2)
       p = this.getPointAtParam((volume.h/2 - this.pt.y) / this.u.y);
-      if (Math.abs(p.x) <= volume.w/2 && p.z > 0) crossings.push(p);
+      if (Math.abs(p.x) <= volume.w/2 && p.z >= 0) crossings.push(p);
       //crossing bottom wall (y = -volume.h/2)
       p = this.getPointAtParam((-volume.h/2 - this.pt.y) / this.u.y);
-      if (Math.abs(p.x) <= volume.w/2 && p.z > 0) crossings.push(p);
+      if (Math.abs(p.x) <= volume.w/2 && p.z >= 0) crossings.push(p);
     }
     //no need to continue if we have two crossings
     if (this.u.x !== 0 && crossings.length < 2) {
       //crossing left wall (x = -volume.w/2)
-      p = this.getPointAtParam((-volume.w/2 - this.pt.x) / this.u.x);
-      if (Math.abs(p.y) <= volume.h/2 && p.z > 0) crossings.push(p);
+      p = this.getPointAtParam((-volume.w/2 - this.pt.x) / this.u.x); log.debug(p);
+      if (Math.abs(p.y) <= volume.h/2 && p.z >= 0) crossings.push(p);
       //crossing right wall (x = volume.w/2)
-      p = this.getPointAtParam((volume.w/2 - this.pt.x) / this.u.x);
-      if (crossings.length < 2 && Math.abs(p.y) <= volume.h/2 && p.z > 0) crossings.push(p);
+      p = this.getPointAtParam((volume.w/2 - this.pt.x) / this.u.x); log.debug(p);
+      if (crossings.length < 2 && Math.abs(p.y) <= volume.h/2 && p.z >= 0) crossings.push(p);
     }
     //no need to continue if we have two crossings
     if (this.u.z !== 0 && crossings.length < 2) {
@@ -92,13 +98,16 @@ export class Line extends Item {
       if (crossings.length < 2 && Math.abs(p.y) <= volume.h/2  && Math.abs(p.x) <= volume.w/2) crossings.push(p);
     }
 
+    // log.debug(crossings)
+
     //we should now have two points in crossings
     const projectedP1 = projection.projectPoint(crossings[0], projectionData),
         projectedP2 = projection.projectPoint(crossings[1], projectionData);
     return Object.assign(new Segment2D, {
       p1: projectedP1,
       p2: projectedP2,
-      label
+      label,
+      color
     });
    }
 

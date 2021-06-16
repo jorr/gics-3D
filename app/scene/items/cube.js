@@ -117,8 +117,6 @@ A—————B
       // first wall
       Object.assign(new Polygon2D, {
         points: [this.A, this.B, this.C, this.D].map(v => {
-          log.debug("vertex: ", v);
-          log.debug("projected as: ", projection.projectPoint(v, projectionData))
           return projection.projectPoint(v, projectionData);
         }),
         label

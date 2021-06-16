@@ -55,6 +55,10 @@ export class Plane extends Item {
     return this.hasPoint(l.pt) && this.hasVector(l.u);
    }
 
+   isParallelTo(p) {
+    return this.n.isCollinearWith(p.n);
+   }
+
    static get Oxy() {
     return new Plane(Point.Origin, new Vector(0,0,1));
    }

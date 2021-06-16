@@ -44,7 +44,7 @@ export default class SquareCommand extends CreationCommand {
     else if (params.length === 0 || params.length === 1 && params[0] instanceof Plane) {
       let plane = params[0] || Plane.Oxy;
       let A = plane.getRandomPoint();
-      let B = A.add(plane.getCoplanarVector().scale(100+Math.random()*100));
+      let B = A.add(plane.getCoplanarVector().unit().scale(100+Math.random()*100));
       let C = B.add(A.vectorTo(B).cross(plane.n).unit().scale(dist(A, B)));
       this.item = new Square(A, B, C);
     }

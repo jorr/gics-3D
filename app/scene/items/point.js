@@ -39,15 +39,20 @@ export class Point extends Item {
     return this.x === p.x && this.y === p.y && this.z === p.z;
    }
 
+   to2D() {
+    return Object.assign(new Point2D, { x: this.x, y: this.y });
+   }
+
    static get Origin() {
     return new Point(0,0,0);
    }
 
-   project(projectionData, projection, label) {
+   project(projectionData, projection, label, color) {
     // log.debug(`projecting point ${label}`);
     let projected = projection.projectPoint(this, projectionData);
     // log.debug(projected)
     projected.label = label;
+    projected.color = color;
     return projected;
    }
 }

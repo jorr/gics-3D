@@ -1,11 +1,9 @@
 import { Item } from '../item.js';
 import { Point } from './point.js';
 import { Segment } from './segment.js';
-import { dist } from '../util.js';
+import { dist, project } from '../util.js';
 
 import log from 'loglevel';
-
-const DEFAULT_SIDE = 100;
 
 export class Cylinder extends Item {
 
@@ -17,7 +15,6 @@ export class Cylinder extends Item {
     super();
     this.base1 = base1;
     this.base2 = base2;
-    log.debug(base2);
     this.side = dist(base1.cen, base2.cen);
   }
 
@@ -28,7 +25,9 @@ export class Cylinder extends Item {
   }
 
   project(projectionData, projection, label) {
-    let direction = projectionData.camera.vectorTo(Point.Origin).perpendicular(this.base1.plane).unit();
+    //let direction = projectionData.camera.vectorTo(Point.Origin).perpendicular(this.base1.plane).unit();
+    let screenPlane = projection.screenPlane(projectionData.camera, projectionData.volume);
+    let direction = projectionData.camera.vectorTo(project(projectionData.camera, screenPlane)).perpendicular(this.base1.plane).unit();
     return [
       // first base
       this.base1.project(projectionData, projection, label),

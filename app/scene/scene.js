@@ -1,6 +1,7 @@
 import _ from 'lodash';
 import log from 'loglevel';
 import { Point } from './items/point.js';
+import { Line } from './items/line.js';
 import { Plane } from './items/plane.js';
 import { Vector } from './vectors.js';
 import { CabinetProjection, PerspectiveProjection } from './projections.js';
@@ -16,13 +17,11 @@ export class Scene{
     h: 1000,
     d: 1000,
   };
-  camera = new Point(0,100,-300);
+  camera = new Point(100,100,-300);
   // projection = new CabinetProjection();
   projection = new PerspectiveProjection();
 
-  addItem(item, name) {
-    //TODO: check if suppressing drawing makes sense in 3D, implement as a flag
-
+  addItem(item, name, suppress) {
     if (!name) {
       name = `obj-${this.anonIndex++}`;
       log.info(`Adding an anonymous ${item.constructor.name} to scene`);
@@ -71,14 +70,15 @@ export class Scene{
 
   draw(outputOption) {
 
-    //TODO: for debugging purposes
-    this.items['О'] = new Point(0,0,0);
+    let projectionData = { camera: this.camera, volume: this.volume };
 
     let projectedElements = _(this.items).
     //TODO: label should be done the GICS way going forward
       mapValues((item, name) => item.project(
-        { camera: this.camera, volume: this.volume },
-      this.projection, name.startsWith('obj-') ? '' : name)).
+        projectionData,
+        this.projection,
+        name.startsWith('obj-') ? '' : name
+      )).
       values().
       flattenDeep().
       value();
@@ -87,13 +87,22 @@ export class Scene{
     let bindings = _(this.bindings).
     //TODO: label should be done the GICS way going forward
       mapValues((item, name) => item().project(
-        { camera: this.camera, volume: this.volume },
-      this.projection, name)).
+        projectionData,
+        this.projection,
+        name
+      )).
       values().
       flattenDeep().
       value();
 
-    outputOption.render(_.concat(projectedElements, bindings), this.projection.screenSize(this.camera, this.volume));
+    let infoItems = [
+      Point.Origin.project(projectionData, this.projection, 'O', 'green'),
+      Line.Ox.project(projectionData, this.projection, '', 'green'),
+      Line.Oy.project(projectionData, this.projection, '', 'green'),
+      Line.Oz.project(projectionData, this.projection, '', 'green'),
+    ]
+
+    outputOption.render(_.concat(infoItems, projectedElements, bindings), this.projection.screenSize(this.camera, this.volume));
   }
 
 };

@@ -1,22 +1,20 @@
-import { Item, Polygon2D } from '../item.js';
+import { Polygon, Polygon2D } from '../item.js';
 import { Plane } from './plane.js';
 
 import log from 'loglevel';
 
-export class Square extends Item {
+export class Square extends Polygon {
   /**
    * Square type definition
    * @property {Point} A, B, C, D
    */
    A; B; C; D;
-   plane;
 
    constructor(A, B, C) {
-    super();
+    super(4, new Plane(A, A.vectorTo(B).cross(A.vectorTo(C))));
 
     this.A = A; this.B = B; this.C = C;
     this.D = A.add(B.vectorTo(C));
-    this.plane = new Plane(A, A.vectorTo(B).cross(A.vectorTo(C)));
    }
 
    get side() {

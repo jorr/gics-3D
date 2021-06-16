@@ -31,6 +31,14 @@ export class Segment extends Item {
     return this.p1.vectorTo(this.p2);
    }
 
+   to2D() {
+    return Object.assign(new Segment2D, {p1: this.p1.to2D(), p2: this.p2.to2D() });
+   }
+
+   isParallelTo(s) {
+    return this.asVector().isCollinearWith(s.asVector());
+   }
+
    pointsToTransform() {
     return [this.p1, this.p2];
   }

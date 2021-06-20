@@ -25,9 +25,7 @@ export class Pyramid extends Item {
       // base
       this.base.project(projectionData, projection, label), apexProjection,
       // connecting edges
-      this.base.vertices.map(v => {
-        return Object.assign(new Segment2D, { p1: v.project(projectionData, projection), p2: apexProjection})
-      })
+      this.base.vertices.map(v => new Segment2D(v.project(projectionData, projection), apexProjection))
     ];
   }
 

@@ -32,11 +32,15 @@ export class Segment extends Item {
    }
 
    to2D() {
-    return Object.assign(new Segment2D, {p1: this.p1.to2D(), p2: this.p2.to2D() });
+    return new Segment2D(this.p1.to2D(), this.p2.to2D());
    }
 
    isParallelTo(s) {
     return this.asVector().isCollinearWith(s.asVector());
+   }
+
+   projectionOn(arg) {
+    return new Segment(this.p1.projectionOn(arg), this.p2.projectionOn(arg));
    }
 
    pointsToTransform() {
@@ -48,9 +52,8 @@ export class Segment extends Item {
     //can do a flag
     let projectedP1 = projection.projectPoint(this.p1, projectionData),
         projectedP2 = projection.projectPoint(this.p2, projectionData);
-    return Object.assign(new Segment2D, {
-      p1: projectedP1,
-      p2: projectedP2,
+    return Object.assign(new Segment2D(projectedP1, projectedP2),
+    {
       label
     });
    }

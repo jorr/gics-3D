@@ -42,33 +42,10 @@ export function angle(arg1, arg2) {
   else if (arg1 instanceof Vector && arg2 instanceof Plane)
     return Math.asin(arg1.unit().dot(arg2.n.unit()));
   else if (arg1 instanceof Plane && arg2 instanceof Plane)
-    //BOYKO: angle between planes
-    return 0;
+    return angle(arg1.n, arg2.n);
 }
 
 // CONSTRUCTS
-
-//TODO: finish
-export function intersect(arg1, arg2) {
-  //segment and segment
-  //segment and line
-  //segment and plane
-  //line and plane
-  //plane and plane
-  if (arg1 instanceof Plane && arg2 instanceof Plane) {
-    let A = arg1.pt, B = arg2.pt, m = arg1.n, n = arg2.n;
-    let pt = A.add(
-      m.cross(n).cross(m).scale(
-        n.dot(A.vectorTo(B)) / (m.cross(n).dot(m.cross(n)))
-      )
-    );
-    return new Line(pt, m.cross(n));
-  }
-  //segment and body
-  //line and body
-  //plane and body
-  //body and body
-}
 
 export function midpoint(p1, p2) {
   return new Point(
@@ -83,13 +60,18 @@ export function centroid(vertices) {
   return sum.scale(1/vertices.length).toPoint();
 }
 
-//TODO: finish
-export function project(arg1, arg2, direction) {
-  if (arg1 instanceof Point && arg2 instanceof Plane) {
-    direction = direction || arg2.n;
-    return arg1.add(direction.scale(-arg2.n.dot(arg2.pt.vectorTo(arg1))/arg2.n.dot(direction)));
-  }
-  //TODO: finish the rest
+//sorts vertices to form convex polygon in the given plane
+export function sortVertices(vertices, plane) {
+  log.debug("vs ", vertices)
+  let centre = centroid(vertices); //TODO: check that all vertices and the centroid lie on the same plane
+  log.debug("centre ", centre)
+  let axis = plane.getCoplanarVector().unit();
+  log.debug(axis)
+  return vertices.sort((a,b) => {
+    log.debug("a: ", a, "b: ", b);
+    log.debug(((angle(centre.vectorTo(a), axis) - angle(centre.vectorTo(b), axis)) * Math.PI/180 + 360) % 360);
+    return ((angle(centre.vectorTo(a), axis) - angle(centre.vectorTo(b), axis)) * Math.PI/180 + 360) % 360;
+  });
 }
 
 // CHECKS

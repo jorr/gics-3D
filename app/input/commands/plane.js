@@ -22,6 +22,8 @@ export default class PlaneCommand extends CreationCommand {
 
   createItem(params) {
 
+    //plane(3 points), plane(two vectors)
+
     //plane(<point>, <segment>) - a plane through the point with the segment as normal vector
     if (params.length === 2 && params[0] instanceof Point && params[1] instanceof Segment) {
       this.item = new Plane(params[0], params[1].asVector());

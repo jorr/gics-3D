@@ -1,9 +1,8 @@
-import { Polygon, Polygon2D } from '../item.js';
-import { Plane } from './plane.js';
+import { Square } from './square.js';
 
 import log from 'loglevel';
 
-export class Square extends Polygon {
+export class Rectangle extends Square {
   /**
    * Square type definition
    * @property {Point} A, B, C, D
@@ -30,9 +29,9 @@ export class Square extends Polygon {
   }
 
    project(projectionData, projection, label) {
-    return Object.assign(
-      new Polygon2D([this.A, this.B, this.C, this.D].map(v => projection.projectPoint(v, projectionData))),
-      { label }
-    );
+    return Object.assign(new Polygon2D(
+      [this.A, this.B, this.C, this.D].map(v => projection.projectPoint(v, projectionData))), {
+      label
+    });
    }
 }

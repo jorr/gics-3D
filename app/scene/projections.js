@@ -1,11 +1,11 @@
 import { Point } from './items/point.js';
-import { Vector } from './vectors.js';
+import { Vector, Vector2D } from './vectors.js';
 import { Point2D, Ellipse2D, Segment2D } from './item.js';
 import { Plane } from './items/plane.js';
 import { Line } from './items/line.js';
 import { Segment } from './items/segment.js';
-import { midpoint, dist, pointInVolume, intersect, project, angle } from './util.js';
-import { dist2D, angle2D } from './util2d.js';
+import { midpoint, dist, pointInVolume, angle } from './util.js';
+import { dist2D, angle2D, ellipseConvertConjugateDiametersToAxes } from './util2d.js';
 
 import log from 'loglevel';
 
@@ -33,18 +33,21 @@ class Projection {
       this.projectPoint(new Point(volume.w/2,0,0), {camera, volume}),
       this.projectPoint(new Point(0,-volume.h/2,0), {camera, volume}),
       this.projectPoint(new Point(0,volume.h/2,0), {camera, volume}),
+      this.projectPoint(new Point(-volume.w/2,0,volume.d), {camera, volume}),
+      this.projectPoint(new Point(volume.w/2,0,volume.d), {camera, volume}),
+      this.projectPoint(new Point(0,-volume.h/2,volume.d), {camera, volume}),
+      this.projectPoint(new Point(0,volume.h/2,volume.d), {camera, volume}),
     ];
     let size =  {
-      w: projectedEndpoints[1].x - projectedEndpoints[0].x,
-      h: projectedEndpoints[3].y - projectedEndpoints[2].y
+      w: Math.max(projectedEndpoints[1].x, projectedEndpoints[5].x) - Math.min(projectedEndpoints[0].x, projectedEndpoints[4].x),
+      h: Math.max(projectedEndpoints[3].y, projectedEndpoints[7].y) - Math.min(projectedEndpoints[2].y, projectedEndpoints[6].y)
     };
-    // log.debug(size);
     return size;
   }
 }
 
 export class CabinetProjection extends Projection {
-  angle = Math.atan(2);
+  angle = Math.PI/180*45; //Math.atan(2);
   shortening = 0.5;
 
   direction = new Vector(0.5,0,1);
@@ -66,18 +69,20 @@ export class CabinetProjection extends Projection {
     // return Object.assign(new Point2D, {x: px, y: py});
     // let plane = this.screenPlane(camera, volume);
     // let projection = p.add(this.direction.scale(-plane.n.dot(plane.pt.vectorTo(p))/plane.n.dot(this.direction)));
-    // log.debug('projected: ', p.x, p.y);
+    // log.debug('projecting: ', p.x, p.y, p.z);
+    // log.debug('projected at: ', projection.x, projection.y);
 
     return Object.assign(new Point2D, projection);
   }
 
-  projectCircle(c, { camera, volume }) {
+  projectCircle(c, { camera, volume }, mainAxisProjectionOut = null) {
     let screenPlane = this.screenPlane(camera, volume), p1, p2,
         projectedP1, projectedP2, projectedCen, rx, ry, mainAxisSegment;
-    let direction = camera.vectorTo(project(camera, screenPlane)).perpendicular(c.plane).unit();
+    let direction = screenPlane.n.perpendicular(c.plane).unit();
+
     p1 = c.cen.add(direction.scale(c.rad));
     p2 = c.cen.add(direction.scale(-c.rad));
-    let conjugateDiamDirection = c.cen.vectorTo(p1).perpendicular(c.plane).unit();
+    let conjugateDiamDirection = direction.perpendicular(c.plane).unit();
     let p3 = c.cen.add(conjugateDiamDirection.scale(c.rad));
     let p4 = c.cen.add(conjugateDiamDirection.scale(-c.rad));
 
@@ -87,26 +92,29 @@ export class CabinetProjection extends Projection {
     let projectedP4 = this.projectPoint(p4, { camera, volume });
     projectedCen = this.projectPoint(c.cen, { camera, volume });
 
-    rx = dist2D(projectedP1, projectedP2);
-    ry = dist2D(projectedP3, projectedP4);
-    mainAxisSegment = Object.assign(new Segment2D, {p1: projectedP1, p2: projectedP2});
+    // log.debug('original centre ', c.cen)
+    // log.debug('projected cen ', projectedCen)
 
-    if (rx>ry) {
-      let temp = rx; rx=ry; ry=temp;
-      mainAxisSegment = Object.assign(new Segment2D, {p1: projectedP3, p2: projectedP4});
-    }
+    rx = dist2D(projectedP1, projectedP2)/2;
+    ry = dist2D(projectedP3, projectedP4)/2;
+    mainAxisSegment = Vector2D.fromPoints(projectedP1, projectedP2);
+
+    let ellipseParams = ellipseConvertConjugateDiametersToAxes(
+      projectedCen, new Segment2D(projectedP1, projectedP2), new Segment2D(projectedP3, projectedP4),
+      mainAxisProjectionOut
+    );
+
+    delete ellipseParams.mainAxisProjectionOut;
 
     return Object.assign(new Ellipse2D, {
       c: projectedCen,
-      rx,
-      ry,
-      rotate: angle2D( // the angle between a radius of the ellipse and Ox in 2D
-        mainAxisSegment,
-        Object.assign(new Segment2D, {
-          p1:Object.assign(new Point2D, {x:0,y:0}),
-          p2:Object.assign(new Point2D, {x:1,y:0})
-        })
-      )
+      ...ellipseParams
+      // rx,
+      // ry,
+      // rotate: angle2D( // the angle between a radius of the ellipse and Ox in 2D
+      //   mainAxisSegment,
+      //   new Vector2D(1,0)
+      // )
     });
   }
 }
@@ -120,7 +128,7 @@ export class PerspectiveProjection extends Projection {
     let plane = this.screenPlane(camera, volume);
 
      // log.debug('camera to p, ', direction);
-    let projection = project(p, plane, direction);
+    let projection = p.add(direction.scale(-plane.n.dot(plane.pt.vectorTo(p))/plane.n.dot(direction)));
     // log.debug('projected: ', projection);
 
     if (in3D) return projection;
@@ -160,10 +168,10 @@ export class PerspectiveProjection extends Projection {
       }
 
     } else {
-      let planesIntersect = intersect(screenPlane, c.plane); log.debug(planesIntersect)
+      let planesIntersect = screenPlane.intersect(c.plane); log.debug(planesIntersect)
       let diamVector = planesIntersect.u.perpendicular(c.plane).unit();
       //TODO: extract intersecting from lines
-      let diamVectorCrossesPlanesIntersectAt = new Line(c.cen, diamVector).intersectWith(planesIntersect);
+      let diamVectorCrossesPlanesIntersectAt = new Line(c.cen, diamVector).intersect(planesIntersect);
 
       let p1 = c.cen.add(diamVector.scale(c.rad))
       let p2 = c.cen.add(diamVector.scale(-c.rad)); //.perpendicular(c.plane)); log.debug(dist(p2,c.cen)); log.debug(p2)

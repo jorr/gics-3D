@@ -10,7 +10,6 @@ export class Triangle extends Polygon {
    * @property {Point} A, B, C
    */
    A; B; C;
-   plane;
 
    constructor(A, B, C) {
     let n = A.vectorTo(B).cross(A.vectorTo(C)).unit();
@@ -43,9 +42,9 @@ export class Triangle extends Polygon {
   }
 
    project(projectionData, projection, label) {
-    return Object.assign(new Polygon2D, {
-      points: this.vertices.map(v => projection.projectPoint(v, projectionData)),
-      label
-    });
+    return Object.assign(new Polygon2D(
+      this.vertices.map(v => projection.projectPoint(v, projectionData))),
+      { label }
+    );
    }
 }

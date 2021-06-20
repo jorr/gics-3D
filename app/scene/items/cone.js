@@ -1,7 +1,7 @@
-import { Item } from '../item.js';
+import { Item, Segment2D, Point2D } from '../item.js';
 import { Point } from './point.js';
 import { Segment } from './segment.js';
-import { dist } from '../util.js';
+// import { dist } from '../util.js';
 
 import log from 'loglevel';
 
@@ -15,22 +15,16 @@ export class Cone extends Item {
     this.apex = apex;
   }
 
-  edge(direction) {
-    let bpoint = this.base.pointOnCircle(direction);
-    // log.debug(bpoint)
-    // log.debug(this.apex)
-    return new Segment(bpoint, this.apex);
-  }
-
   project(projectionData, projection, label) {
-    let direction = projectionData.camera.vectorTo(Point.Origin).perpendicular(this.base.plane).unit();
+    let mainAxisProjectionOut = {p1: null, p2: null};
+    let baseProjection = this.base.project(projectionData, projection, label, mainAxisProjectionOut);
+    let apexProjection = this.apex.project(projectionData, projection);
     return [
       // base
-      this.base.project(projectionData, projection, label),
+      baseProjection,
       // connecting edges
-      // get the diameter that lies on the line perpendicular to the camera-origin vector
-      this.edge(direction).project(projectionData, projection),
-      this.edge(direction.scale(-1)).project(projectionData, projection)
+      new Segment2D(mainAxisProjectionOut.p1, apexProjection),
+      new Segment2D(mainAxisProjectionOut.p2, apexProjection),
     ];
   }
 

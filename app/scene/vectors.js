@@ -1,7 +1,7 @@
-import { intersect } from './util.js';
 import { Plane } from './items/plane.js';
 import { Line } from './items/line.js';
 import { Point } from './items/point.js';
+import { Segment2D } from './item.js';
 
 import log from 'loglevel';
 
@@ -87,7 +87,7 @@ export class Vector {
     } else {
       // build a plane with the given vector as normal
       let normalPlane = new Plane(plane.pt, this);
-      let crossing = intersect(plane, normalPlane);
+      let crossing = plane.intersect(normalPlane);
       return crossing.u.unit();
     }
   }
@@ -106,7 +106,45 @@ export class Vector {
     return new Vector(Math.random(), Math.random(), Math.random());
   }
 
+  static get UnitX() {
+    return new Vector(1,0,0);
+  }
+
+  static get UnitY() {
+    return new Vector(0,1,0);
+  }
+
+  static get UnitZ() {
+    return new Vector(0,0,1);
+  }
+
 };
+
+export class Vector2D extends Vector {
+  constructor(x,y) {
+    super(x,y,0);
+  }
+
+  perpendicular() {
+    return new Vector2D(-this.y,this.x);
+  }
+
+  scale(n) {
+    return new Vector2D(this.x*n, this.y*n);
+  }
+
+  add(v) {
+    return new Vector2D(this.x+v.x, this.y+v.y);
+  }
+
+  unit() {
+    return new Vector2D(this.x/this.norm, this.y/this.norm);
+  }
+
+  static fromPoints(p1,p2) {
+    return new Vector2D(p2.x - p1.x, p2.y - p1.y);
+  }
+}
 
 export class Matrix {
   /**

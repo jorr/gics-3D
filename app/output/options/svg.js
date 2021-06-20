@@ -10,7 +10,7 @@ export class SvgOutput extends OutputOption {
     svg = '';
     stroke = 'black';
     strokeWidth = 1;
-    labelOffset = {x: 2, y: 2};
+    labelOffset = {x: 4, y: 4};
     width;
     height;
 
@@ -23,22 +23,26 @@ export class SvgOutput extends OutputOption {
 
     initScreen(screen) {
       this.strokeWidth = screen.w/this.width;
+      this.labelOffset = {
+        x: screen.w/this.width * 4,
+        y: screen.w/this.width * 4
+      };
       this.svg = `<?xml version="1.0" standalone="no"?>
 <svg version="1.1" baseProfile="full" width="${this.width}" height="${this.height}" viewBox="0 0 ${screen.w} ${screen.h}" xmlns="http://www.w3.org/2000/svg">
 <style>
   text {
-    font-size: 60px;
+    font-size: ${screen.w/100+5}px;
   }
 
   @media (max-width: 600px) {
     text {
-      font-size: 20px;
+      font-size: ${screen.w/30+5}px;
     }
   }
 
   @media (max-width: 800px) {
     text {
-      font-size: 40px;
+      font-size: ${screen.w/15+5}px;
     }
   }
 </style>
@@ -69,18 +73,18 @@ export class SvgOutput extends OutputOption {
     renderPoly(pg) {
       let points = pg.points.map(p => `${p.x},${-p.y}`).join(' ');
       this.svg = `${this.svg}
-<polygon points="${points}" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" fill="none"/>`;
+<polygon points="${points}" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" fill="${pg.color || 'none'}"/>`;
       if (pg.label) {
         //TODO: make this smarter
         this.svg = `${this.svg}
-<text x="${pg.points[0].x+this.labelOffset.x}" y="${-pg.points[0].y+this.labelOffset.y}">${pg.label}</text>`;
+<text x="${pg.centre.x+this.labelOffset.x}" y="${-pg.centre.y+this.labelOffset.y}">${pg.label}</text>`;
       }
     }
 
     renderEllipse(e) {
-      log.debug('Drawing ellipse, ', e)
+      log.debug(e)
       this.svg = `${this.svg}
-<ellipse cx="${e.c.x}" cy="${-e.c.y}" rx="${e.rx}" ry="${e.ry}" transform="rotate(${e.rotate})" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" fill="none"/>`;
+<ellipse cx="${e.c.x}" cy="${-e.c.y}" rx="${e.rx}" ry="${e.ry}" transform="rotate(${e.rotate},${e.c.x},${-e.c.y})" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" fill="none"/>`;
       if (e.label) {
         this.svg = `${this.svg}
 <text x="${e.c.x}" y="${-e.c.y + e.ry + this.labelOffset.y}">${e.label}</text>`;

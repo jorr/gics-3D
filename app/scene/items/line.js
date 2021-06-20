@@ -38,30 +38,42 @@ export class Line extends Item {
     return this.u.isCollinearWith(l.u);
    }
 
+   parallelThrough(p) {
+    return new Line(p, this.u);
+   }
+
+   projectionOn(arg) {
+    if (arg instanceof Plane) {
+      return new Line(this.pt.projectionOn(arg), this.u.add(arg.n.unit().scale(-arg.n.unit().dot(this.u))));
+    } else throw new ImpossibleOperationError('Lines can only be projected on planes');
+   }
+
    static get Ox() {
-    return new Line(Point.Origin, new Vector(1,0,0));
+    return new Line(Point.Origin, Vector.UnitX);
    }
 
    static get Oy() {
-    return new Line(Point.Origin, new Vector(0,1,0));
+    return new Line(Point.Origin, Vector.UnitY);
    }
 
    static get Oz() {
-    return new Line(Point.Origin, new Vector(0,0,1));
+    return new Line(Point.Origin, Vector.UnitZ);
    }
 
-   intersectWith(x) {
-    if (x instanceof Line) {
+   intersect(arg) {
+    //TODO: segment, bodies
+    if (arg instanceof Line) {
       //check if the lines actually intersect
-      if (!this.u.cross(x.u).isNonZero() || this.u.triple(x.u, this.pt.vectorTo(x.pt)) !== 0) {
-        throw new ImpossibleOperationError('Attempt to intersect non-intersecting lines');
+      if (!this.u.cross(arg.u).isNonZero() || this.u.triple(arg.u, this.pt.vectorTo(arg.pt)) !== 0) {
+        return null; //throw new ImpossibleOperationError('Attempt to intersect non-intersecting lines');
       }
 
       return this.getPointAtParam(
-        x.u.triple(this.u.cross(x.u),this.pt.vectorTo(x.pt))/(this.u.cross(x.u).dot(this.u.cross(x.u)))
+        arg.u.triple(this.u.cross(arg.u),this.pt.vectorTo(arg.pt))/(this.u.cross(arg.u).dot(this.u.cross(arg.u)))
       );
-    } else if (x instanceof Plane) {
-      return this.pt.add(this.u.scale(-x.n.dot(x.pt.vectorTo(this.pt))/x.n.dot(this.u)));
+    } else if (arg instanceof Plane) {
+      if (this.u.dot(arg.n) === 0) return null; //parallel
+      return this.pt.add(this.u.scale(-arg.n.dot(arg.pt.vectorTo(this.pt))/arg.n.dot(this.u)));
     }
    }
 
@@ -82,10 +94,10 @@ export class Line extends Item {
     //no need to continue if we have two crossings
     if (this.u.x !== 0 && crossings.length < 2) {
       //crossing left wall (x = -volume.w/2)
-      p = this.getPointAtParam((-volume.w/2 - this.pt.x) / this.u.x); log.debug(p);
+      p = this.getPointAtParam((-volume.w/2 - this.pt.x) / this.u.x);// log.debug(p);
       if (Math.abs(p.y) <= volume.h/2 && p.z >= 0) crossings.push(p);
       //crossing right wall (x = volume.w/2)
-      p = this.getPointAtParam((volume.w/2 - this.pt.x) / this.u.x); log.debug(p);
+      p = this.getPointAtParam((volume.w/2 - this.pt.x) / this.u.x);// log.debug(p);
       if (crossings.length < 2 && Math.abs(p.y) <= volume.h/2 && p.z >= 0) crossings.push(p);
     }
     //no need to continue if we have two crossings
@@ -103,9 +115,7 @@ export class Line extends Item {
     //we should now have two points in crossings
     const projectedP1 = projection.projectPoint(crossings[0], projectionData),
         projectedP2 = projection.projectPoint(crossings[1], projectionData);
-    return Object.assign(new Segment2D, {
-      p1: projectedP1,
-      p2: projectedP2,
+    return Object.assign(new Segment2D(projectedP1, projectedP2), {
       label,
       color
     });

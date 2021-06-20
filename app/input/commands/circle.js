@@ -9,7 +9,7 @@ import { Point } from '../../scene/items/point.js';
 import { Segment } from '../../scene/items/segment.js';
 import { Plane } from '../../scene/items/plane.js';
 import { Vector } from '../../scene/vectors.js';
-import { midpoint, dist, intersect } from '../../scene/util.js';
+import { midpoint, dist } from '../../scene/util.js';
 import { WrongParamsError, WrongPatternError, NotFeasibleError } from '../../errors.js';
 
 import log from 'loglevel';

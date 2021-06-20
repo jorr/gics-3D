@@ -1,7 +1,7 @@
-import { Item } from '../item.js';
+import { Item, Segment2D, Point2D } from '../item.js';
 import { Point } from './point.js';
 import { Segment } from './segment.js';
-import { dist, project } from '../util.js';
+import { dist } from '../util.js';
 
 import log from 'loglevel';
 
@@ -18,26 +18,42 @@ export class Cylinder extends Item {
     this.side = dist(base1.cen, base2.cen);
   }
 
-  edge(direction) {
-    let b1point = this.base1.pointOnCircle(direction);
-    let sideVector = this.base1.cen.vectorTo(this.base2.cen);
-    return new Segment(b1point, b1point.add(sideVector));
-  }
+  // edge(direction) {
+  //   let b1point = this.base1.pointOnCircle(direction);
+  //   let sideVector = this.base1.cen.vectorTo(this.base2.cen);
+  //   return new Segment(b1point, b1point.add(sideVector));
+  // }
 
   project(projectionData, projection, label) {
     //let direction = projectionData.camera.vectorTo(Point.Origin).perpendicular(this.base1.plane).unit();
-    let screenPlane = projection.screenPlane(projectionData.camera, projectionData.volume);
-    let direction = projectionData.camera.vectorTo(project(projectionData.camera, screenPlane)).perpendicular(this.base1.plane).unit();
+    // let screenPlane = projection.screenPlane(projectionData.camera, projectionData.volume);
+    // let direction = projectionData.camera.vectorTo(project(projectionData.camera, screenPlane)).perpendicular(this.base1.plane).unit();
+
+    let mainAxisBase1ProjectionOut = {p1: null, p2: null};
+    let base1Projection = this.base1.project(projectionData, projection, '', mainAxisBase1ProjectionOut);
+    let mainAxisBase2ProjectionOut = {p1: null, p2: null};
+    let base2Projection = this.base2.project(projectionData, projection, '', mainAxisBase2ProjectionOut);
+
     return [
-      // first base
-      this.base1.project(projectionData, projection, label),
-      // second base
-      this.base2.project(projectionData, projection),
+      // bases
+      base1Projection, base2Projection,
       // connecting edges
-      // get the diameter that lies on the line perpendicular to the camera-origin vector
-      this.edge(direction).project(projectionData, projection),
-      this.edge(direction.scale(-1)).project(projectionData, projection)
+      Object.assign(new Segment2D(mainAxisBase1ProjectionOut.p1, mainAxisBase2ProjectionOut.p1), { label }),
+      new Segment2D(mainAxisBase1ProjectionOut.p2, mainAxisBase2ProjectionOut.p2),
+      Object.assign(mainAxisBase1ProjectionOut.p1, { label: "P1", color: "blue"})
     ];
+
+
+    // return [
+    //   // first base
+    //   this.base1.project(projectionData, projection, label),
+    //   // second base
+    //   this.base2.project(projectionData, projection),
+    //   // connecting edges
+    //   // get the diameter that lies on the line perpendicular to the camera-origin vector
+    //   this.edge(direction).project(projectionData, projection),
+    //   this.edge(direction.scale(-1)).project(projectionData, projection)
+    // ];
   }
 
 }

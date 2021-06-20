@@ -53,4 +53,6 @@ export default class CylinderCommand extends CreationCommand {
     else throw new WrongParamsError(params, this);
   }
 
+  //TODO: bindElements
+
 };

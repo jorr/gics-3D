@@ -50,4 +50,6 @@ export default class ConeCommand extends CreationCommand {
     else throw new WrongParamsError(params, this);
   }
 
+  //TODO: bindElements
+
 };

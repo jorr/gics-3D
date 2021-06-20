@@ -115,21 +115,17 @@ A—————B
   project(projectionData, projection, label) {
     return [
       // first wall
-      Object.assign(new Polygon2D, {
-        points: [this.A, this.B, this.C, this.D].map(v => {
-          return projection.projectPoint(v, projectionData);
-        }),
-        label
-      }),
+      Object.assign(
+        new Polygon2D([this.A, this.B, this.C, this.D].map(v => projection.projectPoint(v, projectionData))),
+        { label }
+      ),
       // second wall
-      Object.assign(new Polygon2D, {
-        points: [this.A1, this.B1, this.C1, this.D1].map(v => projection.projectPoint(v, projectionData))
-      }),
+      new Polygon2D([this.A1, this.B1, this.C1, this.D1].map(v => projection.projectPoint(v, projectionData))),
       // connecting edges
-      Object.assign(new Segment2D, { p1: this.A.project(projectionData, projection), p2: this.A1.project(projectionData, projection)}),
-      Object.assign(new Segment2D, { p1: this.B.project(projectionData, projection), p2: this.B1.project(projectionData, projection)}),
-      Object.assign(new Segment2D, { p1: this.C.project(projectionData, projection), p2: this.C1.project(projectionData, projection)}),
-      Object.assign(new Segment2D, { p1: this.D.project(projectionData, projection), p2: this.D1.project(projectionData, projection)}),
+      new Segment2D(this.A.project(projectionData, projection), this.A1.project(projectionData, projection)),
+      new Segment2D(this.B.project(projectionData, projection), this.B1.project(projectionData, projection)),
+      new Segment2D(this.C.project(projectionData, projection), this.C1.project(projectionData, projection)),
+      new Segment2D(this.D.project(projectionData, projection), this.D1.project(projectionData, projection)),
     ];
   }
 

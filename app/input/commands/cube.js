@@ -35,4 +35,6 @@ export default class CubeCommand extends CreationCommand {
     else throw new WrongParamsError(params, this);
   }
 
+  //TODO: bindElements
+
 };

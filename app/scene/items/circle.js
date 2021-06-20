@@ -41,7 +41,12 @@ export class Circle extends Item {
     return [this.cen]; //, this.p1, this.p2];
   }
 
-   project(projectionData, projection, label) {
-     return Object.assign(projection.projectCircle(this, projectionData), { label });
-   }
+  project(projectionData, projection, label, mainAxisProjectionOut = null) {
+    let projectedCircle = projection.projectCircle(this, projectionData, mainAxisProjectionOut);
+
+    return [
+      Object.assign(projectedCircle, { label }),
+      // this.cen.project(projectionData, projection, "CEN")
+    ];
+  }
 }

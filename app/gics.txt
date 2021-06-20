@@ -19,6 +19,7 @@
 #segment(p1,p2) -> s
 
 point(0,95,0) -> d
+#line(d,line("Oz"),d:90) -> ll
 
 circle([0,0,0],40,plane("Oxz")) -> c
 

@@ -57,8 +57,8 @@ const DIV = createToken({ name: 'DIV', pattern: /\//, categories: MULTOP });
 
 const tokens = [
   WHITESPACE, COMMENT, MULT, DIV, NUMBER, COMMAND, LPAREN, RPAREN, COMMA,
-  /*QUOTE,*/ RBRAC, LBRAC, STRING, IDENTIFIER, TO, ANON, PLUS, MINUS,
-  ANGLE, SEPARATOR, MULTOP, ADDOP
+  /*QUOTE,*/ RBRAC, LBRAC, STRING, ANGLE, IDENTIFIER, TO, ANON, PLUS, MINUS,
+  SEPARATOR, MULTOP, ADDOP
 ];
 
 export const gicsLexer = new Lexer(tokens);

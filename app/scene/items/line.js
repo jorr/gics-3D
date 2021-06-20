@@ -89,7 +89,7 @@ export class Line extends Item {
       this.intersect(Plane.Oxy.parallelThrough(new Point(0,0,volume.d))),
       this.intersect(Plane.Oxz.parallelThrough(new Point(0,volume.h/2,0,0))),
       this.intersect(Plane.Oxz.parallelThrough(new Point(0,-volume.h/2,0,0)))
-    ].filter(c => c && pointInVolume(c, volume).map(c => projection.projectPoint(c, projectionData));
+    ].filter(c => c && pointInVolume(c, volume)).map(c => projection.projectPoint(c, projectionData));
 
     // there should be just two at this point
     return Object.assign(new Segment2D(crossings[0], crossings[1]), { label, color });

@@ -23,6 +23,8 @@ point(0,95,0) -> d
 
 circle([0,0,0],40,plane("Oxz")) -> c
 
+sphere(c) -> sp
+
 #square([300,0,300],[100,0,100],plane("Oxz")) -> sq[A,B,C,D]
 
 #square(plane("Oxz")) -> sq[A,B,C,D]

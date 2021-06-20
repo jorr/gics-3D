@@ -46,7 +46,7 @@ export function ellipseConvertConjugateDiametersToAxes(cen, diam1, diam2, mainAx
   return {
     rx,
     ry,
-    rotate: angle2D( // the angle between a radius of the ellipse and Ox in 2D
+    rotate: rx === ry ? 0 : angle2D( // the angle between a radius of the ellipse and Ox in 2D
       new Vector2D(1,0),
       mainAxisProjection
     )

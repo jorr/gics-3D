@@ -40,8 +40,7 @@ export default class ConeCommand extends CreationCommand {
       let side = params[0][params[1]]; log.debug(side)
       let center = midpoint(side.p1, side.p2); log.debug(center)
       let axis = side.asVector().perpendicular(params[0].plane); log.debug(axis)
-      log.debug(new Circle(center, side.len/2, new Plane(center, axis)))
-      let rotated = side.asVector().rotate(axis, 45);
+      // let rotated = side.asVector().rotate(axis, 45);
       this.item = new Cone(
         new Circle(center, side.len/2, new Plane(center, axis)),
         params[0][params[1].toUpperCase()]

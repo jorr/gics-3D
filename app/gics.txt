@@ -37,11 +37,11 @@ circle([0,0,0],40,plane("Oxz")) -> c
 
 #triangle(p1,p2,d) -> tr
 
-triangle([-100,0,0],[100,0,0],[100,0,300]) -> t[A,B,C]
+#triangle([-100,0,0],[100,0,0],[100,0,300]) -> t[A,B,C]
 #point(0,95,0) -> d
 #pyramid(t,150) -> p
 
-cone(c,d) -> CN
-cone(c,200) -> -CN2
-cone(t,"a") -> CN3
-produce(CN2)
+#cone(c,d) -> CN
+#cone(c,200) -> -CN2
+#cone(t,"a") -> CN3
+#produce(CN2)

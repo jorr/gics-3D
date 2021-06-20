@@ -147,7 +147,7 @@ export class Plane extends Item {
       //note that there may not be such
       let leftCross = this.intersect(Plane.Oyz.parallelThrough(new Point(-volume.w/2,0,0))),
       rightCross = this.intersect(Plane.Oyz.parallelThrough(new Point(volume.w/2,0,0))),
-      frontCross = this.intersect(Plane.Oxy.parallelThrough(new Point(0,0,volume.d/2))),
+      frontCross = this.intersect(Plane.Oxy.parallelThrough(new Point(0,0,0))),
       backCross = this.intersect(Plane.Oxy.parallelThrough(new Point(0,0,volume.d))),
       topCross = this.intersect(Plane.Oxz.parallelThrough(new Point(0,volume.h/2,0,0))),
       bottomCross = this.intersect(Plane.Oxz.parallelThrough(new Point(0,-volume.h/2,0,0)));

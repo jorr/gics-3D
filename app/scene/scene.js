@@ -106,12 +106,15 @@ export class Scene{
       flattenDeep().
       value();
 
-    let infoItems = [
+    let infoItems = _([
       Point.Origin.project(projectionData, this.projection, 'O', 'green'),
       Line.Ox.project(projectionData, this.projection, '', 'green'),
       Line.Oy.project(projectionData, this.projection, '', 'green'),
       Line.Oz.project(projectionData, this.projection, '', 'green'),
-    ]
+    ]).
+    values().
+    flattenDeep().
+    value();
 
     outputOption.render(_.concat(infoItems, projectedElements, bindings), this.projection.screenSize(this.camera, this.volume));
   }

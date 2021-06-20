@@ -14,6 +14,7 @@ export default class AngleCommand extends Command {
     return false;
   }
 
+  //TODO: check if we use Angle instances where we should
   execute(params, pattern) {
     super.execute(params, pattern);
     if (params.length !== 2) {

@@ -4,7 +4,7 @@ import { Command } from '../command.js';
 import { WrongParamsError } from '../../errors.js';
 import { dist } from '../../scene/util.js';
 
-export default class SegmentCommand extends Command {
+export default class DistCommand extends Command {
 
   get name() {
     return 'dist';

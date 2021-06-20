@@ -4,7 +4,7 @@ import { Command, Angle } from '../command.js';
 import { WrongParamsError } from '../../errors.js';
 import { angle } from '../../scene/util.js';
 
-export default class SegmentCommand extends Command {
+export default class AngleCommand extends Command {
 
   get name() {
     return 'angle';

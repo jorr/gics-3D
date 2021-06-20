@@ -5,6 +5,7 @@ import { Line } from './items/line.js';
 import { Plane } from './items/plane.js';
 import { Vector } from './vectors.js';
 import { CabinetProjection, PerspectiveProjection } from './projections.js';
+import { NameUndefinedError } from '../errors.js';
 
 export class Scene{
   //TODO: maybe switch to smarter storage
@@ -18,8 +19,8 @@ export class Scene{
     d: 1000,
   };
   camera = new Point(100,100,-300);
-  // projection = new CabinetProjection();
-  projection = new PerspectiveProjection();
+  projection = new CabinetProjection();
+  // projection = new PerspectiveProjection();
 
   addItem(item, name, suppress) {
     if (!name) {
@@ -30,7 +31,7 @@ export class Scene{
     }
 
     //TODO: rebinding should be possible, check!
-    if (!!this.items[name]) throw new Error('Repeating name binding attempt');
+    //if (!!this.items[name]) throw new Error('Repeating name binding attempt');
 
     this.items[name] = item;
     return name;
@@ -38,7 +39,10 @@ export class Scene{
 
   addBinding(item, propertyChain, name) {
     log.info(`Binding ${propertyChain} on a ${item.constructor.name} with name ${name}`);
-    this.bindings[name] = (() => _.get(item, propertyChain));
+    if (propertyChain)
+      this.bindings[name] = (() => _.get(item, propertyChain));
+    else
+      this.bindings[name] = item; //_.get would not work on expressions binding
   }
 
   removeItem(name) {
@@ -47,7 +51,10 @@ export class Scene{
 
   getItem(name) {
     if (!this.items[name]) {
-      return this.bindings[name]();
+      if (!this.bindings[name])
+        throw new NameUndefinedError(name);
+      else
+        return this.bindings[name]();
     }
     return this.items[name];
   }
@@ -60,8 +67,8 @@ export class Scene{
     );
   }
 
-  set viewPoint(z) {
-    this.camera.z = z;
+  set viewPoint(viewPoint) {
+    this.camera = viewPoint;
   }
 
   set projection(projection) {
@@ -72,7 +79,7 @@ export class Scene{
 
     let projectionData = { camera: this.camera, volume: this.volume };
 
-    let projectedElements = _(this.items).
+    let projectedElements = _(this.items).pickBy(i => !i.suppress).
     //TODO: label should be done the GICS way going forward
       mapValues((item, name) => item.project(
         projectionData,
@@ -84,7 +91,7 @@ export class Scene{
       value();
     // outputOption.render(projectedElements, this.projection.screenSize(this.camera, this.volume));
 
-    let bindings = _(this.bindings).
+    let bindings = _(this.bindings).pickBy(i => !i.suppress).
     //TODO: label should be done the GICS way going forward
       mapValues((item, name) => item().project(
         projectionData,

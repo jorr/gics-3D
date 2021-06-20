@@ -23,7 +23,7 @@ export default class ProduceCommand extends Command {
 
     //check if params[0] is resolved to a valid item
     if (params[0] instanceof Item) {
-      params[0].suppress = pattern?.suppress;
+      params[0].suppressed = pattern?.suppress;
       //rebind it to the globalScene
       //TODO: should we try to remove it first?
       globalScene.addItem(params[0], pattern?.name);

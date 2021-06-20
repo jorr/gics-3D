@@ -2,9 +2,10 @@
 //import scene manipulation
 //import drawing for side-effects
 
-import { CreationCommand } from '../command.js';
+import { CreationCommand, Angle } from '../command.js';
 import { globalScene } from '../../scene/scene.js';
 import { Segment } from '../../scene/items/segment.js';
+import { Line } from '../../scene/items/line.js';
 import { Point } from '../../scene/items/point.js';
 import { dist } from '../../scene/util.js';
 import { WrongParamsError, WrongPatternError, NotFeasibleError } from '../../errors.js';
@@ -27,11 +28,15 @@ export default class SegmentCommand extends CreationCommand {
       }
       this.item = new Segment(...params);
     }
-    // segment(<point>,r,ang[,<plane>]) - a segment starting from the given endpoint and having the second one on distance r, at angle ang from plane (defaults at 0xy)
-    // else if (params.length >= 3 && params[0] instanceof Point && typeof params[1] == 'number' && typeof params[2] == 'number') {
-    //   //not unique
-    // }
-
+    //segment(<point>,d,<line|segment>[,<angle>])
+    else if (params.length >= 3 && params[0] instanceof Point && typeof params[1] === 'number'
+      && (params[2] instanceof Line || params[2] instanceof Segment)) {
+      let angle = params[3] && params[3] instanceof Angle ? params[3].value : 0;
+      if (params[2] instanceof Segment)
+        params[2] = params[2].lineOn();
+      let directon = params[2].u.rotate(params[2].u.perpendicular(),angle);
+      this.item = new Segment(params[0], params[0].add(direction.unit().scale(params[1])));
+    }
     else throw new WrongParamsError(params, this);
   }
 

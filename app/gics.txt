@@ -1,6 +1,14 @@
-#point(400,200,300) -> p1
-#point(200,300,300) -> p2
-#segment(p1,[0,0,100]) -> s[.,p3]
+point(400,200,300) -> p1
+point(200,300,300) -> p2
+segment(p1,[0,0,100]) -> s[.,p3]
+
+#rectangle(s,d:45) -> R
+#rhomb([p1,p2],200) -> R
+#rhomb(plane("Oxy")) -> RH
+#parallelogram([p1,p2],100,d:45) -> PL
+#parallelogram([p1,p2],d:45,100) -> PL
+#parallelogram(plane("Oxz")) -> PLXZ
+
 
 #plane(p1,s) -> pl
 
@@ -11,19 +19,22 @@
 
 #segment(p1,[angle(s,l),0,0]) -> s2
 
-#point() -> p4
+plane(p1,p2,p3) -> -p123
+point(p123) -> p4
 
+#quad(p1,p2,p3,p4) -> Q
+quad(p123) -> Q1
 
 #point(100,100,30) -> p1
 #point(-100,-100,-30) -> p2
 #segment(p1,p2) -> s
 
-point(0,95,0) -> d
+#point(0,95,0) -> d
 #line(d,line("Oz"),d:90) -> ll
 
-circle([0,0,0],40,plane("Oxz")) -> c
+#circle([0,0,0],40,plane("Oxz")) -> c
 
-sphere(c) -> sp
+#sphere(c) -> sp
 
 #square([300,0,300],[100,0,100],plane("Oxz")) -> sq[A,B,C,D]
 

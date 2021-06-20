@@ -7,9 +7,9 @@ import { MissingPatternError, NotFeasibleError, WrongParamsError } from '../../e
 import { Point } from '../../scene/items/point.js';
 import { Plane } from '../../scene/items/plane.js';
 import { Pyramid } from '../../scene/items/pyramid.js';
-//TODO: can we import all items at once?
+import { Polygon } from '../../scene/item.js';
 import { Triangle } from '../../scene/items/triangle.js';
-import { Square } from '../../scene/items/square.js';
+import { Square } from '../../scene/items/regularquad.js';
 import { centroid } from '../../scene/util.js';
 import { globalScene } from '../../scene/scene.js';
 
@@ -28,13 +28,11 @@ export default class PyramidCommand extends CreationCommand {
   createItem(params) {
 
     // pyramid(<tri|quad|square|...>,<point>) - base and apex
-    if (params.length === 2 && params[1] instanceof Point &&
-      ( params[0] instanceof Triangle || params[0] instanceof Square)) { //TODO: finish the others!
+    if (params.length === 2 && params[1] instanceof Point && params[0] instanceof Polygon) {
       this.item = new Pyramid(params[0], params[1]);
     }
     // pyramid(<base>,height) - base of right pyramid where the apex is projected on the center
-    else if (params.length == 2 && typeof params[1] === 'number' &&
-      ( params[0] instanceof Triangle || params[0] instanceof Square)) { //TODO: finish the others!
+    else if (params.length == 2 && typeof params[1] === 'number' && params[0] instanceof Polygon) {
       let centre = centroid(params[0].vertices);
       let height = params[0].plane.n.unit().scale(params[1]);
       let apex = centre.add(height);
@@ -53,7 +51,7 @@ export default class PyramidCommand extends CreationCommand {
         this.item = new Pyramid(new Triangle(...vertices), apex);
       } else if (params[2] == 4) {
         this.item = new Pyramid(new Square(...vertices), apex);
-      } //TODO: finishe the others.
+      } //TODO: finish the others.
       else throw new WrongParamsError(params, this);
     }
     else throw new WrongParamsError(params, this);

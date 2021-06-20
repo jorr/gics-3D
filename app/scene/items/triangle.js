@@ -41,10 +41,11 @@ export class Triangle extends Polygon {
     return new Segment(this.A, this.B);
   }
 
-   project(projectionData, projection, label) {
+  //TODO: this can be implenented at Polygon with this.vertices
+  project(projectionData, projection, label) {
     return Object.assign(new Polygon2D(
       this.vertices.map(v => projection.projectPoint(v, projectionData))),
       { label }
     );
-   }
+  }
 }

@@ -40,7 +40,7 @@ export class CreationCommand extends Command {
   }
 
   bind(pattern) {
-    this.item.suppress = pattern?.suppress;
+    this.item.suppressed = pattern?.suppress;
     this.itemIndex = globalScene.addItem(this.item, pattern?.name);
     if (pattern?.elements?.length > 0) {
       this.bindElements(pattern.elements);

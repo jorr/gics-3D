@@ -6,7 +6,7 @@ import { CreationCommand } from '../command.js';
 import { MissingPatternError } from '../../errors.js';
 import { Point } from '../../scene/items/point.js';
 import { Cube } from '../../scene/items/cube.js';
-import { Square } from '../../scene/items/square.js';
+import { Square } from '../../scene/items/regularquad.js';
 import { globalScene } from '../../scene/scene.js';
 
 export default class CubeCommand extends CreationCommand {

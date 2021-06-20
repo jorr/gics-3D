@@ -40,6 +40,8 @@ export class Polygon extends Item {
     this.n = n;
     this.plane = plane;
   }
+
+  //TODO: getter AB es7 goodness
 }
 
 class Element2D {

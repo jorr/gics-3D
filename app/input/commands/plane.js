@@ -7,7 +7,7 @@ import { globalScene } from '../../scene/scene.js';
 import { Plane } from '../../scene/items/plane.js';
 import { Point } from '../../scene/items/point.js';
 import { Segment } from '../../scene/items/segment.js';
-import { MissingPatternError, WrongParamsError } from '../../errors.js';
+import { MissingPatternError, WrongParamsError, NotFeasibleError } from '../../errors.js';
 
 export default class PlaneCommand extends CreationCommand {
 
@@ -27,6 +27,13 @@ export default class PlaneCommand extends CreationCommand {
     //plane(<point>, <segment>) - a plane through the point with the segment as normal vector
     if (params.length === 2 && params[0] instanceof Point && params[1] instanceof Segment) {
       this.item = new Plane(params[0], params[1].asVector());
+    }
+    //plane(<point>, <point>, <point>) - a plane through three points
+    else if (params.length === 3 && params.every(p => p instanceof Point)) {
+      let vA = params[0].vectorTo(params[1]), vB = params[0].vectorTo(params[2]);
+      if (vA.isCollinearWith(vB))
+        throw new NotFeasibleError(params, this.name);
+      this.item = new Plane(params[0], vA.cross(vB).unit());
     }
     //plane(<point>,<plane>,[angle]) - a plane through the point, at angle to the given plane (defaults to parallel)
     else if (params.length >= 2 && params[0] instanceof Point && params[1] instanceof Plane) {

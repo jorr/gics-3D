@@ -37,9 +37,9 @@ export default class ConeCommand extends CreationCommand {
     }
     // cone(<triangle>,"a | b | c") - the triangle is rotated around the midpoint of the side
     else if (params.length == 2 && params[0] instanceof Triangle && typeof params[1] === 'string') {
-      let side = params[0][params[1]]; log.debug(side)
-      let center = midpoint(side.p1, side.p2); log.debug(center)
-      let axis = side.asVector().perpendicular(params[0].plane); log.debug(axis)
+      let side = params[0][params[1]];
+      let center = midpoint(side.p1, side.p2);
+      let axis = side.asVector().perpendicular(params[0].plane);
       // let rotated = side.asVector().rotate(axis, 45);
       this.item = new Cone(
         new Circle(center, side.len/2, new Plane(center, axis)),

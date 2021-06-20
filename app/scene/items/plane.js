@@ -22,11 +22,15 @@ export class Plane extends Item {
   }
 
   hasPoint(p) {
-   return this.n.dot(this.pt.vectorTo(p)) == 0;
+    // log.debug(Math.abs(this.n.dot(this.pt.vectorTo(p)))<Number.EPSILON);
+    let D = -(this.n.x*this.pt.x + this.n.y*this.pt.y + this.n.z*this.pt.z);
+    // log.debug(this.n.x * p.x + this.n.y * p.y + this.n.z * p.z + D)
+    // BOYKO: why does this not always work? return this.n.dot(this.pt.vectorTo(p)) === 0;
+    return this.n.x * p.x + this.n.y * p.y + this.n.z * p.z + D == 0;
   }
 
   hasVector(v) {
-   return this.n.cross(v) == 0;
+   return !this.n.cross(v).isNonZero();
   }
 
   getRandomPoint() {
@@ -46,7 +50,7 @@ export class Plane extends Item {
      return new Point(x,y,Math.random() * 100);
    }
 
-   let z = -(A*x + B*x + D)/C;
+   let z = -(A*x + B*y + D)/C;
    return new Point(x,y,z);
   }
 

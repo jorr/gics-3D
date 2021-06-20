@@ -7,7 +7,7 @@ import { globalScene } from '../../scene/scene.js';
 import { Segment } from '../../scene/items/segment.js';
 import { Point } from '../../scene/items/point.js';
 import { Plane } from '../../scene/items/plane.js';
-import { Square } from '../../scene/items/square.js';
+import { Square } from '../../scene/items/regularquad.js';
 import { dist, midpoint } from '../../scene/util.js';
 import { WrongParamsError, WrongPatternError, NotFeasibleError } from '../../errors.js';
 
@@ -24,9 +24,10 @@ export default class SquareCommand extends CreationCommand {
   }
 
   createItem(params) {
-    //square(<point>,<point>,[<plane>]) - a square on the diagonal, optionally in a given plane (else Oxy)
+    //square(<point>,<point>,[<plane>]) - a square on the diagonal, optionally in a given plane
     if (params.length >=2 && params[0] instanceof Point && params[1] instanceof Point) {
-      if (dist(params[0], params[1]) === 0) {
+      if (dist(params[0], params[1]) === 0 ||
+        (params[2] instanceof Plane && params[0].vectorTo(params[1]).isCollinearWith(params[2].n))) {
         throw new NotFeasibleError(params, Square.name);
       }
       let plane = params[2] instanceof Plane ? params[2] : new Plane(params[0], params[0].vectorTo(params[1]).perpendicular());

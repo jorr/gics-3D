@@ -83,7 +83,7 @@ export class Scene{
 
     let projectionData = { camera: this.camera, volume: this.volume };
 
-    let projectedElements = _(this.items).pickBy(i => !i.suppress).
+    let projectedElements = _(this.items).pickBy(i => !i.suppressed).
     //TODO: label should be done the GICS way going forward
       mapValues((item, name) => item.project(
         projectionData,
@@ -95,7 +95,7 @@ export class Scene{
       value();
     // outputOption.render(projectedElements, this.projection.screenSize(this.camera, this.volume));
 
-    let bindings = _(this.bindings).pickBy(i => !i.suppress).
+    let bindings = _(this.bindings).pickBy(i => !i.suppressed).
     //TODO: label should be done the GICS way going forward
       mapValues((item, name) => item().project(
         projectionData,

@@ -67,12 +67,16 @@ export class Scene{
     );
   }
 
-  set viewPoint(viewPoint) {
-    this.camera = viewPoint;
+  set viewpoint(viewpoint) {
+    this.camera = viewpoint;
   }
 
   set projection(projection) {
     this.projection = projection;
+  }
+
+  set volume(volume) {
+    this.volume = volume;
   }
 
   draw(outputOption) {

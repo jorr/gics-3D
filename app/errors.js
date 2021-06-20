@@ -44,5 +44,12 @@ export class ImpossibleOperationError extends GicsError {
   }
 }
 
+export class NameUndefinedError extends GicsError {
+  constructor(name) {
+    super();
+    this.message = `${name} was referenced but it is not defined in the program`;
+  }
+}
+
 export class SyntaxError extends GicsError {
 }

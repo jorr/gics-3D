@@ -20,11 +20,11 @@ A—————B
  *
  */
 
- //TODO: consider A,B,C....also direction?
+ //TODO: switch to a base and direction
 
   A; B; v; // AB is a side of the cube, v is a vector that is not colinear with them, so that ABv is the wall ABCD
   side;
-  sign;
+  sign; //TODO: should we also use this for prism, pyramid, etc?
 
   constructor(A, B, v, sign = 1) {
     super();
@@ -74,12 +74,12 @@ A—————B
   //   ];
   // }
 
-  // get vertices() {
-  //   return [
-  //     this.A, this.B, this.C, this.D,
-  //     this.A1, this.B1, this.C1, this.D1
-  //   ];
-  // }
+  get vertices() {
+    return [
+      this.A, this.B, this.C, this.D,
+      this.A1, this.B1, this.C1, this.D1
+    ];
+  }
 
   // static fromDiagonalPoints(d1, d2) {
 
@@ -104,13 +104,8 @@ A—————B
   }
 
   static fromBaseAndLength(base, len, direction) {
+    //TODO: finish this
   }
-
-  //  cen - centre
-  // A,B,C,...,H - vertices
-  // baseA - base closer to the origin
-  // baseB - base farther to the origin
-  // wallAB, wallAC.. - walls (squares)
 
   project(projectionData, projection, label) {
     return [

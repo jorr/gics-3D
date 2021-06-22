@@ -1,5 +1,6 @@
 import { Polygon, Polygon2D } from '../item.js';
 import { Plane } from './plane.js';
+import { centroid } from '../util.js';
 
 import log from 'loglevel';
 
@@ -16,6 +17,10 @@ export class Square extends Polygon {
     this.A = A; this.B = B; this.C = C;
     this.D = A.add(B.vectorTo(C));
    }
+
+  get cen() {
+    return centroid(this.vertices);
+  }
 
    get side() {
     return this.A.vectorTo(this.B).norm;

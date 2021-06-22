@@ -31,6 +31,16 @@ export class Segment extends Item {
     return this.p1.vectorTo(this.p2);
    }
 
+   hasPoint(p) {
+    let p1p = this.p1.vectorTo(p), direction = this.p1.vectorTo(this.p2);
+    return p1p.isCollinearWith(direction) && p1p.norm < direction.norm;
+   }
+
+   intersect(arg) {
+    let intersection = this.lineOn.intersect(arg);
+    return this.hasPoint(intersection) ? intersection : null;
+   }
+
    to2D() {
     return new Segment2D(this.p1.to2D(), this.p2.to2D());
    }

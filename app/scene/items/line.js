@@ -75,6 +75,8 @@ export class Line extends Item {
     } else if (arg instanceof Plane) {
       if (this.u.dot(arg.n) === 0) return null; //parallel
       return this.pt.add(this.u.scale(-arg.n.dot(arg.pt.vectorTo(this.pt))/arg.n.dot(this.u)));
+    } else if (arg instanceof Segment) {
+      return arg.intersect(this);
     }
    }
 

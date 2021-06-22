@@ -2,7 +2,12 @@ point(400,200,300) -> p1
 point(200,300,300) -> p2
 segment(p1,[0,0,100]) -> s[.,p3]
 
-#rectangle(s,d:45) -> R
+rectangle(s,d:45) -> R
+#rectangle([[p1.x,p1.y+100,p1.z],[p3.x,p3.y+100,p3.z]],d:45) -> R2
+cuboid(R,100,"-") -> CR
+#cuboid(R,R2) -> CR2
+
+
 #rhomb([p1,p2],200) -> R
 #rhomb(plane("Oxy")) -> RH
 #parallelogram([p1,p2],100,d:45) -> PL
@@ -19,11 +24,11 @@ segment(p1,[0,0,100]) -> s[.,p3]
 
 #segment(p1,[angle(s,l),0,0]) -> s2
 
-plane(p1,p2,p3) -> -p123
-point(p123) -> p4
+#plane(p1,p2,p3) -> -p123
+#point(p123) -> p4
 
 #quad(p1,p2,p3,p4) -> Q
-quad(p123) -> Q1
+#quad(p123) -> Q1
 
 #point(100,100,30) -> p1
 #point(-100,-100,-30) -> p2

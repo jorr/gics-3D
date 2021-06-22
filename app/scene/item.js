@@ -72,6 +72,7 @@ export class Polygon2D extends Element2D {
 
   constructor(points) { super(); this.points = points; }
 
+  //TODO: rename to cen
   get centre() {
     let sum = this.points.reduce((totalValue, currentValue) => ({x: totalValue.x+currentValue.x, y:totalValue.y+currentValue.y}), {x: 0, y:0});
     return new Point2D(sum.x/this.points.length, sum.y/this.points.length);

@@ -18,7 +18,7 @@ export class Plane extends Item {
   constructor(pt, n) {
    super();
    this.pt = pt;
-   this.n = n;
+   this.n = n.unit();
   }
 
   hasPoint(p) {

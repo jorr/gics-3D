@@ -4,9 +4,10 @@ import { Line } from './items/line.js';
 import { Plane } from './items/plane.js';
 import { Point2D, Segment2D } from './item.js';
 import { Vector } from './vectors.js';
-import { WrongParamsError } from '../errors.js';
+import { WrongParamsError, ImpossibleOperationError } from '../errors.js';
 
 import log from 'loglevel';
+import _ from 'lodash';
 
 // CALCULATIONS
 
@@ -62,16 +63,22 @@ export function centroid(vertices) {
 
 //sorts vertices to form convex polygon in the given plane
 export function sortVertices(vertices, plane) {
-  log.debug("vs ", vertices)
-  let centre = centroid(vertices); //TODO: check that all vertices and the centroid lie on the same plane
-  log.debug("centre ", centre)
-  let axis = plane.getCoplanarVector().unit();
-  log.debug(axis)
-  return vertices.sort((a,b) => {
-    log.debug("a: ", a, "b: ", b);
-    log.debug(((angle(centre.vectorTo(a), axis) - angle(centre.vectorTo(b), axis)) * Math.PI/180 + 360) % 360);
-    return ((angle(centre.vectorTo(a), axis) - angle(centre.vectorTo(b), axis)) * Math.PI/180 + 360) % 360;
-  });
+  // let centre = centroid(vertices); //TODO: check that all vertices and the centroid lie on the same plane
+  // let axis = plane.getCoplanarVector().unit();
+  // return vertices.sort((a,b) => {
+  //   return ((angle(centre.vectorTo(a), axis) - angle(centre.vectorTo(b), axis)) * Math.PI/180 + 360) % 360;
+  // });
+
+  let sorted = [vertices.pop()], last = sorted[0];
+  while (vertices.length) {
+    let [newlast] = _.remove(vertices,
+      v => vertices.every(w => v.equals(w) || last.vectorTo(v).triple(last.vectorTo(w), plane.n) > 0));
+    if (!newlast) throw new ImpossibleOperationError('Attempting to sort vertices that don\'t form a convex polygon');
+    sorted.push(newlast);
+    last = newlast;
+  }
+
+  return sorted;
 }
 
 // CHECKS
@@ -79,7 +86,7 @@ export function sortVertices(vertices, plane) {
 export function pointInVolume(p, v) {
   return Math.abs(p.x) <= v.w/2 &&
     Math.abs(p.y) <= v.h/2 &&
-    Math.abs(p.z) <= v.d;
+    p.z <= v.d;
 }
 
 // TRANSFORMATIONS

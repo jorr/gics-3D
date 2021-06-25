@@ -10,6 +10,7 @@ import { sortVertices } from '../../scene/util.js';
 import { WrongParamsError, WrongPatternError, NotFeasibleError } from '../../errors.js';
 
 import log from 'loglevel';
+import _ from 'lodash';
 
 export default class QuadCommand extends CreationCommand {
 
@@ -39,8 +40,12 @@ export default class QuadCommand extends CreationCommand {
     // quad([<plane>]) - a random quad lying in Oxy or the given plane
     else if (params.length <= 1) {
       let plane = params[0] && params[0] instanceof Plane ? params[0] : Plane.Oxy;
-      let points = sortVertices([0,0,0,0].map(a => plane.getRandomPoint()), plane);
-      this.item = new Quad(...points);
+      let points = [];
+      while (points.length < 4) {
+        let p = plane.getRandomPoint();
+        if (!_.find(points, pp => p.equals(pp))) points.push(p);
+      }
+      this.item = new Quad(...sortVertices(points, plane));
     }
     else throw new WrongParamsError(params, this);
   }

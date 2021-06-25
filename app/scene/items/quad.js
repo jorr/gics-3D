@@ -11,7 +11,6 @@ export class Quad extends Polygon {
    A; B; C; D;
 
    constructor(A, B, C, D) {
-    log.debug(A,B,C,D)
     let n = A.vectorTo(B).cross(A.vectorTo(C)).unit();
     if (n.y < 0) n = n.scale(-1); //TODO: check rhs vs lhs in a smarter way
     super(4, new Plane(A, n));

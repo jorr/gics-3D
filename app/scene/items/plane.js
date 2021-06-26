@@ -3,7 +3,10 @@ import { Vector } from '../vectors.js';
 import { Point } from './point.js';
 import { Line } from './line.js';
 import { Quad } from './quad.js';
+import { Triangle } from './triangle.js';
 import { sortVertices, pointInVolume } from '../util.js';
+
+import { ImpossibleOperationError } from '../../errors.js';
 
 import log from 'loglevel';
 
@@ -34,8 +37,8 @@ export class Plane extends Item {
   }
 
   getRandomPoint() {
-   let x = Math.random() * 100;
-   let y = Math.random() * 100;
+   let x = Math.random() * 200;
+   let y = Math.random() * 200;
    let A = this.n.x, B = this.n.y, C = this.n.z;
    let D = -(A*this.pt.x + B*this.pt.y + C*this.pt.z);
 
@@ -43,11 +46,11 @@ export class Plane extends Item {
    if (C === 0) {
      if (B === 0) {
        //plane is x=d, so parallel to Oyz, y can be random so we keep it
-       return new Point(D,y,Math.random() * 100);
+       return new Point(D,y,Math.random() * 200);
      }
      //else, recalculate y to conform to the two-var equation
      y = -(A*x +D)/B;
-     return new Point(x,y,Math.random() * 100);
+     return new Point(x,y,Math.random() * 200);
    }
 
    let z = -(A*x + B*y + D)/C;
@@ -171,7 +174,13 @@ export class Plane extends Item {
         bottomCross && backCross ? bottomCross.intersect(backCross) : null
       ];
 
-      quad = new Quad(...sortVertices(crossings.filter(c => c && pointInVolume(c,volume)), this));
+      crossings = crossings.filter(c => c && pointInVolume(c,volume));
+      log.debug(volume)
+      if (crossings.length === 3)
+        quad = new Triangle(...crossings);
+      else if (crossings.length === 4)
+        quad = new Quad(...sortVertices(crossings, this));
+      else throw new ImpossibleOperationError("Plane crosses volume in a weird way");
     // }
 
     //TODO: shrink

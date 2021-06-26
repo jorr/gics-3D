@@ -91,7 +91,7 @@ export function resolveIdentifier(identifier) {
 export class Angle {
   value;
 
-  constructor(value) { this.value = value; }
+  constructor(value) { this.value = value * Math.PI / 180; }
 }
 
 export function convertAngle(angleToken) {

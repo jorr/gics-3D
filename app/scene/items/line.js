@@ -62,7 +62,7 @@ export class Line extends Item {
    }
 
    intersect(arg) {
-    //TODO: segment, bodies
+    //TODO: bodies
     if (arg instanceof Line) {
       //check if the lines actually intersect
       if (!this.u.cross(arg.u).isNonZero() || this.u.triple(arg.u, this.pt.vectorTo(arg.pt)) !== 0) {

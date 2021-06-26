@@ -2,9 +2,9 @@ point(400,200,300) -> p1
 point(200,300,300) -> p2
 segment(p1,[0,0,100]) -> s[.,p3]
 
-rectangle(s,d:45) -> R
+#rectangle(s,d:45) -> R
 #rectangle([[p1.x,p1.y+100,p1.z],[p3.x,p3.y+100,p3.z]],d:45) -> R2
-cuboid(R,100,"-") -> CR
+#cuboid(R,100,"-") -> CR
 #cuboid(R,R2) -> CR2
 
 
@@ -15,7 +15,7 @@ cuboid(R,100,"-") -> CR
 #parallelogram(plane("Oxz")) -> PLXZ
 
 
-#plane(p1,s) -> pl
+#plane(p3,s) -> pl
 
 #translate(s,10,10,0)
 #line([p1,p2]) -> l
@@ -29,6 +29,11 @@ cuboid(R,100,"-") -> CR
 
 #quad(p1,p2,p3,p4) -> Q
 #quad(p123) -> Q1
+#quad(plane("Oxy")) -> Q2
+
+#polygon(5, plane("Oxy")) -> PG1
+#polygon(p1, 5, 200) -> PG2
+polygon([p3,[0,100,100]],4,plane(p3,plane("Oxy"))) -> PG3
 
 #point(100,100,30) -> p1
 #point(-100,-100,-30) -> p2

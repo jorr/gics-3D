@@ -39,7 +39,7 @@ export class Segment extends Item {
    }
 
    intersect(arg) {
-    let intersection = this.lineOn.intersect(arg);
+    let intersection = this.lineOn().intersect(arg);
     return this.hasPoint(intersection) ? intersection : null;
    }
 

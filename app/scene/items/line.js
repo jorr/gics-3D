@@ -1,6 +1,7 @@
 import { Item, Segment2D } from '../item.js';
 import { Point } from './point.js';
 import { Plane } from './plane.js';
+import { Segment } from './segment.js';
 import { Vector } from '../vectors.js';
 import { ImpossibleOperationError } from '../../errors.js';
 import { pointInVolume } from '../util.js';

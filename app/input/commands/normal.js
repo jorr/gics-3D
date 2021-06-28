@@ -26,6 +26,7 @@ export default class NormalCommand extends CreationCommand {
       let pt = params[0].getRandomPoint();
       this.item = new Segment(pt, pt.add(params[0].n.unit().scale(size)), true);
     }
+    else throw new WrongParamsError(params, this);
   }
 
 };

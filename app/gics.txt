@@ -1,6 +1,6 @@
 point(400,200,300) -> p1
 point(200,300,300) -> p2
-segment(p1,[0,0,100]) -> s[.,p3]
+#segment(p1,[0,0,100]) -> s[.,p3]
 
 #rectangle(s,d:45) -> R
 #rectangle([[p1.x,p1.y+100,p1.z],[p3.x,p3.y+100,p3.z]],d:45) -> R2
@@ -30,6 +30,11 @@ segment(p1,[0,0,100]) -> s[.,p3]
 #plane("Oyz") -> xzpl
 plane([0,100,0],plane("Oxz")) -> xzparallel
 normal(xzparallel) -> np
+project(p2,xzparallel) -> p2'
+point(100,200,100) -> prp
+segment([0,0,0],prp) -> prs
+project(prp,xzparallel) -> prp'
+project(prs,xzparallel) -> prs'
 
 #quad(p1,p2,p3,p4) -> Q
 #quad(p123) -> Q1

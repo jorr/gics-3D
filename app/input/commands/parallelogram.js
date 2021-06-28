@@ -57,7 +57,6 @@ export default class ParallelogramCommand extends CreationCommand {
       let C = B.add(A.vectorTo(B).rotate(plane.n, angle).unit().scale(sideB));
       this.item = new Parallelogram(A, B, C);
     }
-
     else throw new WrongParamsError(params, this);
   }
 

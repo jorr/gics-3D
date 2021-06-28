@@ -2,14 +2,12 @@ import { Item, Point2D } from '../item.js';
 import { Vector } from '../vectors.js';
 import { Plane } from './plane.js';
 import { ImpossibleOperationError } from '../../errors.js';
+import { EPSILON } from '../util.js';
 
 import log from 'loglevel';
 
 export class Point extends Item {
-    /**
-   * Point type definition
-   * @property {x} x
-   */
+
    x; y; z;
 
    constructor(x, y, z) {
@@ -38,7 +36,7 @@ export class Point extends Item {
    }
 
    equals(p) {
-    return this.x === p.x && this.y === p.y && this.z === p.z;
+    return Math.abs(this.x - p.x) <= EPSILON && Math.abs(this.y - p.y) <= EPSILON && Math.abs(this.z - p.z) <= EPSILON;
    }
 
    to2D() {
@@ -50,7 +48,12 @@ export class Point extends Item {
       return this.add(arg.n.unit().scale(-arg.n.unit().dot(arg.pt.vectorTo(this))));
     } else if (arg instanceof Line) {
       return this.add(arg.u.unit().scale(arg.u.unit().dot(arg.pt.vectorTo(this))));
-    } else throw new ImpossibleOperationError('Points can be projected on lines or planes');
+    } else if (arg instanceof Segment) {
+      let projection = this.add(arg.lineOn().u.unit().scale(arg.lineOn().u.unit().dot(arg.p1.vectorTo(this))));
+      if (arg.hasPoint(projection)) return projection;
+      else throw new ImpossibleOperationError('Point projection is outside the segment');
+    }
+    else throw new ImpossibleOperationError('Points can be projected on lines, segments or planes');
    }
 
    static get Origin() {

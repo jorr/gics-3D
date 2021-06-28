@@ -8,7 +8,7 @@ import { Point } from '../../scene/items/point.js';
 import { Segment } from '../../scene/items/segment.js';
 import { Line } from '../../scene/items/line.js';
 import { Plane } from '../../scene/items/plane.js';
-import { MissingPatternError } from '../../errors.js';
+import { MissingPatternError, WrongParamsError } from '../../errors.js';
 
 import log from 'loglevel';
 

@@ -11,12 +11,14 @@ export class Segment extends Item {
    * @property {Point} p2
    */
    p1; p2;
+   drawAsArrow;
 
-   constructor(p1, p2) {
+   constructor(p1, p2, drawAsArrow = false) {
     super();
 
     this.p1 = p1;
     this.p2 = p2;
+    this.drawAsArrow = drawAsArrow;
    }
 
    get len() {
@@ -58,13 +60,8 @@ export class Segment extends Item {
   }
 
    project(projectionData, projection, label) {
-    //TODO: there is a redundancy here because the endpoints are bound and we are drawing them twice. Solve?
-    //can do a flag
     let projectedP1 = projection.projectPoint(this.p1, projectionData),
         projectedP2 = projection.projectPoint(this.p2, projectionData);
-    return Object.assign(new Segment2D(projectedP1, projectedP2),
-    {
-      label
-    });
+    return Object.assign(new Segment2D(projectedP1, projectedP2), { label, drawAsArrow: this.drawAsArrow });
    }
 }

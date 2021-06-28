@@ -16,6 +16,7 @@ segment(p1,[0,0,100]) -> s[.,p3]
 
 
 #plane(p3,s) -> pl
+#plane([0,500,0],[-500,500,500],[-500,0,0]) -> testPL
 
 #translate(s,10,10,0)
 #line([p1,p2]) -> l
@@ -24,8 +25,11 @@ segment(p1,[0,0,100]) -> s[.,p3]
 
 #segment(p1,[angle(s,l),0,0]) -> s2
 
-#plane(p1,p2,p3) -> -p123
+#plane(p1,p2,[300,200,300]) -> p123
 #point(p123) -> p4
+#plane("Oyz") -> xzpl
+plane([0,100,0],plane("Oxz")) -> xzparallel
+normal(xzparallel) -> np
 
 #quad(p1,p2,p3,p4) -> Q
 #quad(p123) -> Q1
@@ -33,7 +37,7 @@ segment(p1,[0,0,100]) -> s[.,p3]
 
 #polygon(5, plane("Oxy")) -> PG1
 #polygon(p1, 5, 200) -> PG2
-polygon([p3,[0,100,100]],4,plane(p3,plane("Oxy"))) -> PG3
+#polygon([p3,[0,100,100]],4,plane(p3,plane("Oxy"))) -> PG3
 
 #point(100,100,30) -> p1
 #point(-100,-100,-30) -> p2

@@ -53,20 +53,17 @@ export class SvgOutput extends OutputOption {
     renderPoint(p) {
       this.svg = `${this.svg}
 <circle cx="${p.x}" cy="${-p.y}" r="${this.strokeWidth}" stroke="${p.color || this.stroke}" stroke-width="${this.strokeWidth}" fill="${this.stroke}"/>`;
-      if (p.label) {
-        this.svg = `${this.svg}
-<text x="${p.x+this.labelOffset.x}" y="${-p.y+this.labelOffset.y}">${p.label}</text>`;
-      }
+      this.renderLabel(p.label, p);
     }
 
     renderSegment(s) {
       this.svg = `${this.svg}
-<line x1="${s.p1.x}" x2="${s.p2.x}" y1="${-s.p1.y}" y2="${-s.p2.y}" stroke="${s.color || this.stroke}" stroke-width="${this.strokeWidth}"/>`;
-      if (s.label) {
-        //TODO: make this smarter
-        let midPoint = midpoint(s.p1, s.p2);
-        this.svg = `${this.svg}
-<text x="${midPoint.x+this.labelOffset.x}" y="${-midPoint.y+this.labelOffset.y}">${s.label}</text>`;
+<line x1="${s.p1.x}" x2="${s.p2.x}" y1="${-s.p1.y}" y2="${-s.p2.y}" stroke="${s.color || this.stroke}" stroke-width="${this.strokeWidth + Number(s.drawAsArrow)}"/>`;
+      this.renderLabel(s.label, midpoint(s.p1, s.p2));
+
+      if (s.drawAsArrow) {
+        this.renderPoint(s.p1);
+        this.renderArrow(s);
       }
     }
 
@@ -74,21 +71,51 @@ export class SvgOutput extends OutputOption {
       let points = pg.points.map(p => `${p.x},${-p.y}`).join(' ');
       this.svg = `${this.svg}
 <polygon points="${points}" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" fill="${pg.color || 'none'}"/>`;
-      if (pg.label) {
-        //TODO: make this smarter
-        this.svg = `${this.svg}
-<text x="${pg.centre.x+this.labelOffset.x}" y="${-pg.centre.y+this.labelOffset.y}">${pg.label}</text>`;
-      }
+      this.renderLabel(pg.label, pg.centre);
     }
 
     renderEllipse(e) {
       log.debug(e)
       this.svg = `${this.svg}
 <ellipse cx="${e.c.x}" cy="${-e.c.y}" rx="${e.rx}" ry="${e.ry}" transform="rotate(${e.rotate},${e.c.x},${-e.c.y})" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" fill="none"/>`;
-      if (e.label) {
-        this.svg = `${this.svg}
-<text x="${e.c.x}" y="${-e.c.y + e.ry + this.labelOffset.y}">${e.label}</text>`;
+      this.renderLabel(e.label, e.c);
+    }
+
+    renderArrow(s) {
+      let vectorOnSegment = { x: (s.p1.x-s.p2.x) * 0.1, y: (s.p1.y-s.p2.y) * 0.1};
+      let angle = 30 * Math.PI / 180;
+      this.renderPoly({
+        color: 'black',
+        points: [
+          s.p2,
+          //rotate point on segment both ways
+          {
+            x: s.p2.x + vectorOnSegment.x*Math.cos(angle) - vectorOnSegment.y*Math.sin(angle),
+            y: s.p2.y + vectorOnSegment.x*Math.sin(angle) + vectorOnSegment.y*Math.cos(angle)
+          },
+          {
+            x: s.p2.x + vectorOnSegment.x*Math.cos(-angle) - vectorOnSegment.y*Math.sin(-angle),
+            y: s.p2.y + vectorOnSegment.x*Math.sin(-angle) + vectorOnSegment.y*Math.cos(-angle)
+          }
+        ]
+      });
+    }
+
+    renderLabel(label, location, preset) {
+      if (!label) return;
+      preset = preset || 'SE';
+      let displacement = { x:0, y:0 };
+      for (let dir of preset) {
+        switch(dir) {
+          case 'N': displacement.y = displacement.y - this.labelOffset.y; break;
+          case 'S': displacement.y = displacement.y + this.labelOffset.y; break;
+          case 'E': displacement.x = displacement.x + this.labelOffset.x; break;
+          case 'W': displacement.x = displacement.x - this.labelOffset.x; break;
+        }
       }
+
+      this.svg = `${this.svg}
+<text x="${location.x+displacement.x}" y="${-location.y+displacement.y}">${label}</text>`;
     }
 
     flushOutput() {

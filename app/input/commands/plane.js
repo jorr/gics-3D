@@ -22,10 +22,18 @@ export default class PlaneCommand extends CreationCommand {
 
   createItem(params) {
 
-    //plane(3 points), plane(two vectors)
-
+    //plane(<point>,<point>,<point>) - a plane through three points
+    if (params.length === 3 && params.every(p => p instanceof Point)) {
+      this.item = new Plane(params[0], params[0].vectorTo(params[1]).cross(params[1].vectorTo(params[2])).unit());
+      //TODO feasibility check
+    }
+    //plane(<segment>,<segment>) - a plane defined by two non-colinear vectors
+    else if (params.length === 2 && params.every(p => p instanceof Segment)) {
+      this.item = new Plane(params[0].p1, params[0].asVector().cross(params[1].asVector()).unit());
+      //TODO feasibility check
+    }
     //plane(<point>, <segment>) - a plane through the point with the segment as normal vector
-    if (params.length === 2 && params[0] instanceof Point && params[1] instanceof Segment) {
+    else if (params.length === 2 && params[0] instanceof Point && params[1] instanceof Segment) {
       this.item = new Plane(params[0], params[1].asVector());
     }
     //plane(<point>, <point>, <point>) - a plane through three points

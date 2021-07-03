@@ -42,6 +42,11 @@ export class Polygon extends Item {
   }
 
   //TODO: getter AB es7 goodness
+  project(projectionData, projection, label, color) {
+    return Object.assign(new Polygon2D(this.vertices.map(v => projection.projectPoint(v, projectionData))), {
+      label, color
+    });
+  }
 }
 
 class Element2D {

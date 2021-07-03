@@ -27,10 +27,4 @@ export class Quad extends Polygon {
   get vertices() {
     return [this.A, this.B, this.C, this.D];
   }
-
-   project(projectionData, projection, label, color) {
-    return Object.assign(new Polygon2D(this.vertices.map(v => projection.projectPoint(v, projectionData))), {
-      label, color
-    });
-   }
 }

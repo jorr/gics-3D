@@ -4,11 +4,14 @@ import { Point } from './point.js';
 import { Line } from './line.js';
 import { Quad } from './quad.js';
 import { Triangle } from './triangle.js';
-import { sortVertices, pointInVolume } from '../util.js';
+import { sortVertices, pointInVolume, shrinkPolygon } from '../util.js';
 
 import { ImpossibleOperationError } from '../../errors.js';
 
 import log from 'loglevel';
+import _ from 'lodash';
+
+const SHRINK_FACTOR = 0.2;
 
 export class Plane extends Item {
   /**
@@ -25,9 +28,7 @@ export class Plane extends Item {
   }
 
   hasPoint(p) {
-    // log.debug(Math.abs(this.n.dot(this.pt.vectorTo(p)))<Number.EPSILON);
     let D = -(this.n.x*this.pt.x + this.n.y*this.pt.y + this.n.z*this.pt.z);
-    // log.debug(this.n.x * p.x + this.n.y * p.y + this.n.z * p.z + D)
     // BOYKO: why does this not always work? return this.n.dot(this.pt.vectorTo(p)) === 0;
     return this.n.x * p.x + this.n.y * p.y + this.n.z * p.z + D == 0;
   }
@@ -105,86 +106,46 @@ export class Plane extends Item {
   project(projectionData, projection, label) {
     //We will represent the plane as a quad defined by the crossings with the volume
     //TODO: test shrinking
-    let quad;
+    let projectedPlane;
     let { volume } = { ...projectionData };
 
-    //Let's first do the axial parallels
-    // if (this.isParallelTo(Plane.Oxz)) {
-    //   log.debug('parallel to oxz')
-    //   if (this.pt.y > volume.h/2 || this.pt.y < -volume.h/2) return []; //plane is outside volume
-    //   //we need to cross all but the top wall and the bottom wall of the mini-volume
-    //   let leftCross = this.intersect(Plane.Oyz.parallelThrough(new Point(-volume.w/2,0,0))),
-    //   rightCross = this.intersect(Plane.Oyz.parallelThrough(new Point(volume.w/2,0,0))),
-    //   frontCross = this.intersect(Plane.Oxy),
-    //   backCross = this.intersect(Plane.Oxy.parallelThrough(new Point(0,0,volume.d)));
-    //   quad = new Quad(
-    //     frontCross.intersect(leftCross),
-    //     frontCross.intersect(rightCross),
-    //     backCross.intersect(rightCross),
-    //     backCross.intersect(leftCross)
-    //   );
-    // } else if (this.isParallelTo(Plane.Oxy)) {
-    //   if (this.pt.z > volume.d || this.pt.z < 0) return []; //plane is outside volume
-    //   //we need to cross all but the front wall and the back wall of the mini-volume
-    //   let leftCross = this.intersect(Plane.Oyz.parallelThrough(new Point(-volume.w/2,0,0))),
-    //   rightCross = this.intersect(Plane.Oyz.parallelThrough(new Point(volume.w/2,0,0))),
-    //   topCross = this.intersect(Plane.Oxz.parallelThrough(new Point(0,volume.h/2,0,0)));
-    //   bottomCross = this.intersect(Plane.Oxz.parallelThrough(new Point(0,-volume.h/2,0,0)));
-    //   quad = new Quad(
-    //     topCross.intersect(leftCross),
-    //     topCross.intersect(rightCross),
-    //     bottomCross.intersect(rightCross),
-    //     bottomCross.intersect(leftCross)
-    //   );
-    // } else if (this.isParallelTo(Plane.Oyz)) {
-    //   if (this.pt.x > volume.w/2 || this.pt.x < -volume.w/2) return []; //plane is outside volume
-    //   //we need to cross all but the left wall and the right wall of the mini-volume
-    //   let frontCross = this.intersect(Plane.Oxy),
-    //   backCross = this.intersect(Plane.Oxy.parallelThrough(new Point(0,0,volume.d))),
-    //   topCross = this.intersect(Plane.Oxz.parallelThrough(new Point(0,volume.h/2,0,0))),
-    //   bottomCross = this.intersect(Plane.Oxz.parallelThrough(new Point(0,-volume.h/2,0,0)));
-    //   quad = new Quad(
-    //     topCross.intersect(backCross),
-    //     topCross.intersect(frontCross),
-    //     bottomCross.intersect(frontCross),
-    //     bottomCross.intersect(backCross)
-    //   );
-    // } else {
-      //now we need to cross possibly everything; so lets find out a cross that yields us 4 points in the volume
-      //note that there may not be such
-      let leftCross = this.intersect(Plane.Oyz.parallelThrough(new Point(-volume.w/2,0,0))),
-      rightCross = this.intersect(Plane.Oyz.parallelThrough(new Point(volume.w/2,0,0))),
-      frontCross = this.intersect(Plane.Oxy.parallelThrough(new Point(0,0,0))),
-      backCross = this.intersect(Plane.Oxy.parallelThrough(new Point(0,0,volume.d))),
-      topCross = this.intersect(Plane.Oxz.parallelThrough(new Point(0,volume.h/2,0,0))),
-      bottomCross = this.intersect(Plane.Oxz.parallelThrough(new Point(0,-volume.h/2,0,0)));
+    let leftCross = this.intersect(Plane.Oyz.parallelThrough(new Point(-volume.w/2,0,0))),
+    rightCross = this.intersect(Plane.Oyz.parallelThrough(new Point(volume.w/2,0,0))),
+    frontCross = this.intersect(Plane.Oxy.parallelThrough(new Point(0,0,0))),
+    backCross = this.intersect(Plane.Oxy.parallelThrough(new Point(0,0,volume.d))),
+    topCross = this.intersect(Plane.Oxz.parallelThrough(new Point(0,volume.h/2,0))),
+    bottomCross = this.intersect(Plane.Oxz.parallelThrough(new Point(0,-volume.h/2,0)));
 
-      let crossings = [
-        leftCross && topCross ? leftCross.intersect(topCross) : null,
-        leftCross && bottomCross ? leftCross.intersect(bottomCross) : null,
-        leftCross && backCross ? leftCross.intersect(backCross) : null,
-        leftCross && frontCross ? leftCross.intersect(frontCross) : null,
-        rightCross && topCross ? rightCross.intersect(topCross) : null,
-        rightCross && bottomCross ? rightCross.intersect(bottomCross) : null,
-        rightCross && backCross ? rightCross.intersect(backCross) : null,
-        rightCross && frontCross ? rightCross.intersect(frontCross) : null,
-        topCross && frontCross ? topCross.intersect(frontCross) : null,
-        topCross && backCross ? topCross.intersect(backCross) : null,
-        bottomCross && frontCross ? bottomCross.intersect(frontCross) : null,
-        bottomCross && backCross ? bottomCross.intersect(backCross) : null
-      ];
+    let crossings = [
+      leftCross && topCross ? leftCross.intersect(topCross) : null,
+      leftCross && bottomCross ? leftCross.intersect(bottomCross) : null,
+      leftCross && backCross ? leftCross.intersect(backCross) : null,
+      leftCross && frontCross ? leftCross.intersect(frontCross) : null,
+      rightCross && topCross ? rightCross.intersect(topCross) : null,
+      rightCross && bottomCross ? rightCross.intersect(bottomCross) : null,
+      rightCross && backCross ? rightCross.intersect(backCross) : null,
+      rightCross && frontCross ? rightCross.intersect(frontCross) : null,
+      topCross && frontCross ? topCross.intersect(frontCross) : null,
+      topCross && backCross ? topCross.intersect(backCross) : null,
+      bottomCross && frontCross ? bottomCross.intersect(frontCross) : null,
+      bottomCross && backCross ? bottomCross.intersect(backCross) : null
+    ];
 
-      crossings = crossings.filter(c => c && pointInVolume(c,volume));
-      log.debug(volume)
-      if (crossings.length === 3)
-        quad = new Triangle(...crossings);
-      else if (crossings.length === 4)
-        quad = new Quad(...sortVertices(crossings, this));
-      else throw new ImpossibleOperationError("Plane crosses volume in a weird way");
-    // }
+    crossings = sortVertices(_.uniqWith(
+      crossings.filter(c => c && pointInVolume(c,volume)),
+      (p,q) => p.equals(q)),
+    this);
 
-    //TODO: shrink
-    log.debug('quad is ready ', quad)
-    return quad.project(projectionData, projection, label, 'rgba(124,240,10,0.5)');
+    if (crossings.length === 3) {
+      projectedPlane = new Triangle(...crossings);
+    }
+    else if (crossings.length >= 4)
+      projectedPlane = new Quad(...crossings.slice(0,4));
+    else throw new ImpossibleOperationError("Plane crosses volume in a weird way");
+
+    projectedPlane = shrinkPolygon(projectedPlane, SHRINK_FACTOR);
+
+    let color = { r: Math.round(Math.random()*255), b: Math.round(Math.random()*255) };
+    return projectedPlane.project(projectionData, projection, label, `rgba(${color.r},240,${color.b},0.5)`);
   }
 }

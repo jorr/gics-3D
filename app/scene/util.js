@@ -8,6 +8,7 @@ import { WrongParamsError, ImpossibleOperationError } from '../errors.js';
 
 import log from 'loglevel';
 import _ from 'lodash';
+import util from 'util';
 
 // CALCULATIONS
 
@@ -81,29 +82,34 @@ export function sortVertices(vertices, plane) {
   return sorted;
 }
 
+export function shrinkPolygon(polygon, factor) {
+  let centre = centroid(polygon.vertices);
+  return new polygon.constructor(...polygon.vertices.map(v => v.add(v.vectorTo(centre).scale(factor))));
+}
+
 // CHECKS
 
+// export const EPSILON = 0.001;
+
 export function pointInVolume(p, v) {
-  return Math.abs(p.x) <= v.w/2 &&
-    Math.abs(p.y) <= v.h/2 &&
-    p.z <= v.d;
+  return Math.abs(p.x) - v.w/2 <= Number.EPSILON  &&
+    Math.abs(p.y) - v.h/2 <= Number.EPSILON &&
+    p.z >= 0 && Math.abs(p.z) - v.d <= Number.EPSILON;
 }
 
 // TRANSFORMATIONS
 
-
-//TODO: these must be nondestructive
 export function translate(p, v) {
-  p.rvector = p.rvector.add(v);
+  return p.add(v);
 }
 
 export function rotate(p, axis, fi) {
   const u = axis.u.unit(), a = axis.pt.rvector, ap = a.vectorTo(p);
-  p.rvector = a.add(u.scale((1 - Math.cos(fi))*u.dot(ap))).
+  return new Point(a.add(u.scale((1 - Math.cos(fi))*u.dot(ap))).
                 add(ap.scale(Math.cos(fi))).
-                add(u.cross(ap).scale(Math.sin(fi)));
+                add(u.cross(ap).scale(Math.sin(fi))));
 }
 
 export function scale(p, n) {
-  p.rvector = p.rvector.scale(n);
+  return new Point(p.rvector.scale(n));
 }

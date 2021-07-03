@@ -1,7 +1,7 @@
 point(400,200,300) -> p1
 point(200,300,300) -> p2
 segment(p1,[0,0,100]) -> s[.,p3]
-line(s) -> .
+#line(s) -> .
 
 #rectangle(s,d:45) -> R
 #rectangle([[p1.x,p1.y+100,p1.z],[p3.x,p3.y+100,p3.z]],d:45) -> R2
@@ -16,8 +16,9 @@ line(s) -> .
 #parallelogram(plane("Oxz")) -> PLXZ
 
 
-#plane(p3,s) -> pl
-#plane([0,500,0],[-500,500,500],[-500,0,0]) -> testPL
+#plane(p1,s) -> pl
+plane([0,500,0],[-500,500,500],[-500,0,0]) -> testPL
+plane([[500,500,0],[500,0,0]],[[500,500,0],[-500,500,1000]]) -> pl2
 
 #translate(s,10,10,0)
 
@@ -29,6 +30,7 @@ line(s) -> .
 #point(p123) -> p4
 #plane("Oyz") -> xzpl
 plane([0,100,0],plane("Oxz")) -> xzparallel
+#intersect(pl2,xzparallel) -> .
 #normal(xzparallel) -> np
 #project(p2,xzparallel) -> p2'
 #point(100,200,100) -> prp
@@ -37,11 +39,12 @@ plane([0,100,0],plane("Oxz")) -> xzparallel
 #project(prp,xzparallel) -> prp'
 #project(prs,xzparallel) -> prs'
 #intersect(prs,prs') -> X
+intersect(line("Oy"),xzparallel) -> Y
 #should throw an error
 #intersect(line("Ox"),xzparallel) -> test
 #intersect(l,xzparallel) -> p3O
 
-transversal(line(s),line("Ox")) -> tr
+#transversal(line(s),line("Ox")) -> tr
 
 #quad(p1,p2,p3,p4) -> Q
 #quad(p123) -> Q1

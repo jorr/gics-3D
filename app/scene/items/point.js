@@ -2,7 +2,6 @@ import { Item, Point2D } from '../item.js';
 import { Vector } from '../vectors.js';
 import { Plane } from './plane.js';
 import { ImpossibleOperationError } from '../../errors.js';
-import { EPSILON } from '../util.js';
 
 import log from 'loglevel';
 
@@ -19,6 +18,11 @@ export class Point extends Item {
     } else { //construct from coordinates
       this.x = x; this.y = y; this.z = z;
     }
+
+    // round the coordinates to avoid fp errors
+    this.x = Math.round((this.x + Number.EPSILON) * 1000) / 1000;
+    this.y = Math.round((this.y + Number.EPSILON) * 1000) / 1000;
+    this.z = Math.round((this.z + Number.EPSILON) * 1000) / 1000;
    }
 
    get rvector() { return new Vector(this.x, this.y, this.z); }
@@ -36,7 +40,7 @@ export class Point extends Item {
    }
 
    equals(p) {
-    return Math.abs(this.x - p.x) <= EPSILON && Math.abs(this.y - p.y) <= EPSILON && Math.abs(this.z - p.z) <= EPSILON;
+    return Math.abs(this.x - p.x) <= Number.EPSILON && Math.abs(this.y - p.y) <= Number.EPSILON && Math.abs(this.z - p.z) <= Number.EPSILON;
    }
 
    to2D() {

@@ -33,13 +33,6 @@ export class Square extends Polygon {
    pointsToTransform() {
     return [this.A, this.B, this.C, this.D];
   }
-
-   project(projectionData, projection, label) {
-    return Object.assign(
-      new Polygon2D([this.A, this.B, this.C, this.D].map(v => projection.projectPoint(v, projectionData))),
-      { label }
-    );
-   }
 }
 
 export class Rhomb extends Square {

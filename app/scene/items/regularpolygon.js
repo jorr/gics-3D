@@ -20,11 +20,4 @@ export class RegularPolygon extends Polygon {
   pointsToTransform() {
     return this.vertices;
   }
-
-  project(projectionData, projection, label) {
-    return Object.assign(
-      new Polygon2D(this.vertices.map(v => projection.projectPoint(v, projectionData))),
-      { label }
-    );
-  }
 }

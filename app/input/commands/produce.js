@@ -1,9 +1,11 @@
 // COMMAND SYNTAX: 
 
 import { Command } from '../command.js';
-import { WrongParamsError } from '../../errors.js';
+import { WrongParamsError, SyntaxError } from '../../errors.js';
 import { Item } from '../../scene/item.js';
 import { globalScene } from '../../scene/scene.js';
+
+import log from 'loglevel';
 
 export default class ProduceCommand extends Command {
 
@@ -29,7 +31,14 @@ export default class ProduceCommand extends Command {
       globalScene.addItem(params[0], pattern?.name);
       //no binding elements is allowed with produce
     } else if (pattern) {
-      globalScene.addBinding(params[0], pattern.name);
+
+      //TODO: this is broken!
+      let propertyChain = params[0].split('.');
+      let item = globalScene.getItem(propertyChain.shift());
+      if (!item) {
+        throw new SyntaxError(`Identifier not resolved: ${params[0]}`);
+      }
+      globalScene.addBinding(item, propertyChain.join('.'), pattern.name);
     }
   }
 

@@ -17,8 +17,8 @@ segment(p1,[0,0,100]) -> s[.,p3]
 
 
 #plane(p1,s) -> pl
-plane([0,500,0],[-500,500,500],[-500,0,0]) -> testPL
-plane([[500,500,0],[500,0,0]],[[500,500,0],[-500,500,1000]]) -> pl2
+#plane([0,500,0],[-500,500,500],[-500,0,0]) -> testPL
+#plane([[500,500,0],[500,0,0]],[[500,500,0],[-500,500,1000]]) -> pl2
 
 #translate(s,10,10,0)
 
@@ -48,7 +48,8 @@ intersect(line("Oy"),xzparallel) -> Y
 
 #quad(p1,p2,p3,p4) -> Q
 #quad(p123) -> Q1
-#quad(plane("Oxy")) -> Q2
+#quad(plane("Oxy")) -> Q2[.,B,.,.]
+#height(Q2,Q2.B,Q2.AD) -> h[H]
 
 #polygon(5, plane("Oxy")) -> PG1
 #polygon(p1, 5, 200) -> PG2
@@ -65,26 +66,32 @@ intersect(line("Oy"),xzparallel) -> Y
 
 #sphere(c) -> sp
 
-#square([300,0,300],[100,0,100],plane("Oxz")) -> sq[A,B,C,D]
+#square([300,0,300],[100,0,100],plane("Oxz")) -> sq1[A,.,.,.]
+#line(sq1.AB) -> lAB
 
 #square(plane("Oxz")) -> sq[A,B,C,D]
 #square([[A.x,A.y+200,A.z],[B.x,B.y+200,B.z]],plane(A, plane("Oxz"))) -> sq2[A1,B1,C1,D1]
 #prism(sq,100,"-") -> pr
 #prism(sq,s) -> pr2
+#height(pr2,D) -> .[H]
+#triangle(pr2.base2.D,H,pr2.base2.A) -> .
 #prism(sq,sq2) -> pr3
 
 #cube(sq) -> .
-#pyramid(sq,200) -> .
+#pyramid(sq,200) -> pyr
+#height(pyr) -> .
 
 #cylinder(c, 90) -> C
 
 #triangle(p1,p2,d) -> tr
 
 #triangle([-100,0,0],[100,0,0],[100,0,300]) -> t[A,B,C]
+#height(t,"B") -> .
 #point(0,95,0) -> d
 #pyramid(t,150) -> p
 
 #cone(c,d) -> CN
 #cone(c,200) -> -CN2
 #cone(t,"a") -> CN3
+#height(CN) -> H
 #produce(CN2)

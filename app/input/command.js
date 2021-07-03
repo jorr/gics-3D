@@ -49,7 +49,7 @@ export class CreationCommand extends Command {
 
   bindElements(elems) {
     //bind item's elements to storage
-    throw new WrongPatternError(this, 'no pattern expected');
+    throw new WrongPatternError('no pattern expected', this);
   }
 }
 

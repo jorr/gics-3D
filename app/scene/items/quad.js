@@ -1,4 +1,4 @@
-import { Polygon, Polygon2D } from '../item.js';
+import { Polygon } from './polygon.js';
 import { Plane } from './plane.js';
 
 import log from 'loglevel';

@@ -4,7 +4,7 @@
 
 import { CreationCommand } from '../command.js';
 import { NotFeasibleError, WrongParamsError } from '../../errors.js';
-import { Polygon } from '../../scene/item.js';
+import { Polygon } from '../../scene/items/polygon.js';
 import { Prism } from '../../scene/items/prism.js';
 import { Segment } from '../../scene/items/segment.js';
 

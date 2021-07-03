@@ -1,5 +1,6 @@
-import { Item, Polygon } from '../item.js';
+import { Item } from '../item.js';
 import { Point } from './point.js';
+import { Polygon } from './polygon.js';
 import { Segment } from './segment.js';
 import { dist } from '../util.js';
 import { ImpossibleOperationError } from '../../errors.js';

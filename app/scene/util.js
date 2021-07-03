@@ -62,6 +62,7 @@ export function centroid(vertices) {
   return sum.scale(1/vertices.length).toPoint();
 }
 
+//TODO: doesnt really work :( check random quad in plane
 //sorts vertices to form convex polygon in the given plane
 export function sortVertices(vertices, plane) {
   // let centre = centroid(vertices); //TODO: check that all vertices and the centroid lie on the same plane

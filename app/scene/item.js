@@ -32,23 +32,6 @@ export class Item {
   // rotate(axis, fi) { this.transform(rotatePoint, [axis, fi]); }
 };
 
-export class Polygon extends Item {
-  plane; n; // number of vertices
-
-  constructor(n, plane) {
-    super();
-    this.n = n;
-    this.plane = plane;
-  }
-
-  //TODO: getter AB es7 goodness
-  project(projectionData, projection, label, color) {
-    return Object.assign(new Polygon2D(this.vertices.map(v => projection.projectPoint(v, projectionData))), {
-      label, color
-    });
-  }
-}
-
 class Element2D {
   label;
   color;

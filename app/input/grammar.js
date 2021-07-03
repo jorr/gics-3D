@@ -25,7 +25,7 @@ for (let file of files) {
 const NUMBER = createToken({ name: 'NUMBER', pattern: /\d+/});//(\.\d*)/});
 const IDENTIFIER = createToken({
   name: 'IDENTIFIER',
-  pattern: /[a-zA-Z]+[a-zA-Z\d']*(\.[a-zA-Z]+[a-zA-Z\d]*)?/
+  pattern: /[a-zA-Z]+[a-zA-Z\d']*((\.[a-zA-Z]+[a-zA-Z\d]*)*)?/
 });
 const COMMAND = createToken({
   name: 'COMMAND',

@@ -7,6 +7,7 @@ import { Point } from '../../scene/items/point.js';
 import { Plane } from '../../scene/items/plane.js';
 import { Quad } from '../../scene/items/quad.js';
 import { sortVertices } from '../../scene/util.js';
+import { globalScene } from '../../scene/scene.js';
 import { WrongParamsError, WrongPatternError, NotFeasibleError } from '../../errors.js';
 
 import log from 'loglevel';

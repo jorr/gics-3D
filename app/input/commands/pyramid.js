@@ -7,7 +7,7 @@ import { MissingPatternError, NotFeasibleError, WrongParamsError } from '../../e
 import { Point } from '../../scene/items/point.js';
 import { Plane } from '../../scene/items/plane.js';
 import { Pyramid } from '../../scene/items/pyramid.js';
-import { Polygon } from '../../scene/item.js';
+import { Polygon } from '../../scene/items/polygon.js';
 import { Triangle } from '../../scene/items/triangle.js';
 import { Square } from '../../scene/items/regularquad.js';
 import { centroid } from '../../scene/util.js';

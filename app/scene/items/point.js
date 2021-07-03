@@ -1,6 +1,8 @@
 import { Item, Point2D } from '../item.js';
 import { Vector } from '../vectors.js';
 import { Plane } from './plane.js';
+import { Line } from './line.js';
+import { Segment } from './segment.js';
 import { ImpossibleOperationError } from '../../errors.js';
 
 import log from 'loglevel';
@@ -51,11 +53,11 @@ export class Point extends Item {
     if (arg instanceof Plane) {
       return this.add(arg.n.unit().scale(-arg.n.unit().dot(arg.pt.vectorTo(this))));
     } else if (arg instanceof Line) {
-      return this.add(arg.u.unit().scale(arg.u.unit().dot(arg.pt.vectorTo(this))));
+      return arg.pt.add(arg.u.unit().scale(arg.u.unit().dot(arg.pt.vectorTo(this))));
     } else if (arg instanceof Segment) {
-      let projection = this.add(arg.lineOn().u.unit().scale(arg.lineOn().u.unit().dot(arg.p1.vectorTo(this))));
-      if (arg.hasPoint(projection)) return projection;
-      else throw new ImpossibleOperationError('Point projection is outside the segment');
+      return arg.p1.add(arg.lineOn().u.unit().scale(arg.lineOn().u.unit().dot(arg.p1.vectorTo(this))));
+      //if (arg.hasPoint(projection)) return projection;
+      //else throw new ImpossibleOperationError('Point projection is outside the segment');
     }
     else throw new ImpossibleOperationError('Points can be projected on lines, segments or planes');
    }

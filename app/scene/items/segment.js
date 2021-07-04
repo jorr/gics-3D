@@ -3,6 +3,8 @@ import { Point } from './point.js';
 import { Line } from './line.js';
 import { dist } from '../util.js';
 
+import log from 'loglevel';
+
 
 export class Segment extends Item {
   /**
@@ -34,9 +36,10 @@ export class Segment extends Item {
    }
 
    hasPoint(p) {
-    let p1p = this.p1.vectorTo(p), direction = this.p1.vectorTo(this.p2);
-    return p1p.isCollinearWith(direction) && p1p.norm < direction.norm;
-   }
+    if (!p) return false;
+    let p1p = this.p1.vectorTo(p), direction = this.asVector(), dotp1p = direction.dot(p1p);
+    return p1p.isCollinearWith(direction) && dotp1p > 0 && dotp1p < direction.dot(direction);
+  }
 
    intersect(arg) {
     let intersection = this.lineOn().intersect(arg);

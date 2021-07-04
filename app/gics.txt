@@ -1,6 +1,6 @@
 point(400,200,300) -> p1
 point(200,300,300) -> p2
-segment(p1,[0,0,100]) -> s[.,p3]
+#segment(p1,[0,0,100]) -> s[.,p3]
 #line(s) -> .
 
 #rectangle(s,d:45) -> R
@@ -26,7 +26,7 @@ segment(p1,[0,0,100]) -> s[.,p3]
 
 #segment(p1,[angle(s,l),0,0]) -> s2
 
-#plane(p1,p2,[300,200,300]) -> p123
+plane(p1,p2,[300,200,300]) -> p123
 #point(p123) -> p4
 #plane("Oyz") -> xzpl
 plane([0,100,0],plane("Oxz")) -> xzparallel
@@ -48,6 +48,8 @@ intersect(line("Oy"),xzparallel) -> Y
 
 #quad(p1,p2,p3,p4) -> Q
 #quad(p123) -> Q1
+quad([100,0,100],[200,300,100],[40,40,100],[0,200,100]) -> QQ
+bisector(QQ,QQ.A) -> BSQ
 #quad(plane("Oxy")) -> Q2[.,B,.,.]
 #height(Q2,Q2.B,Q2.AD) -> h[H]
 
@@ -85,7 +87,9 @@ intersect(line("Oy"),xzparallel) -> Y
 
 #triangle(p1,p2,d) -> tr
 
-#triangle([-100,0,0],[100,0,0],[100,0,300]) -> t[A,B,C]
+triangle([-100,0,0],[100,0,0],[100,0,300]) -> t[A,B,C]
+bisector(t,A) -> BSC
+
 #height(t,"B") -> .
 #point(0,95,0) -> d
 #pyramid(t,150) -> p

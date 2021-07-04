@@ -7,6 +7,8 @@ import { MethodNotImplemented } from '../errors.js';
 //   scale as scalePoint, rotate as rotatePoint } from './util.js';
 // TODO: delegate these to a transformer class (can be here) to avoid circular dependencies
 
+export const EPSILON = 0.000000001; // Number.EPSILON seems to break the calculations
+
 export class Item {
 
   suppressed = false;

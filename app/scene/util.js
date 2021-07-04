@@ -1,3 +1,4 @@
+import { EPSILON } from './item.js';
 import { Point } from './items/point.js';
 import { Segment } from './items/segment.js';
 import { Line } from './items/line.js';
@@ -90,12 +91,10 @@ export function shrinkPolygon(polygon, factor) {
 
 // CHECKS
 
-// export const EPSILON = 0.001;
-
 export function pointInVolume(p, v) {
-  return Math.abs(p.x) - v.w/2 <= Number.EPSILON  &&
-    Math.abs(p.y) - v.h/2 <= Number.EPSILON &&
-    p.z >= 0 && Math.abs(p.z) - v.d <= Number.EPSILON;
+  return Math.abs(p.x) - v.w/2 <= EPSILON  &&
+    Math.abs(p.y) - v.h/2 <= EPSILON &&
+    p.z >= 0 && Math.abs(p.z) - v.d <= EPSILON;
 }
 
 // TRANSFORMATIONS

@@ -22,6 +22,10 @@ export class Polygon extends Item {
     });
   }
 
+  get edges() {
+    return this.vertices.map((v,i) => new Segment(v, this.vertices[(i+1)%this.vertices.length]));
+  }
+
   project(projectionData, projection, label, color) {
     return Object.assign(new Polygon2D(this.vertices.map(v => projection.projectPoint(v, projectionData))), {
       label, color

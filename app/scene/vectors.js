@@ -1,3 +1,4 @@
+import { EPSILON } from './item.js';
 import { Plane } from './items/plane.js';
 import { Line } from './items/line.js';
 import { Point } from './items/point.js';
@@ -18,6 +19,11 @@ export class Vector {
     this.x = x;
     this.y = y;
     this.z = z;
+
+    // round the coordinates to avoid fp errors
+    // this.x = Math.round((this.x + EPSILON) * 10e6) / 10e6;
+    // this.y = Math.round((this.y + EPSILON) * 10e6) / 10e6;
+    // this.z = Math.round((this.z + EPSILON) * 10e6) / 10e6;
   }
 
   get norm() {
@@ -25,11 +31,11 @@ export class Vector {
   }
 
   isCollinearWith(v) {
-    return !this.cross(v).isNonZero();
+    return this.cross(v).isZero();
   }
 
-  isNonZero() {
-    return this.x !=0 || this.y !=0 || this.z != 0;
+  isZero() {
+    return Math.abs(this.x) < EPSILON && Math.abs(this.y) < EPSILON && Math.abs(this.z) < EPSILON;
   }
 
   dot(v) {

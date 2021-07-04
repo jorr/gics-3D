@@ -34,7 +34,7 @@ export class Plane extends Item {
   }
 
   hasVector(v) {
-   return !this.n.cross(v).isNonZero();
+   return this.n.cross(v).isZero();
   }
 
   getRandomPoint() {

@@ -103,7 +103,11 @@ export class Plane extends Item {
     //TODO: segment, bodies
   }
 
-  project(projectionData, projection, label) {
+  get labelPosition() {
+    return this.pt;
+  }
+
+  project(projectionData, projection) {
     //We will represent the plane as a quad defined by the crossings with the volume
     //TODO: test shrinking
     let projectedPlane;
@@ -146,6 +150,6 @@ export class Plane extends Item {
     projectedPlane = shrinkPolygon(projectedPlane, SHRINK_FACTOR);
 
     let color = { r: Math.round(Math.random()*255), b: Math.round(Math.random()*255) };
-    return projectedPlane.project(projectionData, projection, label, `rgba(${color.r},240,${color.b},0.5)`);
+    return projectedPlane.project(projectionData, projection, `rgba(${color.r},240,${color.b},0.5)`);
   }
 }

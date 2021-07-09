@@ -50,15 +50,14 @@ A—————B
     return this.base.vertices.concat(this.base.vertices.map(v => v.add(this.direction)));
   }
 
-  // static fromDiagonalPoints(d1, d2) {
+  get labelPosition() {
+    return this.base.labelPosition;
+  }
 
-  // }
-
-
-  project(projectionData, projection, label) {
+  project(projectionData, projection) {
     return [
       // first wall
-      this.base.project(projectionData, projection, label),
+      this.base.project(projectionData, projection),
       // second wall
       new Polygon2D(this.base.vertices.map(v => projection.projectPoint(v.add(this.direction), projectionData))),
       // connecting edges

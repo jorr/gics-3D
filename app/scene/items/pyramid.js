@@ -19,11 +19,15 @@ export class Pyramid extends Item {
   //   return new Segment(b1point, b1point.add(sideVector));
   // }
 
-  project(projectionData, projection, label) {
+  get labelPosition() {
+    return new Segment(this.base.cen,this.apex).labelPosition;
+  }
+
+  project(projectionData, projection) {
     let apexProjection = this.apex.project(projectionData, projection);
     return [
       // base
-      this.base.project(projectionData, projection, label), apexProjection,
+      this.base.project(projectionData, projection), apexProjection,
       // connecting edges
       this.base.vertices.map(v => new Segment2D(v.project(projectionData, projection), apexProjection))
     ];

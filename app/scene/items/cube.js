@@ -1,7 +1,7 @@
 import { Item, Polygon2D, Segment2D } from '../item.js';
 import { Point } from './point.js';
 import { Vector } from '../vectors.js';
-import { midpoint } from '../util.js';
+import { midpoint, centroid } from '../util.js';
 
 import log from 'loglevel';
 
@@ -94,6 +94,11 @@ A—————B
   //   }));
   // }
 
+  //TODO: fix the cube to have a base and add new constructors
+  get labelPosition() {
+    return centroid(this.A, this.B, this.C, this.D);
+  }
+
   static fromCentreAndParallelToAxi(cen, len) {
     //if the cube is parallel to the axi then the vector from A to CEN is radius times the unit vector
     len = len ?? DEFAULT_SIDE;
@@ -107,13 +112,10 @@ A—————B
     //TODO: finish this
   }
 
-  project(projectionData, projection, label) {
+  project(projectionData, projection) {
     return [
       // first wall
-      Object.assign(
-        new Polygon2D([this.A, this.B, this.C, this.D].map(v => projection.projectPoint(v, projectionData))),
-        { label }
-      ),
+      new Polygon2D([this.A, this.B, this.C, this.D].map(v => projection.projectPoint(v, projectionData))),
       // second wall
       new Polygon2D([this.A1, this.B1, this.C1, this.D1].map(v => projection.projectPoint(v, projectionData))),
       // connecting edges

@@ -1,5 +1,3 @@
-import _ from 'lodash';
-import log from 'loglevel';
 import { Point } from './items/point.js';
 import { Line } from './items/line.js';
 import { Plane } from './items/plane.js';
@@ -7,8 +5,16 @@ import { Vector } from './vectors.js';
 import { CabinetProjection, PerspectiveProjection } from './projections.js';
 import { NameUndefinedError } from '../errors.js';
 
+import _ from 'lodash';
+import log from 'loglevel';
+
+export class Style {
+  stroke = 1.0;
+  linetype = 'solid';
+  color = 'black';
+}
+
 export class Scene{
-  //TODO: maybe switch to smarter storage
   items = {};
   bindings = {};
   anonIndex = 0;
@@ -18,9 +24,11 @@ export class Scene{
     h: 1000,
     d: 1000,
   };
+  //the camera is only used for perspective at this point
   camera = new Point(100,100,-300);
-  projection = new CabinetProjection();
-  // projection = new PerspectiveProjection();
+  projection = new CabinetProjection(); //projection = new PerspectiveProjection();
+  defaultStyle = new Style();
+  autolabel = false;
 
   addItem(item, name, suppress) {
     if (!name) {
@@ -30,9 +38,7 @@ export class Scene{
       log.info(`Adding ${item.constructor.name} with name '${name}' to scene`);
     }
 
-    //TODO: rebinding should be possible, check!
-    //if (!!this.items[name]) throw new Error('Repeating name binding attempt');
-
+    item.style = this.defaultStyle;
     this.items[name] = item;
     return name;
   }
@@ -43,6 +49,10 @@ export class Scene{
       this.bindings[name] = (() => _.get(item, propertyChain));
     else
       this.bindings[name] = item; //_.get would not work on expressions binding
+  }
+
+  setStyle(style) {
+    this.defaultStyle = style;
   }
 
   removeItem(name) {
@@ -88,7 +98,7 @@ export class Scene{
       mapValues((item, name) => item.project(
         projectionData,
         this.projection,
-        name.startsWith('obj-') ? '' : name
+        //name.startsWith('obj-') ? '' : name
       )).
       values().
       flattenDeep().
@@ -100,7 +110,7 @@ export class Scene{
       mapValues((item, name) => item().project(
         projectionData,
         this.projection,
-        name
+        //name
       )).
       values().
       flattenDeep().

@@ -12,14 +12,20 @@ export const EPSILON = 0.000000001; // Number.EPSILON seems to break the calcula
 export class Item {
 
   suppressed = false;
+  style;
+  styledElements = {};
 
   //TODO: implement
   get vertices() { throw new MethodNotImplemented('vertices', this); }
   get faces() { throw new MethodNotImplemented('faces', this); }
   get edges() { throw new MethodNotImplemented('edges', this); }
 
-  project(projectionData, projection, label) { throw new MethodNotImplemented('project', this); }
-  // pointsToTransform() { throw new MethodNotImplemented('pointsToTransform', this); }
+  get labelPosition() { throw new MethodNotImplemented('labelPosition', this); }
+  project(projectionData, projection) { throw new MethodNotImplemented('project', this); }
+
+  checkStyledElements(element) {
+
+  }
 
   // TODO: delegate transform to descendants
   // transform(transformation, data) {
@@ -35,8 +41,8 @@ export class Item {
 };
 
 class Element2D {
-  label;
   color;
+  style;
 }
 
 export class Point2D extends Element2D {
@@ -46,6 +52,11 @@ export class Point2D extends Element2D {
   equals(p) {
     return this.x === p.x && this.y === p.y;
   }
+}
+
+export class Text2D extends Element2D {
+  location; text; direction; offset;
+  constructor(loc,t,d,o) { super(); this.location = loc; this.text = t; this.direction = d; this.offset = o; }
 }
 
 export class Segment2D extends Element2D {

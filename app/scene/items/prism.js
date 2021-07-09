@@ -33,10 +33,14 @@ export class Prism extends Item {
     return this.base1.vertices.map((v,i) => new Segment(v, this.base2.vertices[i]));
   }
 
-  project(projectionData, projection, label) {
+  get labelPosition() {
+    return new Segment(this.base1.cen, this.base2.cen).labelPosition;
+  }
+
+  project(projectionData, projection) {
     return [
       // first base
-      this.base1.project(projectionData, projection, label),
+      this.base1.project(projectionData, projection),
       // second base
       this.base2.project(projectionData, projection),
       // connecting edges

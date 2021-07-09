@@ -62,6 +62,10 @@ export class Segment extends Item {
     return [this.p1, this.p2];
   }
 
+  get labelPosition() {
+    return midpoint(this.p1, this.p2);
+  }
+
    project(projectionData, projection, label) {
     let projectedP1 = projection.projectPoint(this.p1, projectionData),
         projectedP2 = projection.projectPoint(this.p2, projectionData);

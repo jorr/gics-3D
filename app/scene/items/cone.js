@@ -15,9 +15,13 @@ export class Cone extends Item {
     this.apex = apex;
   }
 
+  get labelPosition() {
+    return this.base.labelPosition;
+  }
+
   project(projectionData, projection, label) {
     let mainAxisProjectionOut = {p1: null, p2: null};
-    let baseProjection = this.base.project(projectionData, projection, label, mainAxisProjectionOut);
+    let baseProjection = this.base.project(projectionData, projection, mainAxisProjectionOut);
     let apexProjection = this.apex.project(projectionData, projection);
     return [
       // base

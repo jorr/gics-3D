@@ -15,10 +15,10 @@ import { WrongParamsError, WrongPatternError, NotFeasibleError } from '../../err
 
 import log from 'loglevel';
 
-export default class HeightCommand extends CreationCommand {
+export default class AltitudeCommand extends CreationCommand {
 
   get name() {
-    return 'height';
+    return 'altitude';
   }
 
   requiresPattern() {
@@ -26,11 +26,11 @@ export default class HeightCommand extends CreationCommand {
   }
 
   createItem(params) {
-    //height(<pyramid>|<cone>)
+    //altitude(<pyramid>|<cone>)
     if (params.length == 1 && (params[0] instanceof Pyramid || params[0] instanceof Cone)) {
       this.item = new Segment(params[0].apex, params[0].apex.projectionOn(params[0].base.plane));
     }
-    //height(<prism>,<vertex>)
+    //altitude(<prism>,<vertex>)
     else if (params.length == 2 && params[0] instanceof Prism && (typeof params[1] === 'string' || params[1] instanceof Point)) {
       let vertex = params[1];
       if (typeof params[1] === 'string') {
@@ -43,7 +43,7 @@ export default class HeightCommand extends CreationCommand {
         this.item = new Segment(vertex, vertex.projectionOn(params[0].base1.plane));
       }
     }
-    //height(<triangle>,<vertex>)
+    //altitude(<triangle>,<vertex>)
     else if (params.length == 2 && params[0] instanceof Triangle && (typeof params[1] === 'string' || params[1] instanceof Point)) {
       let vertex = params[1];
       if (typeof params[1] === 'string') {
@@ -52,7 +52,7 @@ export default class HeightCommand extends CreationCommand {
       let side = new Segment(...params[0].vertices.filter(p => !p.equals(vertex)));
       this.item = new Segment(vertex, vertex.projectionOn(side));
     }
-    //height(<quad>,<vertex>,<side>)
+    //altitude(<quad>,<vertex>,<side>)
     else if (params.length === 3 && params[0] instanceof Quad &&
       (typeof params[1] === 'string' || params[1] instanceof Point) &&
       (typeof params[2] === 'string' || params[2] instanceof Segment)) {
@@ -71,7 +71,7 @@ export default class HeightCommand extends CreationCommand {
   }
 
   bindElements(elems) {
-    // Height should support [point] deconstruction
+    // Altitude should support [point] deconstruction
     if (elems.length !== 1) {
       throw new WrongPatternError('[point]', this);
     }

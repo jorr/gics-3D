@@ -1,5 +1,6 @@
 import { Item, Polygon2D } from '../item.js';
 import { Segment } from './segment.js';
+import { centroid } from '../util.js';
 
 import log from 'loglevel';
 
@@ -26,9 +27,17 @@ export class Polygon extends Item {
     return this.vertices.map((v,i) => new Segment(v, this.vertices[(i+1)%this.vertices.length]));
   }
 
-  project(projectionData, projection, label, color) {
+  get labelPosition() {
+    return centroid(this.vertices);
+  }
+
+  get cen() {
+    return centroid(this.vertices);
+  }
+
+  project(projectionData, projection, color) {
     return Object.assign(new Polygon2D(this.vertices.map(v => projection.projectPoint(v, projectionData))), {
-      label, color
+      color
     });
   }
-}
+};

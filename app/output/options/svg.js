@@ -1,5 +1,5 @@
 import { OutputOption } from '../output.js';
-import { midpoint } from '../../scene/util.js';
+// import { midpoint } from '../../scene/util.js';
 import fs from 'fs';
 
 import log from 'loglevel';
@@ -53,13 +53,13 @@ export class SvgOutput extends OutputOption {
     renderPoint(p) {
       this.svg = `${this.svg}
 <circle cx="${p.x}" cy="${-p.y}" r="${this.strokeWidth}" stroke="${p.color || this.stroke}" stroke-width="${this.strokeWidth}" fill="${this.stroke}"/>`;
-      this.renderLabel(p.label, p);
+      //this.renderLabel(p.label, p);
     }
 
     renderSegment(s) {
       this.svg = `${this.svg}
 <line x1="${s.p1.x}" x2="${s.p2.x}" y1="${-s.p1.y}" y2="${-s.p2.y}" stroke="${s.color || this.stroke}" stroke-width="${this.strokeWidth + Number(s.drawAsArrow)}"/>`;
-      this.renderLabel(s.label, midpoint(s.p1, s.p2));
+      //this.renderLabel(s.label, midpoint(s.p1, s.p2));
 
       if (s.drawAsArrow) {
         this.renderPoint(s.p1);
@@ -71,14 +71,14 @@ export class SvgOutput extends OutputOption {
       let points = pg.points.map(p => `${p.x},${-p.y}`).join(' ');
       this.svg = `${this.svg}
 <polygon points="${points}" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" fill="${pg.color || 'none'}"/>`;
-      this.renderLabel(pg.label, pg.centre);
+      // this.renderLabel(pg.label, pg.centre);
     }
 
     renderEllipse(e) {
       log.debug(e)
       this.svg = `${this.svg}
 <ellipse cx="${e.c.x}" cy="${-e.c.y}" rx="${e.rx}" ry="${e.ry}" transform="rotate(${e.rotate},${e.c.x},${-e.c.y})" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" fill="none"/>`;
-      this.renderLabel(e.label, e.c);
+      // this.renderLabel(e.label, e.c);
     }
 
     renderArrow(s) {
@@ -101,10 +101,12 @@ export class SvgOutput extends OutputOption {
       });
     }
 
-    renderLabel(label, location, preset) {
-      if (!label) return;
-      preset = preset || 'SE';
-      let displacement = { x:0, y:0 };
+    renderText(t) {
+      if (!t.text || !t.location) return;
+
+      //TODO: parse special text here
+      let preset = t.preset || 'SE';
+      let displacement = t.displacement || { x:0, y:0 };
       for (let dir of preset) {
         switch(dir) {
           case 'N': displacement.y = displacement.y - this.labelOffset.y; break;
@@ -115,7 +117,7 @@ export class SvgOutput extends OutputOption {
       }
 
       this.svg = `${this.svg}
-<text x="${location.x+displacement.x}" y="${-location.y+displacement.y}">${label}</text>`;
+<text x="${t.location.x+displacement.x}" y="${-t.location.y+displacement.y}">${t.text}</text>`;
     }
 
     flushOutput() {

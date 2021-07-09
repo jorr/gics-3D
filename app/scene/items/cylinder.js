@@ -1,7 +1,7 @@
 import { Item, Segment2D, Point2D } from '../item.js';
 import { Point } from './point.js';
 import { Segment } from './segment.js';
-import { dist } from '../util.js';
+import { dist, midpoint } from '../util.js';
 
 import log from 'loglevel';
 
@@ -24,23 +24,26 @@ export class Cylinder extends Item {
   //   return new Segment(b1point, b1point.add(sideVector));
   // }
 
-  project(projectionData, projection, label) {
+  get labelPosition() {
+    return midpoint(base1.cen, base2.cen);
+  }
+
+  project(projectionData, projection) {
     //let direction = projectionData.camera.vectorTo(Point.Origin).perpendicular(this.base1.plane).unit();
     // let screenPlane = projection.screenPlane(projectionData.camera, projectionData.volume);
     // let direction = projectionData.camera.vectorTo(project(projectionData.camera, screenPlane)).perpendicular(this.base1.plane).unit();
 
     let mainAxisBase1ProjectionOut = {p1: null, p2: null};
-    let base1Projection = this.base1.project(projectionData, projection, '', mainAxisBase1ProjectionOut);
+    let base1Projection = this.base1.project(projectionData, projection, mainAxisBase1ProjectionOut);
     let mainAxisBase2ProjectionOut = {p1: null, p2: null};
-    let base2Projection = this.base2.project(projectionData, projection, '', mainAxisBase2ProjectionOut);
+    let base2Projection = this.base2.project(projectionData, projection, mainAxisBase2ProjectionOut);
 
     return [
       // bases
       base1Projection, base2Projection,
       // connecting edges
-      Object.assign(new Segment2D(mainAxisBase1ProjectionOut.p1, mainAxisBase2ProjectionOut.p1), { label }),
-      new Segment2D(mainAxisBase1ProjectionOut.p2, mainAxisBase2ProjectionOut.p2),
-      Object.assign(mainAxisBase1ProjectionOut.p1, { label: "P1", color: "blue"})
+      new Segment2D(mainAxisBase1ProjectionOut.p1, mainAxisBase2ProjectionOut.p1),
+      new Segment2D(mainAxisBase1ProjectionOut.p2, mainAxisBase2ProjectionOut.p2)
     ];
 
 

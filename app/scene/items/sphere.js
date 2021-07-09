@@ -16,7 +16,11 @@ export class Sphere extends Item {
     this.rad = radius;
   }
 
-  project(projectionData, projection, label) {
+  get labelPosition() {
+    return this.cen;
+  }
+
+  project(projectionData, projection) {
 
     let screenPlane = projection.screenPlane(projectionData.camera, projectionData.volume);
     //let's first draw a circle in the screen plane
@@ -28,10 +32,10 @@ export class Sphere extends Item {
     //let direction = projectionData.camera.vectorTo(project(projectionData.camera, screenPlane)).perpendicular(this.base1.plane).unit();
 
     // let mainAxisProjectionOut = {p1: null, p2: null};
-    // let baseProjection = this.base.project(projectionData, projection, label, mainAxisProjectionOut);
+    // let baseProjection = this.base.project(projectionData, projection, mainAxisProjectionOut);
     // let apexProjection = this.apex.project(projectionData, projection);
     return [
-      mainCircle.project(projectionData, projection, label),
+      mainCircle.project(projectionData, projection),
       circumferenceCircle.project(projectionData, projection)
     ];
   }

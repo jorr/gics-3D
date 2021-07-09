@@ -99,3 +99,5 @@ bisector(t,A) -> BSC
 #cone(t,"a") -> CN3
 #height(CN) -> H
 #produce(CN2)
+
+label("t",t,"NE",10)

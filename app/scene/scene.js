@@ -43,7 +43,7 @@ export class Scene{
     }
     if (!suppress) {
       this.draw.push(Object.assign(item, {style: this.defaultStyle}));
-      if (this.autolabel) {
+      if (this.autolabel && name) {
         log.debug(`Autolabeling with name: ${name}`);
         this.addLabel(new Label(item.labelPosition, name));
       }
@@ -52,19 +52,6 @@ export class Scene{
     }
     return name;
   }
-
-  // addItem(item, name, suppress) {
-  //   if (!name) {
-  //     name = `obj-${this.anonIndex++}`;
-  //     log.info(`Adding an anonymous ${item.constructor.name} to scene`);
-  //   } else {
-  //     log.info(`Adding ${item.constructor.name} with name '${name}' to scene`);
-  //   }
-
-  //   item.style = this.defaultStyle;
-  //   this.items[name] = item;
-  //   return name;
-  // }
 
   bindResult(value, name) {
     this.names[name] = value;
@@ -78,7 +65,7 @@ export class Scene{
     }
     if (!suppress) {
       this.draw.push(element);
-      if (this.autolabel) {
+      if (this.autolabel && name) {
         log.debug(`Autolabeling with name: ${name}`);
         this.addLabel(new Label(element.labelPosition, name));
       }
@@ -91,19 +78,6 @@ export class Scene{
     this.draw.push(label);
   }
 
-  // addBinding(name, item, propertyChain, suppress) {
-  //   if (propertyChain) {
-  //     log.info(`binding ${propertyChain} on a ${item.constructor.name} with name ${name}`);
-  //     this.bindings[name] = (() => _.get(item, propertyChain));
-  //     if (!suppress) item.styledElements[propertyChain] = defaultStyle;
-  //     else item.suppressedElements.push(_.get(item, propertyChain));
-  //   }
-  //   else {
-  //     log.info(`Binding expression result ${item} with name ${name}`);
-  //     this.bindings[name] = item; //_.get would not work on expressions binding
-  //   }
-  // }
-
   setStyle(style) {
     this.defaultStyle = style;
   }
@@ -113,16 +87,6 @@ export class Scene{
     if (item == undefined) throw new NameUndefinedError(name);
     else return item;
   }
-
-  // getItem(name) {
-  //   if (!this.items[name]) {
-  //     if (!this.bindings[name])
-  //       throw new NameUndefinedError(name);
-  //     else
-  //       return this.bindings[name]();
-  //   }
-  //   return this.items[name];
-  // }
 
   getRandomPointInGoodView() {
     return new Point(

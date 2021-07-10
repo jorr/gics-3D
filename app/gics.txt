@@ -1,6 +1,6 @@
 point(400,200,300) -> p1
 point(200,300,300) -> p2
-segment(p1,[0,0,100]) -> s[.,p3]
+#segment(p1,[0,0,100]) -> s[.,p3]
 #line(s) -> .
 
 #rectangle(s,d:45) -> R
@@ -41,7 +41,7 @@ plane([0,100,0],["Oxz"]) -> xzparallel
 #project(prs,xzparallel) -> prs'
 #intersect(prs,prs') -> X
 #line("Oy") -> -Oy
-autolabel("off")
+#autolabel("off")
 intersect(["Oy"],xzparallel) -> Y
 label("Y",Y,"SE",20)
 #should throw an error
@@ -71,14 +71,16 @@ label("Y",Y,"SE",20)
 point(0,95,0) -> d
 #line(d,["Oz"],d:90) -> ll
 
-circle([0,0,0],40,["Oxz"]) -> c
+#circle([0,0,0],40,["Oxz"]) -> c
 
 #sphere(c) -> sp
 
 #square([300,0,300],[100,0,100],["Oxz"]) -> sq1[A,.,.,.]
 #line(sq1.AB) -> lAB
 
-#square(["Oxz"]) -> sq[A,B,C,D]
+#square(["Oxz"]) -> -sq[A,B,C,D]
+square(["Oxz"]) -> -sq
+produce(sq.AB) -> .[A,B]
 #plane(A,["Oxz"]) -> AOxz
 #square([[A.x,A.y+200,A.z],[B.x,B.y+200,B.z]],AOxz) -> sq2[A1,B1,C1,D1]
 #prism(sq,100,"-") -> pr
@@ -95,16 +97,16 @@ circle([0,0,0],40,["Oxz"]) -> c
 
 #triangle(p1,p2,d) -> tr
 
-triangle([-100,0,0],[100,0,0],[100,0,300]) -> t[A,B,C]
+#triangle([-100,0,0],[100,0,0],[100,0,300]) -> t[A,B,C]
 #bisector(t,A) -> BSC
 #altitude(t,"B") -> .
 
-pyramid(t,150) -> p
+#pyramid(t,150) -> p
 
-cone(c,d) -> CN
-cone(c,200) -> -CN2
-cone(t,"a") -> CN3
-height(CN) -> H
-produce(CN2)
+#cone(c,d) -> CN
+#cone(c,200) -> -CN2
+#cone(t,"a") -> CN3
+#height(CN) -> H
+#produce(CN2)
 
-label("t",t,"N",10)
+#label("t",t,"N",10)

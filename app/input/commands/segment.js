@@ -10,6 +10,8 @@ import { Point } from '../../scene/items/point.js';
 import { dist } from '../../scene/util.js';
 import { WrongParamsError, WrongPatternError, NotFeasibleError } from '../../errors.js';
 
+import log from 'loglevel';
+
 export default class SegmentCommand extends CreationCommand {
 
   get name() {
@@ -45,6 +47,7 @@ export default class SegmentCommand extends CreationCommand {
     if (elems.length !== 2) {
       throw new WrongPatternError('[p1,p2]', this);
     }
+
     globalScene.bindElement(this.item.p1, elems[0].name, elems[0].suppress);
     globalScene.bindElement(this.item.p2, elems[1].name, elems[1].suppress);
   }

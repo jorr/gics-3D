@@ -25,11 +25,11 @@ export default class ProduceCommand extends Command {
     //check if params[0] is resolved to a valid item
     if (params[0] instanceof Item) {
       globalScene.bindElement(params[0], pattern.name, pattern.suppress);
-      if (pattern.elements) {
+      if (pattern.elements?.length) {
         //we must also bind the elements if we have a true pattern. so, a little JS hackery...
         let cname = params[0].constructor.name.toLowerCase();
         // if (!c.hasOwnProperty('bindElements')) throw new WrongPatternError()
-        commands[cname].bindElements(pattern.elements);
+        Object.getPrototypeOf(commands[cname]).bindElements.call({item:params[0]},pattern.elements);
       }
     } else {
       globalScene.bindResult(params[0],pattern.name);

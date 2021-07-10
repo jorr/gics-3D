@@ -75,9 +75,7 @@ export default class AltitudeCommand extends CreationCommand {
     if (elems.length !== 1) {
       throw new WrongPatternError('[point]', this);
     }
-    if (elems[0].name) {
-      globalScene.addBinding(this.item, 'p2', elems[0].name);
-    }
+    globalScene.bindElement(this.item.p2, elems[0].name, elems[0].suppress);
   }
 
 };

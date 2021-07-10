@@ -1,5 +1,6 @@
 import { Point } from './items/point.js';
 import { Line } from './items/line.js';
+import { Label } from './items/label.js';
 import { Plane } from './items/plane.js';
 import { Vector } from './vectors.js';
 import { CabinetProjection, PerspectiveProjection } from './projections.js';
@@ -15,8 +16,10 @@ export class Style {
 }
 
 export class Scene{
-  items = {};
-  bindings = {};
+  items = [];
+  names = {};
+  draw = [];
+
   anonIndex = 0;
   //the origin is assumed to be at (w/2, h/2, 0), the volume extends towards Oz+
   volume = {
@@ -31,43 +34,95 @@ export class Scene{
   autolabel = false;
 
   addItem(item, name, suppress) {
-    if (!name) {
-      name = `obj-${this.anonIndex++}`;
-      log.info(`Adding an anonymous ${item.constructor.name} to scene`);
+    this.items.push(item);
+    if (name) {
+      this.names[name] = item;
+      log.info(`adding ${item.constructor.name} with name '${name}' to scene`);
     } else {
-      log.info(`Adding ${item.constructor.name} with name '${name}' to scene`);
+      log.info(`adding an anonymous ${item.constructor.name} to scene`);
     }
-
-    item.style = this.defaultStyle;
-    this.items[name] = item;
+    if (!suppress) {
+      this.draw.push(Object.assign(item, {style: this.defaultStyle}));
+      if (this.autolabel) {
+        log.debug(`Autolabeling with name: ${name}`);
+        this.addLabel(new Label(item.labelPosition, name));
+      }
+    } else {
+      log.info(`[it will not be drawn]`);
+    }
     return name;
   }
 
-  addBinding(item, propertyChain, name) {
-    log.info(`Binding ${propertyChain} on a ${item.constructor.name} with name ${name}`);
-    if (propertyChain)
-      this.bindings[name] = (() => _.get(item, propertyChain));
-    else
-      this.bindings[name] = item; //_.get would not work on expressions binding
+  // addItem(item, name, suppress) {
+  //   if (!name) {
+  //     name = `obj-${this.anonIndex++}`;
+  //     log.info(`Adding an anonymous ${item.constructor.name} to scene`);
+  //   } else {
+  //     log.info(`Adding ${item.constructor.name} with name '${name}' to scene`);
+  //   }
+
+  //   item.style = this.defaultStyle;
+  //   this.items[name] = item;
+  //   return name;
+  // }
+
+  bindResult(value, name) {
+    this.names[name] = value;
   }
+
+  bindElement(element, name, suppress) {
+    log.info(`binding ${element.constructor.name}`);
+    if (name) {
+      this.names[name] = element;
+      log.info(`[to name ${name}]`);
+    }
+    if (!suppress) {
+      this.draw.push(element);
+      if (this.autolabel) {
+        log.debug(`Autolabeling with name: ${name}`);
+        this.addLabel(new Label(element.labelPosition, name));
+      }
+    } else {
+      log.info(`[it will not be drawn]`);
+    }
+  }
+
+  addLabel(label) {
+    this.draw.push(label);
+  }
+
+  // addBinding(name, item, propertyChain, suppress) {
+  //   if (propertyChain) {
+  //     log.info(`binding ${propertyChain} on a ${item.constructor.name} with name ${name}`);
+  //     this.bindings[name] = (() => _.get(item, propertyChain));
+  //     if (!suppress) item.styledElements[propertyChain] = defaultStyle;
+  //     else item.suppressedElements.push(_.get(item, propertyChain));
+  //   }
+  //   else {
+  //     log.info(`Binding expression result ${item} with name ${name}`);
+  //     this.bindings[name] = item; //_.get would not work on expressions binding
+  //   }
+  // }
 
   setStyle(style) {
     this.defaultStyle = style;
   }
 
-  removeItem(name) {
-    delete this.items[name];
+  getItem(name) {
+    let item = this.names[name];
+    if (item == undefined) throw new NameUndefinedError(name);
+    else return item;
   }
 
-  getItem(name) {
-    if (!this.items[name]) {
-      if (!this.bindings[name])
-        throw new NameUndefinedError(name);
-      else
-        return this.bindings[name]();
-    }
-    return this.items[name];
-  }
+  // getItem(name) {
+  //   if (!this.items[name]) {
+  //     if (!this.bindings[name])
+  //       throw new NameUndefinedError(name);
+  //     else
+  //       return this.bindings[name]();
+  //   }
+  //   return this.items[name];
+  // }
 
   getRandomPointInGoodView() {
     return new Point(
@@ -89,44 +144,23 @@ export class Scene{
     this.volume = volume;
   }
 
-  draw(outputOption) {
-
+  drawScene(outputOption) {
     let projectionData = { camera: this.camera, volume: this.volume };
 
-    let projectedElements = _(this.items).pickBy(i => !i.suppressed).
-    //TODO: label should be done the GICS way going forward
-      mapValues((item, name) => item.project(
-        projectionData,
-        this.projection,
-        //name.startsWith('obj-') ? '' : name
-      )).
-      values().
-      flattenDeep().
-      value();
-    // outputOption.render(projectedElements, this.projection.screenSize(this.camera, this.volume));
-
-    let bindings = _(this.bindings).pickBy(i => !i.suppressed).
-    //TODO: label should be done the GICS way going forward
-      mapValues((item, name) => item().project(
-        projectionData,
-        this.projection,
-        //name
-      )).
-      values().
+    let projectedElements = _(this.draw).
+      map(item => item.project(projectionData, this.projection)).
       flattenDeep().
       value();
 
-    let infoItems = _([
-      Point.Origin.project(projectionData, this.projection, 'O', 'green'),
+    let infoItems = [
+      Point.Origin.project(projectionData, this.projection, 'green'),
+      new Label(Point.Origin, "O"),
       Line.Ox.project(projectionData, this.projection, '', 'green'),
       Line.Oy.project(projectionData, this.projection, '', 'green'),
       Line.Oz.project(projectionData, this.projection, '', 'green'),
-    ]).
-    values().
-    flattenDeep().
-    value();
+    ];
 
-    outputOption.render(_.concat(infoItems, projectedElements, bindings), this.projection.screenSize(this.camera, this.volume));
+    outputOption.render(_.concat(infoItems, projectedElements), this.projection.screenSize(this.camera, this.volume));
   }
 
 };

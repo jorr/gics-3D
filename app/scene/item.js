@@ -11,7 +11,6 @@ export const EPSILON = 0.000000001; // Number.EPSILON seems to break the calcula
 
 export class Item {
 
-  suppressed = false;
   style;
   styledElements = {};
 

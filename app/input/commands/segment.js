@@ -45,12 +45,8 @@ export default class SegmentCommand extends CreationCommand {
     if (elems.length !== 2) {
       throw new WrongPatternError('[p1,p2]', this);
     }
-    if (elems[0].name) {
-      globalScene.addBinding(this.item, 'p1', elems[0].name);
-    }
-    if (elems[1].name) {
-      globalScene.addBinding(this.item, 'p2', elems[1].name);
-    }
+    globalScene.bindElement(this.item.p1, elems[0].name, elems[0].suppress);
+    globalScene.bindElement(this.item.p2, elems[1].name, elems[1].suppress);
   }
 
 };

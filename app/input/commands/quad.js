@@ -56,18 +56,10 @@ export default class QuadCommand extends CreationCommand {
     if (elems.length !== 4) {
       throw new WrongPatternError('[A,B,C,D]', this);
     }
-    if (elems[0].name) {
-      globalScene.addBinding(this.item, 'A', elems[0].name);
-    }
-    if (elems[1].name) {
-      globalScene.addBinding(this.item, 'B', elems[1].name);
-    }
-    if (elems[2].name) {
-      globalScene.addBinding(this.item, 'C', elems[2].name);
-    }
-    if (elems[3].name) {
-      globalScene.addBinding(this.item, 'D', elems[3].name);
-    }
+    globalScene.bindElement(this.item.A, elems[0].name, elems[0].suppress);
+    globalScene.bindElement(this.item.B, elems[1].name, elems[1].suppress);
+    globalScene.bindElement(this.item.C, elems[2].name, elems[2].suppress);
+    globalScene.bindElement(this.item.D, elems[3].name, elems[3].suppress);
   }
 
 };

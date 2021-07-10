@@ -56,6 +56,14 @@ export default class PointCommand extends CreationCommand {
     }
   }
 
-  //point can't decompose to elements for binding
+  bindElements(elems) {
+    // Point should support [x,y,z] deconstruction
+    if (elems.length !== 3) {
+      throw new WrongPatternError('[x,y,z]', this);
+    }
+    globalScene.bindExpression(this.item.x, elems[0].name);
+    globalScene.bindExpression(this.item.y, elems[1].name);
+    globalScene.bindExpression(this.item.z, elems[2].name);
+  }
 
 };

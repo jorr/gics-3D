@@ -40,6 +40,10 @@ export class Line extends Item {
     return this.u.isCollinearWith(l.u);
    }
 
+   asVector() {
+    return this.u;
+   }
+
    parallelThrough(p) {
     return new Line(p, this.u);
    }
@@ -67,7 +71,6 @@ export class Line extends Item {
     if (arg instanceof Line) {
       //check if the lines actually intersect
       if (this.u.cross(arg.u).isZero() || this.u.triple(arg.u, this.pt.vectorTo(arg.pt)) !== 0) {
-        log.error(this.u.cross(arg.u))
         return null; //throw new ImpossibleOperationError('Attempt to intersect non-intersecting lines');
       }
 

@@ -96,10 +96,8 @@ export default class RegularPolygonCommand extends CreationCommand {
       throw new WrongPatternError('[<number of vertices>]', this);
     }
     for (let i = 0, letter = 'A'.charCodeAt(0); i < elems.length; i++) {
-      if (elems[i].name) {
-        globalScene.addBinding(this.item, String.fromCharCode(letter), elems[i].name);
-        letter++;
-      }
+      globalScene.bindElement(this.item[String.fromCharCode(letter)], elems[i].name, elems[i].suppress);
+      letter++;
     }
   }
 

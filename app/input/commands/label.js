@@ -21,9 +21,10 @@ export default class LabelCommand extends Command {
   }
 
   execute(params) {
+    super.execute(params);
     //label(<text>,<item>[,<direction>,<offset>])
     if (params.length >=2 && typeof params[0] === 'string' && params[1] instanceof Item) {
-      globalScene.addItem(new Label(params[1].labelPosition, params[0], params[2], params[3]));
+      globalScene.addLabel(new Label(params[1].labelPosition, params[0], params[2], params[3]));
     }
     else throw new WrongParamsError(params, this);
   }

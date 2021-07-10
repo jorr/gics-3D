@@ -9,13 +9,13 @@ export class Cylinder extends Item {
 
   base1;
   base2;
-  side;
+  direction;
 
   constructor(base1, base2) {
     super();
     this.base1 = base1;
     this.base2 = base2;
-    this.side = dist(base1.cen, base2.cen);
+    this.direction = new Segment(base1.cen, base2.cen);
   }
 
   // edge(direction) {

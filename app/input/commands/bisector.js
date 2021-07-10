@@ -64,12 +64,9 @@ export default class BisectorCommand extends CreationCommand {
     if (elems.length !== 1) {
       throw new WrongPatternError('[point]', this);
     }
-    if (elems[0].name) {
-      if (this.item instanceof Segment)
-        globalScene.addBinding(this.item, 'p2', elems[0].name);
-      else
-        globalScene.addBinding(this.item, 'pt', elems[0].name);
-    }
+    if (this.item instanceof Segment)
+      globalScene.bindElement(this.item.p2, elems[0].name, elems[0].suppress);
+    else
+      globalScene.bindElement(this.item.pt, elems[0].name, elems[0].suppress);
   }
-
 };

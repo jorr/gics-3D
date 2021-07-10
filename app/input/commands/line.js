@@ -18,9 +18,8 @@ export default class LineCommand extends CreationCommand {
     return 'line';
   }
 
-  //TODO: we should fix this...
   requiresPattern() {
-    return false;
+    return true;
   }
 
   createItem(params) {
@@ -57,6 +56,12 @@ export default class LineCommand extends CreationCommand {
     else {
       throw new WrongParamsError(params, this);
     }
+  }
+
+  bindElements(elems) {
+    // Line does not support deconstruction, there are no meaningful elements
+    // we can consider deconstructing to equation coordinates but we don't use them for anything
+    throw new WrongPatternError('[no decomposition for lines]', this);
   }
 
 };

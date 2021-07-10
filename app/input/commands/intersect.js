@@ -35,4 +35,6 @@ export default class IntersectCommand extends CreationCommand {
     }
   }
 
+  //TODO: bindElements can be useful but too much effort
+
 };

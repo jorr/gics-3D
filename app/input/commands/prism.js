@@ -40,11 +40,11 @@ export default class PrismCommand extends CreationCommand {
         throw new NotFeasibleError(params, this.name);
       }
 
-      this.item = new Prism(params[0], direction.norm, direction.unit());
+      this.item = new Prism(params[0], direction);
     }
     // prism(<quad|triangle>,<segment>) - construct a prism by a base and an edge
     else if (params.length === 2 && params[0] instanceof Polygon && params[1] instanceof Segment) {
-      this.item = new Prism(params[0], params[1].len, params[1].asVector());
+      this.item = new Prism(params[0], params[1].asVector());
     }
     // prism(<quad|triangle>,<depth>[,'-']) - constructs a right prism by a base and offset, similar to cuboid
     else if (params.length >=2 && params[0] instanceof Polygon && typeof params[1] == 'number') {
@@ -54,10 +54,19 @@ export default class PrismCommand extends CreationCommand {
         else sign = -1;
       }
 
-      let direction = params[0].plane.n.unit().scale(-sign);
-      this.item = new Prism(params[0], params[1], direction);
+      let direction = params[0].plane.n.unit().scale(-params[1]*sign);
+      this.item = new Prism(params[0], direction);
     }
     else throw new WrongParamsError(params, this);
+  }
+
+  bindElements(elems) {
+    // Prism should support [base,segment] deconstruction
+    if (elems.length !== 2) {
+      throw new WrongPatternError('[base,segment]', this);
+    }
+    globalScene.addBinding(this.item.base, elems[0].name, elems[0].suppress);
+    globalScene.addBinding(this.item.direction, elems[1].name, elems[1].suppress);
   }
 
 };

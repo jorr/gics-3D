@@ -27,12 +27,12 @@ A—————B
     if (!(base instanceof Rectangle) && !(base instanceof Square))
       throw new ImpossibleOperationError('A cuboid must have a rectangle base');
     this.base = base;
-    this.direction = direction;
+    this.direction = new Segment(this.base.A, this.base.A.add(direction));
   }
 
   get cen() {
-    return new Segment(this.base.A, this.base.C.add(this.direction)).
-      intersect(new Segment(this.base.B, this.base.D.add(this.direction)));
+    return new Segment(this.base.A, this.base.C.add(this.direction.asVector())).
+      intersect(new Segment(this.base.B, this.base.D.add(this.direction.asVector())));
   }
 
   // get faces() {
@@ -47,7 +47,7 @@ A—————B
   // }
 
   get vertices() {
-    return this.base.vertices.concat(this.base.vertices.map(v => v.add(this.direction)));
+    return this.base.vertices.concat(this.base.vertices.map(v => v.add(this.direction.asVector())));
   }
 
   get labelPosition() {
@@ -59,9 +59,9 @@ A—————B
       // first wall
       this.base.project(projectionData, projection),
       // second wall
-      new Polygon2D(this.base.vertices.map(v => projection.projectPoint(v.add(this.direction), projectionData))),
+      new Polygon2D(this.base.vertices.map(v => projection.projectPoint(v.add(this.direction.asVector()), projectionData))),
       // connecting edges
-      this.base.vertices.map(v => new Segment(v, v.add(this.direction)).project(projectionData, projection)),
+      this.base.vertices.map(v => new Segment(v, v.add(this.direction.asVector())).project(projectionData, projection)),
     ];
   }
 

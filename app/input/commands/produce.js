@@ -14,31 +14,25 @@ export default class ProduceCommand extends Command {
   }
 
   requiresPattern() {
-    return false;
+    return true;
   }
 
-  execute(params, pattern) {
+  execute(params, pattern, commands) {
     super.execute(params, pattern);
     if (params.length !== 1) {
       throw new WrongParamsError(params, this);
     }
-
     //check if params[0] is resolved to a valid item
     if (params[0] instanceof Item) {
-      params[0].suppressed = pattern?.suppress;
-      //rebind it to the globalScene
-      //TODO: should we try to remove it first?
-      globalScene.addItem(params[0], pattern?.name);
-      //no binding elements is allowed with produce
-    } else if (pattern) {
-
-      //TODO: this is broken!
-      let propertyChain = params[0].split('.');
-      let item = globalScene.getItem(propertyChain.shift());
-      if (!item) {
-        throw new SyntaxError(`Identifier not resolved: ${params[0]}`);
+      globalScene.bindElement(params[0], pattern.name, pattern.suppress);
+      if (pattern.elements) {
+        //we must also bind the elements if we have a true pattern. so, a little JS hackery...
+        let cname = params[0].constructor.name.toLowerCase();
+        // if (!c.hasOwnProperty('bindElements')) throw new WrongPatternError()
+        commands[cname].bindElements(pattern.elements);
       }
-      globalScene.addBinding(item, propertyChain.join('.'), pattern.name);
+    } else {
+      globalScene.bindResult(params[0],pattern.name);
     }
   }
 

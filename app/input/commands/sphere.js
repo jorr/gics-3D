@@ -37,6 +37,13 @@ export default class SphereCommand extends CreationCommand {
     else throw new WrongParamsError(params, this);
   }
 
-  //TODO: bindElements
+  bindElements(elems) {
+    // Sphere should support [cen,rad] deconstruction
+    if (elems.length !== 2) {
+      throw new WrongPatternError('[cen,rad]', this);
+    }
+    globalScene.addBinding(this.item.cen, elems[0].name, elems[0].suppress);
+    globalScene.addBinding(this.item.rad, elems[1].name, elems[1].suppress);
+  }
 
 };

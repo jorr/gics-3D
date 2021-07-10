@@ -15,9 +15,8 @@ export default class PlaneCommand extends CreationCommand {
     return 'plane';
   }
 
-  //TODO: ?
   requiresPattern() {
-    return false;
+    return true;
   }
 
   createItem(params) {
@@ -56,6 +55,10 @@ export default class PlaneCommand extends CreationCommand {
     else throw new WrongParamsError(params, this);
   }
 
-  // bindElements(elems) - plane does not decompose
+  bindElements(elems) {
+    // Plane does not support deconstruction, there are no meaningful elements
+    // we can consider deconstructing to equation coordinates but we don't use them for anything
+    throw new WrongPatternError('[no decomposition for planes]', this);
+  }
 
 };

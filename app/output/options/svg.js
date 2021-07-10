@@ -105,19 +105,19 @@ export class SvgOutput extends OutputOption {
       if (!t.text || !t.location) return;
 
       //TODO: parse special text here
-      let preset = t.preset || 'SE';
-      let displacement = t.displacement || { x:0, y:0 };
+      let preset = t.direction || 'SE';
+      let offset = t.offset ? {x: 0, y:0} : this.labelOffset;
       for (let dir of preset) {
         switch(dir) {
-          case 'N': displacement.y = displacement.y - this.labelOffset.y; break;
-          case 'S': displacement.y = displacement.y + this.labelOffset.y; break;
-          case 'E': displacement.x = displacement.x + this.labelOffset.x; break;
-          case 'W': displacement.x = displacement.x - this.labelOffset.x; break;
+          case 'N': offset.y = offset.y - t.offset; break;
+          case 'S': offset.y = offset.y + t.offset; break;
+          case 'E': offset.x = offset.x + t.offset; break;
+          case 'W': offset.x = offset.x - t.offset; break;
         }
       }
 
       this.svg = `${this.svg}
-<text x="${t.location.x+displacement.x}" y="${-t.location.y+displacement.y}">${t.text}</text>`;
+<text x="${t.location.x+offset.x}" y="${-t.location.y+offset.y}">${t.text}</text>`;
     }
 
     flushOutput() {

@@ -53,6 +53,13 @@ export default class CylinderCommand extends CreationCommand {
     else throw new WrongParamsError(params, this);
   }
 
-  //TODO: bindElements
+  bindElements(elems) {
+    // Cylinder should support [base,segment] deconstruction
+    if (elems.length !== 2) {
+      throw new WrongPatternError('[base,segment]', this);
+    }
+    globalScene.addBinding(this.item.base1, elems[0].name, elems[0].suppress);
+    globalScene.addBinding(this.item.direction, elems[1].name, elems[1].suppress);
+  }
 
 };

@@ -1,7 +1,7 @@
 import { Item, Segment2D } from '../item.js';
 import { Point } from './point.js';
 import { Line } from './line.js';
-import { dist } from '../util.js';
+import { dist, midpoint } from '../util.js';
 
 import log from 'loglevel';
 
@@ -66,9 +66,9 @@ export class Segment extends Item {
     return midpoint(this.p1, this.p2);
   }
 
-   project(projectionData, projection, label) {
+   project(projectionData, projection) {
     let projectedP1 = projection.projectPoint(this.p1, projectionData),
         projectedP2 = projection.projectPoint(this.p2, projectionData);
-    return Object.assign(new Segment2D(projectedP1, projectedP2), { label, drawAsArrow: this.drawAsArrow });
+    return Object.assign(new Segment2D(projectedP1, projectedP2), { drawAsArrow: this.drawAsArrow });
    }
 }

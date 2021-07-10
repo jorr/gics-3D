@@ -11,18 +11,18 @@ export class Prism extends Item {
 
   base1;
   base2;
-  side;
+  direction;
 
   //NOTE: having two bases in the constructor makes it needlessly hard to construct the edges
-  constructor(base, side, direction) {
+  constructor(base, direction) {
     super();
     this.base1 = base;
     if (!base instanceof Polygon) {
       throw new ImpossibleOperationError('Prism\'s base needs to be a polygon');
     }
 
-    this.base2 = new base.constructor(...base.vertices.map(v => v.add(direction.unit().scale(side))));
-    this.side = side;
+    this.base2 = new base.constructor(...base.vertices.map(v => v.add(direction)));
+    this.direction = new Segment(base.A, base.A.add(direction));
   }
 
   get vertices() {

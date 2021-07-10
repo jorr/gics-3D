@@ -69,15 +69,9 @@ export default class CircleCommand extends CreationCommand {
     if (elems.length !== 3) {
       throw new WrongPatternError('[cen,rad,plane]', this);
     }
-    if (elems[0].name) {
-      globalScene.addBinding(this.item, 'cen', elems[0].name);
-    }
-    if (elems[1].name) {
-      globalScene.addBinding(this.item, 'rad', elems[1].name);
-    }
-    if (elems[2].name) {
-      globalScene.addBinding(this.item, 'plane', elems[2].name);
-    }
+    globalScene.addBinding(this.item.cen, elems[0].name, elems[0].suppress);
+    globalScene.addBinding(this.item.rad, elems[1].name, elems[1].suppress);
+    globalScene.addBinding(this.item.plane, elems[2].name, elems[2].suppress);
   }
 
 };

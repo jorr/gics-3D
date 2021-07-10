@@ -49,6 +49,13 @@ export default class ConeCommand extends CreationCommand {
     else throw new WrongParamsError(params, this);
   }
 
-  //TODO: bindElements
+  bindElements(elems) {
+    // Cone should support [base,apex] deconstruction
+    if (elems.length !== 2) {
+      throw new WrongPatternError('[base,apex]', this);
+    }
+    globalScene.addBinding(this.item.base, elems[0].name, elems[0].suppress);
+    globalScene.addBinding(this.item.apex, elems[1].name, elems[1].suppress);
+  }
 
 };

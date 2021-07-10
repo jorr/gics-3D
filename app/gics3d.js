@@ -1,4 +1,3 @@
-import { gicsLexer, gicsParser } from './input/grammar.js';
 import { globalScene } from './scene/scene.js';
 import { SvgOutput } from './output/options/svg.js';
 import { inspect } from 'util';
@@ -7,6 +6,23 @@ import log from 'loglevel';
 import prefix from 'loglevel-plugin-prefix';
 import chalk from 'chalk';
 import fs from 'fs';
+import path from 'path';
+
+/****************** COMMANDS ******************/
+
+let commands = {};
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const dir = `${__dirname}/input/commands`;
+const files = fs.readdirSync(dir);
+
+for (let file of files) {
+  const { default: command } = await import(`./input/commands/${file}`);
+  const c = new command;
+  commands[c.name] = c;
+}
+
+const { GicsLexer, GicsParser } = await import('./input/grammar.js');
+const gicsLexer = new GicsLexer(commands), gicsParser = new GicsParser(commands, gicsLexer.tokens);
 
 /***** SETUP LOGGING ******/
 
@@ -31,7 +47,6 @@ prefix.apply(log, {
 
 /***** LAUNCH GICS ******/
 
-
 //TODO: temporary, switch to API endpoint
 const inputText = fs.readFileSync('app/gics.txt', 'utf-8');
 const lexingResult = gicsLexer.tokenize(inputText);
@@ -46,4 +61,4 @@ if (gicsParser.errors.length > 0) {
 
 log.info('-----DRAWING SCENE-----');
 const svgOutput = new SvgOutput('./test.svg');
-globalScene.draw(svgOutput);
+globalScene.drawScene(svgOutput);

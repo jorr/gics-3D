@@ -13,7 +13,7 @@ import path from 'path';
 let commands = {};
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const dir = `${__dirname}/input/commands`;
-const files = fs.readdirSync(dir);
+const files = fs.readdirSync(dir).reverse(); //reverse is needed to assure regex is in no-prefix order
 
 for (let file of files) {
   const { default: command } = await import(`./input/commands/${file}`);

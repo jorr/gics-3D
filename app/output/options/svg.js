@@ -50,42 +50,59 @@ export class SvgOutput extends OutputOption {
 <g id="scene" transform="translate(${screen.w/2} ${screen.h/2})">`;
     }
 
+    parseLinetype(style) {
+      switch (style.linetype) {
+        case 'dashed': return 'stroke-dasharray="4 2"'; break;
+        case 'dotted': return 'stroke-dasharray="1 6" stroke-linecap="round"'; break;
+        case 'altern': return 'stroke-dasharray="4 2 1 2" stroke-linecap="round"'; break;
+        case 'solid':
+        default: return '';
+      }
+    }
+
+    parseStyle(style) {
+      return {
+        strokeWidth: style.stroke || this.strokeWidth,
+        color: style.color || this.stroke,
+        linetype: this.parseLinetype(style),
+      }
+    }
+
     renderPoint(p) {
+      let st = this.parseStyle(p.style);
       this.svg = `${this.svg}
-<circle cx="${p.x}" cy="${-p.y}" r="${this.strokeWidth}" stroke="${p.color || this.stroke}" stroke-width="${this.strokeWidth}" fill="${this.stroke}"/>`;
-      //this.renderLabel(p.label, p);
+<circle cx="${p.x}" cy="${-p.y}" r="${st.strokeWidth}" stroke="${st.color}" stroke-width="${st.strokeWidth}" fill="${st.color}"/>`;
     }
 
     renderSegment(s) {
+      let st = this.parseStyle(s.style);
       this.svg = `${this.svg}
-<line x1="${s.p1.x}" x2="${s.p2.x}" y1="${-s.p1.y}" y2="${-s.p2.y}" stroke="${s.color || this.stroke}" stroke-width="${this.strokeWidth + Number(s.drawAsArrow)}"/>`;
-      //this.renderLabel(s.label, midpoint(s.p1, s.p2));
-
+<line x1="${s.p1.x}" x2="${s.p2.x}" y1="${-s.p1.y}" y2="${-s.p2.y}" ${st.linetype} stroke="${st.color}" stroke-width="${st.strokeWidth + Number(s.drawAsArrow)}"/>`;
       if (s.drawAsArrow) {
-        this.renderPoint(s.p1);
-        this.renderArrow(s);
+        this.renderPoint(Object.assign(s.p1, {style: s.style}));
+        this.renderArrow(s, st.color);
       }
     }
 
     renderPoly(pg) {
+      let st = this.parseStyle(pg.style);
       let points = pg.points.map(p => `${p.x},${-p.y}`).join(' ');
       this.svg = `${this.svg}
-<polygon points="${points}" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" fill="${pg.color || 'none'}"/>`;
-      // this.renderLabel(pg.label, pg.centre);
+<polygon points="${points}" stroke="${st.color}" ${st.linetype} stroke-width="${st.strokeWidth}" fill="${pg.fillColor || 'none'}"/>`;
     }
 
     renderEllipse(e) {
       log.debug(e)
+      let st = this.parseStyle(e.style);
       this.svg = `${this.svg}
-<ellipse cx="${e.c.x}" cy="${-e.c.y}" rx="${e.rx}" ry="${e.ry}" transform="rotate(${e.rotate},${e.c.x},${-e.c.y})" stroke="${this.stroke}" stroke-width="${this.strokeWidth}" fill="none"/>`;
-      // this.renderLabel(e.label, e.c);
+<ellipse cx="${e.c.x}" cy="${-e.c.y}" rx="${e.rx}" ry="${e.ry}" transform="rotate(${e.rotate},${e.c.x},${-e.c.y})" ${st.linetype} stroke="${st.stroke}" stroke-width="${st.strokeWidth}" fill="none"/>`;
     }
 
-    renderArrow(s) {
+    renderArrow(s,color) {
       let vectorOnSegment = { x: (s.p1.x-s.p2.x) * 0.1, y: (s.p1.y-s.p2.y) * 0.1};
       let angle = 30 * Math.PI / 180;
       this.renderPoly({
-        color: 'black',
+        color: color,
         points: [
           s.p2,
           //rotate point on segment both ways

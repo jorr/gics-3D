@@ -43,7 +43,7 @@ plane([0,100,0],["Oxz"]) -> xzparallel
 #line("Oy") -> -Oy
 #autolabel("off")
 intersect(["Oy"],xzparallel) -> Y
-label("Y",Y,"SE",20)
+#label("Y",Y,"SE",20)
 #should throw an error
 #intersect(line("Ox"),xzparallel) -> test
 #intersect(l,xzparallel) -> p3O
@@ -68,7 +68,7 @@ label("Y",Y,"SE",20)
 #point(-100,-100,-30) -> p2
 #segment(p1,p2) -> s
 
-point(0,95,0) -> d
+#point(0,95,0) -> d
 #line(d,["Oz"],d:90) -> ll
 
 #circle([0,0,0],40,["Oxz"]) -> c
@@ -79,6 +79,8 @@ point(0,95,0) -> d
 #line(sq1.AB) -> lAB
 
 #square(["Oxz"]) -> -sq[A,B,C,D]
+color("red")
+linestyle(1,"altern")
 square(["Oxz"]) -> -sq
 produce(sq.AB) -> .[A,B]
 #plane(A,["Oxz"]) -> AOxz
@@ -97,7 +99,8 @@ produce(sq.AB) -> .[A,B]
 
 #triangle(p1,p2,d) -> tr
 
-#triangle([-100,0,0],[100,0,0],[100,0,300]) -> t[A,B,C]
+triangle([-100,0,0],[100,0,0],[100,0,300]) -> t[A,B,C]
+color(t,"blue")
 #bisector(t,A) -> BSC
 #altitude(t,"B") -> .
 

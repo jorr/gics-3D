@@ -12,7 +12,6 @@ export const EPSILON = 0.000000001; // Number.EPSILON seems to break the calcula
 export class Item {
 
   style;
-  styledElements = {};
 
   //TODO: implement
   get vertices() { throw new MethodNotImplemented('vertices', this); }
@@ -21,10 +20,6 @@ export class Item {
 
   get labelPosition() { throw new MethodNotImplemented('labelPosition', this); }
   project(projectionData, projection) { throw new MethodNotImplemented('project', this); }
-
-  checkStyledElements(element) {
-
-  }
 
   // TODO: delegate transform to descendants
   // transform(transformation, data) {
@@ -40,8 +35,7 @@ export class Item {
 };
 
 class Element2D {
-  color;
-  style;
+  style = {};
 }
 
 export class Point2D extends Element2D {

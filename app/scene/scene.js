@@ -42,7 +42,7 @@ export class Scene{
       log.info(`adding an anonymous ${item.constructor.name} to scene`);
     }
     if (!suppress) {
-      this.draw.push(Object.assign(item, {style: this.defaultStyle}));
+      this.draw.push(item);
       if (this.autolabel && name) {
         log.debug(`Autolabeling with name: ${name}`);
         this.addLabel(new Label(item.labelPosition, name));
@@ -78,10 +78,6 @@ export class Scene{
     this.draw.push(label);
   }
 
-  setStyle(style) {
-    this.defaultStyle = style;
-  }
-
   getItem(name) {
     let item = this.names[name];
     if (item == undefined) throw new NameUndefinedError(name);
@@ -112,7 +108,7 @@ export class Scene{
     let projectionData = { camera: this.camera, volume: this.volume };
 
     let projectedElements = _(this.draw).
-      map(item => item.project(projectionData, this.projection)).
+      map(item => Object.assign(item.project(projectionData, this.projection), { style: item.style || this.defaultStyle})).
       flattenDeep().
       value();
 

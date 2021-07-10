@@ -36,8 +36,8 @@ export class Polygon extends Item {
   }
 
   project(projectionData, projection, color) {
-    return Object.assign(new Polygon2D(this.vertices.map(v => projection.projectPoint(v, projectionData))), {
-      color
-    });
+    let projected = new Polygon2D(this.vertices.map(v => projection.projectPoint(v, projectionData)));
+    projected.fillColor = color;
+    return projected;
   }
 };

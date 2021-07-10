@@ -8,7 +8,7 @@ import { GicsError } from '../errors.js';
 
 export class GicsLexer extends Lexer {
   constructor(commands) {
-    const NUMBER = createToken({ name: 'NUMBER', pattern: /\d+/});//(\.\d*)/});
+    const NUMBER = createToken({ name: 'NUMBER', pattern: /\d+(\.\d+)?/});//(\.\d*)/});
     const IDENTIFIER = createToken({
       name: 'IDENTIFIER',
       pattern: /[a-zA-Z]+[a-zA-Z\d']*((\.[a-zA-Z]+[a-zA-Z\d]*)*)?/

@@ -7,7 +7,6 @@ export class Anglemark extends Item {
    anglepoints; //Point[]
    type;
    offset;
-   text;
 
    constructor(anglepoints, type = ')', offset = 30) {
     super();

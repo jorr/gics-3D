@@ -16,6 +16,13 @@ export function dist2D(arg1, arg2) {
   }
 }
 
+export function midpoint2D(p1, p2) {
+  return new Point2D(
+    (p1.x + p2.x) / 2,
+    (p1.y + p2.y) / 2
+  );
+}
+
 export function angle2D(v1, v2) {
   v1 = v1.unit(); v2 = v2.unit();
   return Math.acos(v1.dot(v2)) * 180 / Math.PI;

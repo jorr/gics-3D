@@ -115,3 +115,4 @@ color(t,"blue")
 #label("t",t,"N",10)
 
 anglemark(B,A,C,".)")
+segmentmark(t.AB)

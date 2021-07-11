@@ -109,7 +109,14 @@ export class Scene{
     let projectionData = { camera: this.camera, volume: this.volume };
 
     let projectedElements = _(this.draw).
-      map(item => Object.assign(item.project(projectionData, this.projection), {style: item.style || this.defaultStyle})).
+      map(item => {
+        let projected = item.project(projectionData, this.projection);
+        if (Array.isArray(projected)) {
+          return projected.map(p => Object.assign(p, {style: item.style || this.defaultStyle}));
+        } else {
+          return Object.assign(projected, {style: item.style || this.defaultStyle});
+        }
+      }).
       flattenDeep().
       value();
 

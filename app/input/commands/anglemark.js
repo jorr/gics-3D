@@ -3,17 +3,17 @@
 //import drawing for side-effects
 
 import { Command } from '../command.js';
-import { Label } from '../../scene/items/label.js';
-import { Item } from '../../scene/item.js';
+import { Anglemark } from '../../scene/items/anglemark.js';
+import { Point } from '../../scene/items/point.js';
 import { WrongParamsError } from '../../errors.js';
 import { globalScene } from '../../scene/scene.js';
 
 import log from 'loglevel';
 
-export default class LabelCommand extends Command {
+export default class AnglemarkCommand extends Command {
 
   get name() {
-    return 'label';
+    return 'anglemark';
   }
 
   requiresPattern() {
@@ -22,9 +22,10 @@ export default class LabelCommand extends Command {
 
   execute(params) {
     super.execute(params);
-    //label(<text>,<item>[,<direction>,<offset>])
-    if (params.length >=2 && typeof params[0] === 'string' && params[1] instanceof Item) {
-      globalScene.addMarking(new Label(params[1].labelPosition, params[0], params[2], params[3]));
+    //anglemark(<pointS>,<pointM>,<pointE>[,<type>,<offset>])
+    if (params.length >=3 && params.slice(0,3).every(p => p instanceof Point)) {
+      let points = params.splice(0,3);
+      globalScene.addMarking(new Anglemark(points,...params));
     }
     else throw new WrongParamsError(params, this);
   }

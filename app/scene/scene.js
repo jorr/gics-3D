@@ -45,7 +45,7 @@ export class Scene{
       this.draw.push(item);
       if (this.autolabel && name) {
         log.debug(`Autolabeling with name: ${name}`);
-        this.addLabel(new Label(item.labelPosition, name));
+        this.addMarking(new Label(item.labelPosition, name));
       }
     } else {
       log.info(`[it will not be drawn]`);
@@ -67,15 +67,16 @@ export class Scene{
       this.draw.push(element);
       if (this.autolabel && name) {
         log.debug(`Autolabeling with name: ${name}`);
-        this.addLabel(new Label(element.labelPosition, name));
+        this.addMarking(new Label(element.labelPosition, name));
       }
     } else {
       log.info(`[it will not be drawn]`);
     }
   }
 
-  addLabel(label) {
-    this.draw.push(label);
+  //used for labels, marks, etc, that are not refered to by name and dont bind elements
+  addMarking(marking) {
+    this.draw.push(marking);
   }
 
   getItem(name) {
@@ -108,17 +109,15 @@ export class Scene{
     let projectionData = { camera: this.camera, volume: this.volume };
 
     let projectedElements = _(this.draw).
-      map(item => Object.assign(item.project(projectionData, this.projection), { style: item.style || this.defaultStyle})).
+      map(item => Object.assign(item.project(projectionData, this.projection), {style: item.style || this.defaultStyle})).
       flattenDeep().
       value();
 
+    let infoStyle = {stroke: 1, linetype: 'solid', color: 'green'};
     let infoItems = [
-      Point.Origin.project(projectionData, this.projection, 'green'),
-      new Label(Point.Origin, "O"),
-      Line.Ox.project(projectionData, this.projection, '', 'green'),
-      Line.Oy.project(projectionData, this.projection, '', 'green'),
-      Line.Oz.project(projectionData, this.projection, '', 'green'),
-    ];
+      Point.Origin, new Label(Point.Origin, 'O'),
+      Line.Ox, Line.Oy, Line.Oz
+    ].map(i => Object.assign(i.project(projectionData, this.projection), {style: infoStyle}));
 
     outputOption.render(_.concat(infoItems, projectedElements), this.projection.screenSize(this.camera, this.volume));
   }

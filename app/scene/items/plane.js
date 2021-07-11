@@ -150,6 +150,8 @@ export class Plane extends Item {
     projectedPlane = shrinkPolygon(projectedPlane, SHRINK_FACTOR);
 
     let color = { r: Math.round(Math.random()*255), b: Math.round(Math.random()*255) };
-    return projectedPlane.project(projectionData, projection, `rgba(${color.r},240,${color.b},0.5)`);
+    let projected = projectedPlane.project(projectionData, projection);
+    projected.fillColor = `rgba(${color.r},240,${color.b},0.5)`;
+    return projected;
   }
 }

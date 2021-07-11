@@ -89,7 +89,7 @@ export class Line extends Item {
     return this.pt;
   }
 
-   project(projectionData, projection, color) {
+   project(projectionData, projection) {
     // we need to project the points where the line crosses the volume walls
     let { volume } = { ...projectionData };
 
@@ -103,7 +103,7 @@ export class Line extends Item {
     ].filter(c => c && pointInVolume(c, volume)).map(c => projection.projectPoint(c, projectionData));
 
     // there should be just two at this point
-    return Object.assign(new Segment2D(crossings[0], crossings[1]), { color });
+    return new Segment2D(crossings[0], crossings[1]);
 
     // alternative calculation, commented out
     /*let p, crossings = [];

@@ -1,4 +1,4 @@
-import { Point2D, Segment2D, Polygon2D, Ellipse2D, Text2D } from '../scene/item.js';
+import { Point2D, Segment2D, Polygon2D, Ellipse2D, Text2D, Angle2D } from '../scene/item.js';
 import log from 'loglevel';
 
 export class OutputOption {
@@ -11,6 +11,7 @@ export class OutputOption {
       else if (element instanceof Polygon2D) this.renderPoly(element);
       else if (element instanceof Ellipse2D) this.renderEllipse(element);
       else if (element instanceof Text2D) this.renderText(element);
+      else if (element instanceof Angle2D) this.renderAnglemark(element);
     }
     this.flushOutput();
   }
@@ -22,6 +23,7 @@ export class OutputOption {
   renderPoly(pg) {}
   renderEllipse(e) {}
   renderText(t) {}
+  renderAnglemark(a) {}
 
   flushOutput() {}
 }

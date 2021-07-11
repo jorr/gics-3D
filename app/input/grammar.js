@@ -20,7 +20,7 @@ export class GicsLexer extends Lexer {
     });
     const STRING = createToken({
       name: 'STRING',
-      pattern: RegExp(`"[a-zA-Z-]+"`,'i'),
+      pattern: /"[^"]*"/
     });
     const LPAREN = createToken({ name: 'LPAREN', pattern: /\(/ });
     const RPAREN = createToken({ name: 'RPAREN', pattern: /\)/ });

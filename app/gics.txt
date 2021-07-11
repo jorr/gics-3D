@@ -81,8 +81,8 @@ intersect(["Oy"],xzparallel) -> Y
 #square(["Oxz"]) -> -sq[A,B,C,D]
 color("red")
 linestyle(1,"altern")
-square(["Oxz"]) -> -sq
-produce(sq.AB) -> .[A,B]
+#square(["Oxz"]) -> -sq
+#produce(sq.AB) -> .[A,B]
 #plane(A,["Oxz"]) -> AOxz
 #square([[A.x,A.y+200,A.z],[B.x,B.y+200,B.z]],AOxz) -> sq2[A1,B1,C1,D1]
 #prism(sq,100,"-") -> pr
@@ -113,3 +113,5 @@ color(t,"blue")
 #produce(CN2)
 
 #label("t",t,"N",10)
+
+anglemark(B,A,C,".)")

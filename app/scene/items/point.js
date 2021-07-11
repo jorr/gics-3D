@@ -70,9 +70,8 @@ export class Point extends Item {
     return this;
    }
 
-   project(projectionData, projection, color) {
+   project(projectionData, projection) {
     let projected = projection.projectPoint(this, projectionData);
-    projected.color = color;
     return projected;
    }
 }

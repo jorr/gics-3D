@@ -1,5 +1,6 @@
 import { OutputOption } from '../output.js';
-// import { midpoint } from '../../scene/util.js';
+import { Vector2D } from '../../scene/vectors.js';
+import { midpoint } from '../../scene/util.js';
 import fs from 'fs';
 
 import log from 'loglevel';
@@ -77,7 +78,7 @@ export class SvgOutput extends OutputOption {
     renderSegment(s) {
       let st = this.parseStyle(s.style);
       this.svg = `${this.svg}
-<line x1="${s.p1.x}" x2="${s.p2.x}" y1="${-s.p1.y}" y2="${-s.p2.y}" ${st.linetype} stroke="${st.color}" stroke-width="${st.strokeWidth + Number(s.drawAsArrow)}"/>`;
+<line x1="${s.p1.x}" x2="${s.p2.x}" y1="${-s.p1.y}" y2="${-s.p2.y}" ${st.linetype} stroke="${st.color}" stroke-width="${st.strokeWidth + Number(!!s.drawAsArrow)}"/>`;
       if (s.drawAsArrow) {
         this.renderPoint(Object.assign(s.p1, {style: s.style}));
         this.renderArrow(s, st.color);
@@ -95,7 +96,7 @@ export class SvgOutput extends OutputOption {
       log.debug(e)
       let st = this.parseStyle(e.style);
       this.svg = `${this.svg}
-<ellipse cx="${e.c.x}" cy="${-e.c.y}" rx="${e.rx}" ry="${e.ry}" transform="rotate(${e.rotate},${e.c.x},${-e.c.y})" ${st.linetype} stroke="${st.stroke}" stroke-width="${st.strokeWidth}" fill="none"/>`;
+<ellipse cx="${e.c.x}" cy="${-e.c.y}" rx="${e.rx}" ry="${e.ry}" transform="rotate(${e.rotate},${e.c.x},${-e.c.y})" ${st.linetype} stroke="${st.color}" stroke-width="${st.strokeWidth}" fill="none"/>`;
     }
 
     renderArrow(s,color) {
@@ -126,15 +127,62 @@ export class SvgOutput extends OutputOption {
       let offset = t.offset ? {x: 0, y:0} : this.labelOffset;
       for (let dir of preset) {
         switch(dir) {
-          case 'N': offset.y = offset.y - t.offset; break;
-          case 'S': offset.y = offset.y + t.offset; break;
-          case 'E': offset.x = offset.x + t.offset; break;
-          case 'W': offset.x = offset.x - t.offset; break;
+          case 'N': offset.y = offset.y - (t.offset ?? 0); break;
+          case 'S': offset.y = offset.y + (t.offset ?? 0); break;
+          case 'E': offset.x = offset.x + (t.offset ?? 0); break;
+          case 'W': offset.x = offset.x - (t.offset ?? 0); break;
         }
       }
 
       this.svg = `${this.svg}
 <text x="${t.location.x+offset.x}" y="${-t.location.y+offset.y}">${t.text}</text>`;
+    }
+
+    renderAnglemark(a) {
+      let st = this.parseStyle(a.style);
+      let startPoint = a.points[0];
+      let endPoint = a.points[2];
+
+      let baseStart = Vector2D.fromPoints(a.points[1],startPoint).unit();
+      let baseEnd = Vector2D.fromPoints(a.points[1],endPoint).unit();
+
+      //in order to use the elliptical arc path component, we need to bring the points at the offset distance to the central point
+      startPoint = a.points[1].add(baseStart.scale(a.offset));
+      endPoint = a.points[1].add(baseEnd.scale(a.offset));
+
+      switch(a.type) {
+        case ')':
+          this.svg = `${this.svg}
+<path d="M ${startPoint.x} ${-startPoint.y} A ${a.offset} ${a.offset} 0 0 0 ${endPoint.x} ${-endPoint.y}"
+ ${st.linetype} stroke="${st.color}" stroke-width="${st.strokeWidth}"/>`;
+          break;
+        case '))':
+          let midStart = a.points[1].add(baseStart.scale(a.offset*0.9));
+          let midEnd = a.points[1].add(baseEnd.scale(a.offset*0.9));
+          this.svg = `${this.svg}
+<path d="M ${startPoint.x} ${-startPoint.y} A ${a.offset} ${a.offset} 0 0 0 ${endPoint.x} ${-endPoint.y}
+         M ${midStart.x} ${-midStart.y} A ${a.offset*0.9} ${a.offset*0.9} 0 0 0 ${midEnd.x} ${-midEnd.y}"
+  ${st.linetype} stroke="${st.color}" stroke-width="${st.strokeWidth}"/>`;
+          break;
+        case '.)':
+          let midVector = Vector2D.fromPoints(a.points[1],midpoint(startPoint,endPoint)).unit();
+          let midPoint = a.points[1].add(midVector.scale(a.offset*0.7));
+          this.svg = `${this.svg}
+<path d="M ${startPoint.x} ${-startPoint.y} A ${a.offset} ${a.offset} 0 0 0 ${endPoint.x} ${-endPoint.y}"
+ ${st.linetype} stroke="${st.color}" stroke-width="${st.strokeWidth}"/>`;
+          this.renderPoint({
+            x: midPoint.x,
+            y: midPoint.y,
+            style: a.style
+          });
+          break;
+          break;
+      }
+
+      // this.renderText({
+      //   text: a.text,
+      //   location: endPoint
+      // });
     }
 
     flushOutput() {

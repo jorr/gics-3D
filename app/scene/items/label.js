@@ -17,7 +17,7 @@ export class Label extends Item {
     this.offset = offset;
    }
 
-   project(projectionData, projection, label, color) {
+   project(projectionData, projection) {
     let projected = projection.projectPoint(this.location, projectionData);
     return new Text2D(projected, this.text, this.direction, this.offset);
    }

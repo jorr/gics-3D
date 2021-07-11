@@ -45,6 +45,10 @@ export class Point2D extends Element2D {
   equals(p) {
     return this.x === p.x && this.y === p.y;
   }
+
+  add(v) {
+    return new Point2D(this.x+v.x, this.y+v.y);
+  }
 }
 
 export class Text2D extends Element2D {
@@ -76,4 +80,9 @@ export class Polygon2D extends Element2D {
 export class Ellipse2D extends Element2D {
   c; rx; ry; rotate;
   constructor(c,rx,ry,rotate) { super(); this.c = c; this.rx = rx; this.ry = ry; this.rotate = rotate; }
+}
+
+export class Angle2D extends Element2D {
+  points; type; offset; text;
+  constructor(points,text,type,offset) { super(); this.points = points; this.text = text; this.type = type; this.offset = offset; }
 }

@@ -1,4 +1,4 @@
-import { Item, Polygon2D } from '../item.js';
+import { Item, Polygon2D, Angle2D } from '../item.js';
 import { Segment } from './segment.js';
 import { centroid } from '../util.js';
 
@@ -35,9 +35,7 @@ export class Polygon extends Item {
     return centroid(this.vertices);
   }
 
-  project(projectionData, projection, color) {
-    let projected = new Polygon2D(this.vertices.map(v => projection.projectPoint(v, projectionData)));
-    projected.fillColor = color;
-    return projected;
+  project(projectionData, projection) {
+    return new Polygon2D(this.vertices.map(v => projection.projectPoint(v, projectionData)));
   }
 };

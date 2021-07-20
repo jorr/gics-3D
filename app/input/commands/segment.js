@@ -30,7 +30,7 @@ export default class SegmentCommand extends CreationCommand {
       }
       this.item = new Segment(...params);
     }
-    //segment(<point>,d,<line|segment>[,<angle>])
+    //segment(<point>,d,<line|segment>[,<angle>]) - a segment with length d through a point at angle (defaults to 0) to the given line/segment
     else if (params.length >= 3 && params[0] instanceof Point && typeof params[1] === 'number'
       && (params[2] instanceof Line || params[2] instanceof Segment)) {
       let angle = params[3] && params[3] instanceof Angle ? params[3].value : 0;

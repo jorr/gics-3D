@@ -7,6 +7,8 @@ import { Segment } from '../../scene/items/segment.js';
 import { Plane } from '../../scene/items/plane.js';
 import { Point } from '../../scene/items/point.js';
 import { Line } from '../../scene/items/line.js';
+import PointCommand from './point.js';
+import SegmentCommand from './segment.js';
 import { WrongParamsError } from '../../errors.js';
 
 import log from 'loglevel';
@@ -35,6 +37,14 @@ export default class ProjectCommand extends CreationCommand {
       this.item = params[0].projectionOn(params[1]);
     }
     else throw new WrongParamsError(params, this);
+  }
+
+  bindElements(elems) {
+    if (this.item instanceof Point) {
+      PointCommand.prototype.bindElements.call(this, elems);
+    } else if (this.item instanceof Segment) {
+      SegmentCommand.prototype.bindElements.call(this, elems);
+    }
   }
 
 };

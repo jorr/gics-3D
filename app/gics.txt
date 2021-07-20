@@ -1,5 +1,5 @@
-point(400,200,300) -> p1
-point(200,300,300) -> p2
+#point(400,200,300) -> p1
+#point(200,300,300) -> p2
 #segment(p1,[0,0,100]) -> s[.,p3]
 #line(s) -> .
 
@@ -8,7 +8,7 @@ point(200,300,300) -> p2
 #cuboid(R,100,"-") -> CR
 #cuboid(R,R2) -> CR2
 
-autolabel("on")
+#autolabel("on")
 
 #rhomb([p1,p2],200) -> R
 #rhomb(["Oxy"]) -> RH
@@ -19,7 +19,7 @@ autolabel("on")
 
 #plane(p1,s) -> pl
 #plane([0,500,0],[-500,500,500],[-500,0,0]) -> testPL
-plane([[500,500,0],[500,0,0]],[[500,500,0],[-500,500,1000]]) -> pl2
+#plane([[500,500,0],[500,0,0]],[[500,500,0],[-500,500,1000]]) -> pl2
 
 #translate(s,10,10,0) -> s1
 
@@ -27,10 +27,10 @@ plane([[500,500,0],[500,0,0]],[[500,500,0],[-500,500,1000]]) -> pl2
 
 #segment(p1,[0,0,0]) -> s2
 
-plane(p1,p2,[300,200,300]) -> p123
-point(p123) -> p4
+#plane(p1,p2,[300,200,300]) -> p123
+#point(p123) -> p4
 #plane("Oyz") -> xzpl
-plane([0,100,0],["Oxz"]) -> xzparallel
+#plane([0,100,0],["Oxz"]) -> xzparallel
 #intersect(pl2,xzparallel) -> .
 #normal(xzparallel) -> np
 #project(p2,xzparallel) -> p2'
@@ -42,7 +42,7 @@ plane([0,100,0],["Oxz"]) -> xzparallel
 #intersect(prs,prs') -> X
 #line("Oy") -> -Oy
 #autolabel("off")
-intersect(["Oy"],xzparallel) -> Y
+#intersect(["Oy"],xzparallel) -> Y
 #label("Y",Y,"SE",20)
 #should throw an error
 #intersect(line("Ox"),xzparallel) -> test
@@ -79,8 +79,8 @@ intersect(["Oy"],xzparallel) -> Y
 #line(sq1.AB) -> lAB
 
 #square(["Oxz"]) -> -sq[A,B,C,D]
-color("red")
-linestyle(1,"altern")
+#color("red")
+#linestyle(1,"altern")
 #square(["Oxz"]) -> -sq
 #produce(sq.AB) -> .[A,B]
 #plane(A,["Oxz"]) -> AOxz
@@ -99,8 +99,8 @@ linestyle(1,"altern")
 
 #triangle(p1,p2,d) -> tr
 
-triangle([-100,0,0],[100,0,0],[100,0,300]) -> t[A,B,C]
-color(t,"blue")
+#triangle([-100,0,0],[100,0,0],[100,0,300]) -> t[A,B,C]
+#color(t,"blue")
 #bisector(t,A) -> BSC
 #altitude(t,"B") -> .
 
@@ -114,5 +114,29 @@ color(t,"blue")
 
 #label("t",t,"N",10)
 
-anglemark(B,A,C,".)")
-segmentmark(t.AB)
+#anglemark(B,A,C,".)")
+#segmentmark(t.AB)
+
+
+#----------------------
+
+#plane(["Oz"],["Oxz"],d:45) -> p
+#line([0,0,30],["Oxz"],d:45) -> l1
+#line([0,0,30],["Oxz"]) -> l2
+#point([0,0,30],10,0,0) -> pl2
+#point([0,0,30],10,10,0) -> pl1
+#anglemark(pl1,[0,0,30],pl2,")")
+
+#------------------------
+
+segment([20,0,20],[100,70,40]) -> p[zero,x]
+project(p,["Oxz"]) -> pp[.,xp]
+segment(xp,x) -> n
+arrowmark(p)
+arrowmark(n)
+arrowmark(pp)
+anglemark(zero,x,xp,")",15)
+label()
+label("p",p,"N",15)
+label("n",n,"E",15)
+label("pp",pp,"S",15)

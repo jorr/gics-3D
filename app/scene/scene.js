@@ -122,7 +122,7 @@ export class Scene{
 
     let infoStyle = {stroke: 1, linetype: 'solid', color: 'green'};
     let infoItems = [
-      Point.Origin, new Label(Point.Origin, 'O'),
+      Point.Origin, new Label(Point.Origin, 'O', 'SW', 25),
       Line.Ox, Line.Oy, Line.Oz
     ].map(i => Object.assign(i.project(projectionData, this.projection), {style: infoStyle}));
 

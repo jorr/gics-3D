@@ -52,7 +52,7 @@ export class SvgOutput extends OutputOption {
     }
 
     parseLinetype(style) {
-      switch (style.linetype) {
+      switch (style?.linetype) {
         case 'dashed': return 'stroke-dasharray="4 2"'; break;
         case 'dotted': return 'stroke-dasharray="1 6" stroke-linecap="round"'; break;
         case 'altern': return 'stroke-dasharray="4 2 1 2" stroke-linecap="round"'; break;
@@ -63,8 +63,8 @@ export class SvgOutput extends OutputOption {
 
     parseStyle(style) {
       return {
-        strokeWidth: style.stroke || this.strokeWidth,
-        color: style.color || this.stroke,
+        strokeWidth: style?.stroke || this.strokeWidth,
+        color: style?.color || this.stroke,
         linetype: this.parseLinetype(style),
       }
     }
@@ -100,8 +100,8 @@ export class SvgOutput extends OutputOption {
     }
 
     renderArrow(s,color) {
-      let vectorOnSegment = { x: (s.p1.x-s.p2.x) * 0.1, y: (s.p1.y-s.p2.y) * 0.1};
-      let angle = 30 * Math.PI / 180;
+      let vectorOnSegment = Vector2D.fromPoints(s.p2,s.p1).unit().scale(8);
+      let angle = 15 * Math.PI / 180;
       this.renderPoly({
         color: color,
         points: [

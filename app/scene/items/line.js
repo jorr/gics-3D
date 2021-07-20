@@ -17,11 +17,13 @@ export class Line extends Item {
    * @property {Vector} u
    */
    pt; u;
+   drawAsArrow;
 
-   constructor(pt, u) {
+   constructor(pt, u, drawAsArrow = false) {
     super();
     this.pt = pt;
     this.u = u;
+    this.drawAsArrow = drawAsArrow;
    }
 
    getPointAtParam(s) {
@@ -55,15 +57,15 @@ export class Line extends Item {
    }
 
    static get Ox() {
-    return new Line(Point.Origin, Vector.UnitX);
+    return new Line(Point.Origin, Vector.UnitX, true);
    }
 
    static get Oy() {
-    return new Line(Point.Origin, Vector.UnitY);
+    return new Line(Point.Origin, Vector.UnitY, true);
    }
 
    static get Oz() {
-    return new Line(Point.Origin, Vector.UnitZ);
+    return new Line(Point.Origin, Vector.UnitZ, true);
    }
 
    intersect(arg) {
@@ -98,12 +100,12 @@ export class Line extends Item {
       this.intersect(Plane.Oyz.parallelThrough(new Point(volume.w/2,0,0))),
       this.intersect(Plane.Oxy.parallelThrough(new Point(0,0,0))),
       this.intersect(Plane.Oxy.parallelThrough(new Point(0,0,volume.d))),
+      this.intersect(Plane.Oxz.parallelThrough(new Point(0,-volume.h/2,0,0))),
       this.intersect(Plane.Oxz.parallelThrough(new Point(0,volume.h/2,0,0))),
-      this.intersect(Plane.Oxz.parallelThrough(new Point(0,-volume.h/2,0,0)))
     ].filter(c => c && pointInVolume(c, volume)).map(c => projection.projectPoint(c, projectionData));
 
     // there should be just two at this point
-    return new Segment2D(crossings[0], crossings[1]);
+    return Object.assign(new Segment2D(crossings[0], crossings[1]), { drawAsArrow: this.drawAsArrow });
 
     // alternative calculation, commented out
     /*let p, crossings = [];

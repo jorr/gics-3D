@@ -39,7 +39,7 @@ export default class LineCommand extends CreationCommand {
       let coplanar = params[1].getCoplanarVector();
       let angle = params[2] instanceof Angle ? params[2].value : 0;
       //rotate around an axis that's perpendicular to coplanar but in the plane
-      let line = new Line(params[0], coplanar.rotate(coplanar.perpendicular(params[1]), params[2].value));
+      let line = new Line(params[0], coplanar.rotate(coplanar.perpendicular(params[1]), angle));
       this.item = line;
     }
     // line(<plane>,<plane>) - a line that is the intersection of two planes

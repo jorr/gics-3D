@@ -42,7 +42,7 @@ export default class PyramidCommand extends CreationCommand {
     else if (params.length >= 3 && typeof params[1] === 'number' && typeof params[2] === 'number' &&
       params[0] instanceof Point) {
 
-      let plane = params[3] instanceof Plane ? params[3] : Plane.Oxz; // usually we want Oxz
+      let plane = params[3] instanceof Plane ? params[3].parallelThrough(params[0]) : Plane.Oxz.parallelThrough(params[0]); // usually we want Oxz
       let pToV1 = params[0].vectorTo(plane.getRandomPoint());
       let vertices = [...Array(params[2]).keys()].map(index => params[0].add(pToV1.rotate(plane.n, index*360/params[2])));
       let apex = params[0].add(plane.n.scale(params[1]));

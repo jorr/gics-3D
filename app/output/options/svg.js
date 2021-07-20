@@ -124,6 +124,8 @@ export class SvgOutput extends OutputOption {
       if (!t.text || !t.location) return;
 
       t.text = t.text.replace(/&\{([^}]+)\}/, v => this.symbols[v]); //replace greek letters and math symbols
+      t.text = t.text.replace(/_\{([^}]+)\}/, '<tspan dy="10" font-size="smaller">$1</tspan>'); //subscript
+      t.text = t.text.replace(/\^\{([^}]+)\}/, '<tspan dy="-10" font-size="smaller">$1</tspan>'); //superscript
 
       let preset = t.direction || 'SE';
       let offset = t.offset ? {x: 0, y:0} : this.labelOffset;

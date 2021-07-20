@@ -129,14 +129,15 @@
 
 #------------------------
 
-segment([20,0,20],[100,70,40]) -> p[zero,x]
+segment([20,0,20],[150,90,100]) -> p[zero,x]
 project(p,["Oxz"]) -> pp[.,xp]
 segment(xp,x) -> n
 arrowmark(p)
 arrowmark(n)
 arrowmark(pp)
 anglemark(zero,x,xp,")",15)
-label()
+linestyle(n, 1.0, "dashed")
+label("&{alpha}",x,"SSW",20)
 label("p",p,"N",15)
 label("n",n,"E",15)
 label("pp",pp,"S",15)

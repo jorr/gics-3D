@@ -120,7 +120,7 @@ export class Scene{
       flattenDeep().
       value();
 
-    let infoStyle = {stroke: 1, linetype: 'solid', color: 'green'};
+    let infoStyle = {stroke: 1, linetype: 'dotted', color: 'rgba(64,128,64,0.5)'};
     let infoItems = [
       Point.Origin, new Label(Point.Origin, 'O', 'SW', 25),
       Line.Ox, Line.Oy, Line.Oz

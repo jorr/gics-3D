@@ -47,7 +47,7 @@ export class SvgOutput extends OutputOption {
     }
   }
 </style>
-<rect width="100%" height="100%" fill="#eee" />
+<rect width="100%" height="100%" fill="#fff" />
 <g id="scene" transform="translate(${screen.w/2} ${screen.h/2})">`;
     }
 
@@ -100,10 +100,11 @@ export class SvgOutput extends OutputOption {
     }
 
     renderArrow(s,color) {
-      let vectorOnSegment = Vector2D.fromPoints(s.p2,s.p1).unit().scale(8);
-      let angle = 15 * Math.PI / 180;
+      let vectorOnSegment = Vector2D.fromPoints(s.p2,s.p1).unit().scale(9);
+      let angle = 20 * Math.PI / 180;
       this.renderPoly({
-        color: color,
+        style: {color: color},
+        fillColor: color,
         points: [
           s.p2,
           //rotate point on segment both ways
@@ -122,7 +123,8 @@ export class SvgOutput extends OutputOption {
     renderText(t) {
       if (!t.text || !t.location) return;
 
-      //TODO: parse special text here
+      t.text = t.text.replace(/&\{([^}]+)\}/, v => this.symbols[v]); //replace greek letters and math symbols
+
       let preset = t.direction || 'SE';
       let offset = t.offset ? {x: 0, y:0} : this.labelOffset;
       for (let dir of preset) {
@@ -190,5 +192,58 @@ export class SvgOutput extends OutputOption {
 </g>
 </svg>`;
       fs.writeFileSync(this.fileName, this.svg, 'utf-8');
+    }
+
+    symbols = {
+      "&{Alpha}": "&#x391;",
+      "&{Beta}": "&#x392;",
+      "&{Chi}": "&#x3A7;",
+      "&{Delta}": "&#x394;",
+      "&{Epsilon}": "&#x395;",
+      "&{Eta}": "&#x397;",
+      "&{Gamma}": "&#x393;",
+      "&{Iota}": "&#x399;",
+      "&{Kappa}": "&#x39A;",
+      "&{Lambda}": "&#x39B;",
+      "&{Mu}": "&#x39C;",
+      "&{Nu}": "&#x39D;",
+      "&{Omega}": "&#x3A9;",
+      "&{Omicron}": "&#x39F;",
+      "&{Phi}": "&#x3A6;",
+      "&{Pi}": "&#x3A0;",
+      "&{Psi}": "&#x3A8;",
+      "&{Rho}": "&#x3A1;",
+      "&{Sigma}": "&#x3A3;",
+      "&{Tau}": "&#x3A4;",
+      "&{Theta}": "&#x398;",
+      "&{Upsilon}": "&#x3A5;",
+      "&{Xi}": "&#x39E;",
+      "&{Zeta}": "&#x396;",
+      "&{alpha}": "&#x3B1;",
+      "&{beta}": "&#x3B2;",
+      "&{chi}": "&#x3C7;",
+      "&{delta}": "&#x3B4;",
+      "&{epsilon}": "&#x3B5;",
+      "&{eta}": "&#x3B7;",
+      "&{gamma}": "&#x3B3;",
+      "&{iota}": "&#x3B9;",
+      "&{kappa}": "&#x3BA;",
+      "&{lambda}": "&#x3BB;",
+      "&{mu}": "&#x3BC;",
+      "&{nu}": "&#x3BD;",
+      "&{omega}": "&#x3C9;",
+      "&{omicron}": "&#x3BF;",
+      "&{phi}": "&#x3C6;",
+      "&{pi}": "&#x3C0;",
+      "&{psi}": "&#x3C8;",
+      "&{rho}": "&#x3C1;",
+      "&{sigmaf}": "&#x3C2;",
+      "&{sigma}": "&#x3C3;",
+      "&{tau}": "&#x3C4;",
+      "&{theta}": "&#x3B8;",
+      "&{upsilon}": "&#x3C5;",
+      "&{xi}": "&#x3BE;",
+      "&{zeta}": "&#x3B6;",
+      "&{deg}": "&#xb0;",
     }
 }

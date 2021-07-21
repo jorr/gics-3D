@@ -58,6 +58,10 @@ export class Segment extends Item {
     return new Segment(this.p1.projectionOn(arg), this.p2.projectionOn(arg));
    }
 
+   equals(s) {
+    return this.p1.equals(s.p1) && this.p2.equals(s.p2);
+   }
+
    pointsToTransform() {
     return [this.p1, this.p2];
   }

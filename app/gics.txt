@@ -129,15 +129,20 @@
 
 #------------------------
 
-segment([20,0,20],[150,90,100]) -> p[zero,x]
-project(p,["Oxz"]) -> p'[.,xp]
-segment(xp,x) -> n
-arrowmark(p)
-arrowmark(n)
-arrowmark(p')
-anglemark(zero,x,xp,")",15)
-linestyle(n, 1.0, "dashed")
-label("&{alpha}",x,"SSW",20)
-label("p",p,"N",15)
-label("n",n,"E",15)
-label("p'",p',"S",15)
+#segment([20,0,20],[150,90,100]) -> p[zero,x]
+#project(p,["Oxz"]) -> p'[.,xp]
+#segment(xp,x) -> n
+#arrowmark(p)
+#arrowmark(n)
+#arrowmark(p')
+#anglemark(zero,x,xp,")",15)
+#linestyle(n, 1.0, "dashed")
+#label("&{alpha}",x,"SSW",20)
+#label("p",p,"N",15)
+#label("n",n,"E",15)
+#label("p'",p',"S",15)
+
+#---------------------------
+
+cube(200*sqrt(2)) -> cb
+normal(cb.base,cb.base.cen) -> n1

@@ -26,7 +26,7 @@ export default class CubeCommand extends CreationCommand {
     let A = cen.add(new Vector(-len/2,-len/2,-len/2));
     let B = cen.add(new Vector(len/2,-len/2,-len/2));
     let C = cen.add(new Vector(len/2,-len/2,len/2));
-    return new Cube(new Square(A,B,C), A.vectorTo(B).cross(B.vectorTo(C)).unit().scale(len));
+    return new Cube(new Square(A,B,C), C.vectorTo(B).cross(B.vectorTo(A)).unit().scale(len));
   }
 
   createItem(params) {

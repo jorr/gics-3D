@@ -91,7 +91,7 @@
         "name": "COMMAND",
         "label": "COMMAND",
         "idx": 0,
-        "pattern": "altitude|angle|bisector|circle|cone|cube|cuboid|cylinder|dist|intersect|limits|line|normal|parallelogram|plane|point|polygon|prism|produce|project|projectionmode|pyramid|quad|rectangle|rhomb|segment|sphere|square|translate|transversal|triangle|viewpoint"
+        "pattern": "viewpoint|triangle|transversal|translate|square|sphere|segmentmark|segment|rhomb|rectangle|quad|pyramid|projectionmode|project|produce|prism|polygon|point|plane|parallelogram|normal|linestyle|line|limits|label|intersect|dist|cylinder|cuboid|cube|cone|color|circle|bisector|autolabel|arrowmark|anglemark|angle|altitude|cos|sin|tan|sqrt"
       },
       {
         "type": "Terminal",
@@ -278,10 +278,10 @@
             "definition": [
               {
                 "type": "Terminal",
-                "name": "COMMAND",
-                "label": "COMMAND",
+                "name": "STRING",
+                "label": "STRING",
                 "idx": 0,
-                "pattern": "\"[a-zA-Z-]+\""
+                "pattern": "\"[^\"]*\""
               }
             ]
           },
@@ -291,16 +291,6 @@
               {
                 "type": "NonTerminal",
                 "name": "ARITHMEXPRESSION",
-                "idx": 0
-              }
-            ]
-          },
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "NonTerminal",
-                "name": "COMMANDINVOCATION",
                 "idx": 0
               }
             ]
@@ -435,7 +425,17 @@
                 "name": "NUMBER",
                 "label": "NUMBER",
                 "idx": 0,
-                "pattern": "\\d+"
+                "pattern": "\\d+(\\.\\d+)?"
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "COMMANDINVOCATION",
+                "idx": 0
               }
             ]
           }

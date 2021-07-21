@@ -15,7 +15,7 @@ export class GicsLexer extends Lexer {
     });
     const COMMAND = createToken({
       name: 'COMMAND',
-      pattern: RegExp(`${Object.keys(commands).join('|')}`,'i'),
+      pattern: RegExp(`${Object.keys(commands).concat('cos','sin','tan','sqrt').join('|')}`,'i'),
       longer_alt: IDENTIFIER
     });
     const STRING = createToken({
@@ -84,7 +84,6 @@ export class GicsParser extends EmbeddedActionsParser {
       $.ACTION(() => {
         try {
           commands[command].execute(params, pattern, commands);
-          //TODO: must take care of commands that return a result (or treat them as expressions)
         }
         catch (e) {
           if (e instanceof GicsError) {
@@ -163,28 +162,14 @@ export class GicsParser extends EmbeddedActionsParser {
             }
           });
           $.CONSUME(this.RBRAC);
-
           return $.ACTION(() => literalConstruct(params));
         } },
-        // { ALT: () => {
-        //   let identifier = $.CONSUME(IDENTIFIER).image;
-        //   return $.ACTION(() => resolveIdentifier(identifier));
-        // } },
-        // { ALT: () => {
-        //   let number = $.CONSUME(NUMBER).image;
-        //   return $.ACTION(() => parseFloat(number));
-        // } },
         { ALT: () => convertAngle($.CONSUME(this.ANGLE).image) },
         { ALT: () => {
           let string = $.CONSUME(this.STRING).image;
           return string.slice(1,-1);
         } },
         { ALT: () => $.SUBRULE($.ARITHMEXPRESSION) },
-        // we need nested commands for things like dist and angle
-        { ALT: () => {
-          let {command, params} = $.SUBRULE($.COMMANDINVOCATION);
-          return $.ACTION(() => commands[command].execute(params));
-        } }
       ]);
     });
 
@@ -238,6 +223,14 @@ export class GicsParser extends EmbeddedActionsParser {
             sign = -1;
           });
           return sign * parseFloat($.CONSUME(this.NUMBER).image);
+        } },
+        // we need nested commands for things like dist and angle
+        { ALT: () => {
+          let {command, params} = $.SUBRULE($.COMMANDINVOCATION);
+          return $.ACTION(() => {
+            if (Math[command]) return Math[command](params);
+            else return commands[command].execute(params)
+          });
         } }
       ])
     });

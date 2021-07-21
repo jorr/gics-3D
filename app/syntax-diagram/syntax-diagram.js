@@ -13,7 +13,20 @@
 import path from 'path';
 import fs from 'fs';
 import chevrotain from 'chevrotain';
-import { gicsParser } from '../input/grammar.js';
+
+let commands = {};
+const __dirname = path.dirname(new URL(import.meta.url).pathname);
+const dir = `${__dirname}/../input/commands`;
+const files = fs.readdirSync(dir).reverse(); //reverse is needed to assure regex is in no-prefix order
+
+for (let file of files) {
+  const { default: command } = await import(`../input/commands/${file}`);
+  const c = new command;
+  commands[c.name] = c;
+}
+
+const { GicsLexer, GicsParser } = await import('../input/grammar.js');
+const gicsLexer = new GicsLexer(commands), gicsParser = new GicsParser(commands, gicsLexer.tokens);
 
 // extract the serialized grammar.
 const serializedGrammar = gicsParser.getSerializedGastProductions();

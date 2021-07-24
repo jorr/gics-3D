@@ -23,6 +23,10 @@ export class Pyramid extends Item {
     return new Segment(this.base.cen,this.apex).labelPosition;
   }
 
+  translate(by) { return new Pyramid(this.base.translate(by), this.apex.translate(by)); }
+  rotate(by,around) { return new Pyramid(this.base.rotate(by,around), this.apex.rotate(by,around));  }
+  scale(by) { return new Pyramid(this.base.scale(by), this.base.cen.add(this.base.cen.vectorTo(this.apex).scale(by))); }
+
   project(projectionData, projection) {
     let apexProjection = this.apex.project(projectionData, projection);
     return [

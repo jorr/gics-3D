@@ -12,7 +12,7 @@ export class Circle extends Item {
    * @property {Point} p1
    * @property {Point} p2
    */
-   cen; plane; rad;
+   cen; rad; plane;
 
    constructor(cen, rad, plane) {
     super();
@@ -37,9 +37,9 @@ export class Circle extends Item {
     return dist(p,this.cen) == this.rad && this.plane.hasPoint(p);
    }
 
-   pointsToTransform() {
-    return [this.cen]; //, this.p1, this.p2];
-  }
+  translate(by) { return new Circle(this.cen.add(by), this.rad, this.plane.translate(by)); }
+  rotate(by,around) { return new Circle(this.cen.rotate(by,around), this.rad, this.plane.rotate(by));  }
+  scale(by) { return new Circle(this.cen, this.rad*by, this.plane); }
 
   get labelPosition() {
     return this.cen;

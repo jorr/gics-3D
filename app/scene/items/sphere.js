@@ -20,6 +20,10 @@ export class Sphere extends Item {
     return this.cen;
   }
 
+  translate(by) { return new Sphere(this.cen.translate(by), this.rad); }
+  rotate(by,around) { return new Sphere(this.cen.rotate(by,around), this.rad);  }
+  scale(by) { return new Sphere(this.cen, this.rad*by); }
+
   project(projectionData, projection) {
 
     let screenPlane = projection.screenPlane(projectionData.camera, projectionData.volume);

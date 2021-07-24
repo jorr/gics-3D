@@ -1,4 +1,4 @@
-import { EPSILON } from './item.js';
+import { Item, EPSILON } from './item.js';
 import { Point } from './items/point.js';
 import { Segment } from './items/segment.js';
 import { Line } from './items/line.js';
@@ -95,21 +95,4 @@ export function pointInVolume(p, v) {
   return Math.abs(p.x) - v.w/2 <= EPSILON  &&
     Math.abs(p.y) - v.h/2 <= EPSILON &&
     p.z >= 0 && Math.abs(p.z) - v.d <= EPSILON;
-}
-
-// TRANSFORMATIONS
-
-export function translate(p, v) {
-  return p.add(v);
-}
-
-export function rotate(p, axis, fi) {
-  const u = axis.u.unit(), a = axis.pt.rvector, ap = a.vectorTo(p);
-  return new Point(a.add(u.scale((1 - Math.cos(fi))*u.dot(ap))).
-                add(ap.scale(Math.cos(fi))).
-                add(u.cross(ap).scale(Math.sin(fi))));
-}
-
-export function scale(p, n) {
-  return new Point(p.rvector.scale(n));
 }

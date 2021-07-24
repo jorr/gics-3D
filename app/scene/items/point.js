@@ -41,6 +41,17 @@ export class Point extends Item {
     return new Point(this.rvector.add(v));
    }
 
+
+  translate(by) { return this.add(by); }
+  scale(by) { return new Point(this.rvector); } //we don't scale with respect to the origin, so this stays the same
+
+  rotate(angle, axis) {
+    let uaxis = axis.u.unit(); log.debug(axis)
+    return axis.pt.add(uaxis.scale((1 - Math.cos(angle))*uaxis.dot(axis.pt.vectorTo(this))))
+      .add(axis.pt.vectorTo(this).scale(Math.cos(angle)))
+      .add(uaxis.cross(axis.pt.vectorTo(this)).scale(Math.sin(angle)));
+  }
+
    equals(p) {
     return Math.abs(this.x - p.x) <= EPSILON && Math.abs(this.y - p.y) <= EPSILON && Math.abs(this.z - p.z) <= EPSILON;
    }

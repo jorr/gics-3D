@@ -146,3 +146,10 @@
 
 cube(200*sqrt(2)) -> cb
 normal(cb.base,cb.base.cen) -> n1
+intersect(["Oy"],cb.base.plane) -> X
+label("X",X)
+autolabel("on")
+translate(cb.base,0,-100,0) -> ha
+autolabel("off")
+rotate(ha,d:45,["Oz"]) -> he
+#scale(ha,2) -> ho

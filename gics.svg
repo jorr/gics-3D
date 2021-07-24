@@ -1,0 +1,48 @@
+<?xml version="1.0" standalone="no"?>
+<svg version="1.1" baseProfile="full" width="1000" height="1000" viewBox="0 0 1353.553390593274 1353.5533905932737" xmlns="http://www.w3.org/2000/svg">
+<style>
+  text {
+    font-size: 18.535533905932738px;
+  }
+
+  @media (max-width: 600px) {
+    text {
+      font-size: 50.11844635310913px;
+    }
+  }
+
+  @media (max-width: 800px) {
+    text {
+      font-size: 95.23689270621826px;
+    }
+  }
+</style>
+<rect width="100%" height="100%" fill="#fff" />
+<g id="scene" transform="translate(676.776695296637 676.7766952966368)">
+<circle cx="0" cy="0" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
+<text x="-25" y="25">O</text>
+<line x1="-500" x2="500" y1="0" y2="0" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
+<circle cx="-500" cy="0" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
+<polygon points="500,0 491.5427664129268,3.0781812899310186 491.5427664129268,-3.0781812899310186" stroke="rgba(64,128,64,0.5)"  stroke-width="1.353553390593274" fill="rgba(64,128,64,0.5)"/>
+<line x1="0" x2="0" y1="500" y2="-500" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
+<circle cx="0" cy="500" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
+<polygon points="0,-500 3.0781812899310186,-491.5427664129268 -3.0781812899310186,-491.5427664129268" stroke="rgba(64,128,64,0.5)"  stroke-width="1.353553390593274" fill="rgba(64,128,64,0.5)"/>
+<line x1="0" x2="353.5533905932738" y1="0" y2="-353.5533905932737" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
+<circle cx="0" cy="0" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
+<polygon points="353.5533905932738,-353.5533905932737 349.74982623760746,-345.3966205099439 345.39662050994394,-349.7498262376074" stroke="rgba(64,128,64,0.5)"  stroke-width="1.353553390593274" fill="rgba(64,128,64,0.5)"/>
+<polygon points="-191.4213562373095,191.4213562373095 91.42135623730951,191.4213562373095 191.4213562373095,91.42135623730951 -91.42135623730951,91.42135623730951" stroke="black"  stroke-width="1" fill="none"/>
+<polygon points="-191.4213562373095,-91.42135623730951 91.42135623730951,-91.42135623730951 191.4213562373095,-191.4213562373095 -91.42135623730951,-191.4213562373095" stroke="black"  stroke-width="1" fill="none"/>
+<line x1="-191.4213562373095" x2="-191.4213562373095" y1="191.4213562373095" y2="-91.42135623730951"  stroke="black" stroke-width="1.353553390593274"/>
+<line x1="91.42135623730951" x2="91.42135623730951" y1="191.4213562373095" y2="-91.42135623730951"  stroke="black" stroke-width="1.353553390593274"/>
+<line x1="191.4213562373095" x2="191.4213562373095" y1="91.42135623730951" y2="-191.4213562373095"  stroke="black" stroke-width="1.353553390593274"/>
+<line x1="-91.42135623730951" x2="-91.42135623730951" y1="91.42135623730951" y2="-191.4213562373095"  stroke="black" stroke-width="1.353553390593274"/>
+<line x1="0" x2="0" y1="141.4213562373095" y2="91.42135623730951"  stroke="black" stroke-width="2"/>
+<circle cx="0" cy="141.4213562373095" r="1" stroke="black" stroke-width="1" fill="black"/>
+<polygon points="0,91.42135623730951 3.0781812899310186,99.87858982438269 -3.0781812899310186,99.87858982438269" stroke="black"  stroke-width="1.353553390593274" fill="black"/>
+<circle cx="0" cy="141.4213562373095" r="1" stroke="black" stroke-width="1" fill="black"/>
+<text x="5.414213562373096" y="146.83556979968262">X</text>
+<polygon points="-191.4213562373095,291.4213562373095 91.42135623730951,291.4213562373095 191.4213562373095,191.4213562373095 -91.42135623730951,191.4213562373095" stroke="black"  stroke-width="1" fill="none"/>
+<text x="5.414213562373096" y="246.83556979968262">ha</text>
+<polygon points="20.710678118654734,320.71067811865476 220.71067811865476,120.71067811865476 320.71067811865476,20.710678118654755 120.71067811865476,220.71067811865476" stroke="black"  stroke-width="1" fill="none"/>
+</g>
+</svg>

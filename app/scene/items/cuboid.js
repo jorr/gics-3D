@@ -54,6 +54,10 @@ A—————B
     return this.base.labelPosition;
   }
 
+  translate(by) { return new Cuboid(this.base.translate(by), this.direction); }
+  rotate(by,around) { return new Cuboid(this.base.rotate(by,around), this.direction.rotate(by,around));  }
+  scale(by) { return new Cuboid(this.base.scale(by), this.direction.scale(by)); }
+
   project(projectionData, projection) {
     return [
       // first wall

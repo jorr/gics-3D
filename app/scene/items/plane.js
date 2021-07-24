@@ -107,6 +107,10 @@ export class Plane extends Item {
     return this.pt;
   }
 
+  translate(by) { return new Plane(this.pt.translate(by), this.n); }
+  rotate(by,around) { return new Plane(this.pt.rotate(by,around), this.n.rotate(around.u,by));  }
+  scale(by) { return new Plane(this.pt, this.n); } //we don't scale with respect to the origin, so this stays the same
+
   project(projectionData, projection) {
     //We will represent the plane as a quad defined by the crossings with the volume
     //TODO: test shrinking

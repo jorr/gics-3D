@@ -28,6 +28,10 @@ export class Cylinder extends Item {
     return midpoint(base1.cen, base2.cen);
   }
 
+  translate(by) { return new Cylinder(this.base1.translate(by), this.base2.translate(by)); }
+  rotate(by,around) { return new Cylidner(this.base1.rotate(by,around), this.base2.rotate(by,around));  }
+  scale(by) { return new Cylinder(this.base1.scale(by), this.base2.scale(by)); }
+
   project(projectionData, projection) {
     //let direction = projectionData.camera.vectorTo(Point.Origin).perpendicular(this.base1.plane).unit();
     // let screenPlane = projection.screenPlane(projectionData.camera, projectionData.volume);

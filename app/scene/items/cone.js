@@ -19,6 +19,10 @@ export class Cone extends Item {
     return this.base.labelPosition;
   }
 
+  translate(by) { return new Cone(this.base.translate(by), this.apex.translate(by)); }
+  rotate(by,around) { return new Cone(this.base.rotate(by,around), this.apex.rotate(by,around));  }
+  scale(by) { return new Cone(this.base.scale(by), this.base.cen.add(this.base.cen.vectorTo(this.apex).scale(by))); }
+
   project(projectionData, projection, label) {
     let mainAxisProjectionOut = {p1: null, p2: null};
     let baseProjection = this.base.project(projectionData, projection, mainAxisProjectionOut);

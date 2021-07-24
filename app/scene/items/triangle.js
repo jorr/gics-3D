@@ -5,10 +5,6 @@ import { Segment } from './segment.js';
 import log from 'loglevel';
 
 export class Triangle extends Polygon {
-  /**
-   * Square type definition
-   * @property {Point} A, B, C
-   */
    A; B; C;
 
    constructor(A, B, C) {
@@ -18,12 +14,6 @@ export class Triangle extends Polygon {
 
     this.A = A; this.B = B; this.C = C;
    }
-
-   //getters for centers
-
-  pointsToTransform() {
-    return [this.A, this.B, this.C];
-  }
 
   get vertices() {
     return [this.A, this.B, this.C];
@@ -40,4 +30,8 @@ export class Triangle extends Polygon {
   get c() {
     return new Segment(this.A, this.B);
   }
+
+  translate(by) { return new this.constructor(...this.vertices.map(v => v.translate(by))); }
+  rotate(by,around) { return new this.constructor(...this.vertices.map(v => v.rotate(by,around)));  }
+  scale(by) { return new this.constructor(...this.vertices.map(v => v.add(v.vectorTo(this.cen).scale(by)))); }
 }

@@ -32,7 +32,7 @@ export class CreationCommand extends Command {
   execute(params, pattern, commands) {
     super.execute(params, pattern, commands);
     this.createItem(params);
-    if (pattern) this.bind(pattern);
+    if (pattern) this.bind(pattern, commands);
     return this.item;
   }
 
@@ -41,11 +41,11 @@ export class CreationCommand extends Command {
     throw new MethodNotImplemented('createItem', this);
   }
 
-  bind(pattern) {
+  bind(pattern, commands) {
     this.item.suppressed = pattern?.suppress;
     this.itemIndex = globalScene.addItem(this.item, pattern?.name, pattern?.suppress);
     if (pattern?.elements?.length > 0) {
-      this.bindElements(pattern.elements);
+      this.bindElements(pattern.elements, commands);
     }
   }
 
@@ -124,6 +124,7 @@ export function resolveIdentifier(identifier) {
 export class Angle {
   value;
 
+  //all functions in /scene use radians
   constructor(value) { this.value = value * Math.PI / 180; }
 }
 

@@ -18,11 +18,10 @@ export class Quad extends Polygon {
     this.A = A; this.B = B; this.C = C; this.D = D;
    }
 
-   //getters for centers
-
-  pointsToTransform() {
-    return [this.A, this.B, this.C, this.D];
-  }
+   //we use this.constructor here in order to assign proper type on descendants
+  translate(by) { return new this.constructor(...this.vertices.map(v => v.translate(by))); }
+  rotate(by,around) { return new this.constructor(...this.vertices.map(v => v.rotate(by,around)));  }
+  scale(by) { return new this.constructor(...this.vertices.map(v => this.cen.add(this.cen.vectorTo(v).scale(by)))); }
 
   get vertices() {
     return [this.A, this.B, this.C, this.D];

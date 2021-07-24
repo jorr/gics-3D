@@ -21,17 +21,9 @@ export class Item {
   get labelPosition() { throw new MethodNotImplemented('labelPosition', this); }
   project(projectionData, projection) { throw new MethodNotImplemented('project', this); }
 
-  // TODO: delegate transform to descendants
-  // transform(transformation, data) {
-  //   for (let p of this.pointsToTransform()) {
-  //     transformation(p, ...data);
-  //   }
-  // }
-
-  // // transformations
-  // translate(v) { this.transform(translatePoint, [v]); }
-  // scale(n) { this.transform(scalePoint, [n]); }
-  // rotate(axis, fi) { this.transform(rotatePoint, [axis, fi]); }
+  translate(by) { throw new MethodNotImplemented('translate', this); }
+  rotate(by,around) { throw new MethodNotImplemented('rotate', this); }
+  scale(by) { throw new MethodNotImplemented('scale', this); }
 };
 
 class Element2D {

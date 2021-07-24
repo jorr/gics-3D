@@ -62,9 +62,9 @@ export class Segment extends Item {
     return this.p1.equals(s.p1) && this.p2.equals(s.p2);
    }
 
-   pointsToTransform() {
-    return [this.p1, this.p2];
-  }
+  translate(by) { return new Segment(this.p1.translate(by), this.p2.translate(by)); }
+  rotate(by,around) { return new Segment(this.p1.rotate(by,around), this.p2.rotate(by,around));  }
+  scale(by) { return new Segment(this.p1, this.p1.add(this.asVector().scale(by))); }
 
   get labelPosition() {
     return midpoint(this.p1, this.p2);

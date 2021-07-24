@@ -37,6 +37,10 @@ export class Prism extends Item {
     return new Segment(this.base1.cen, this.base2.cen).labelPosition;
   }
 
+  translate(by) { return new Prism(this.base.translate(by), this.direction); }
+  rotate(by,around) { return new Prism(this.base.rotate(by,around), this.direction.rotate(by,around));  }
+  scale(by) { return new Prism(this.base.scale(by), this.direction.scale(by)); }
+
   project(projectionData, projection) {
     return [
       // first base

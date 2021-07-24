@@ -23,7 +23,7 @@ A—————B
 
   base; direction;
 
-  constructor(base, direction) {
+  constructor(base, direction) { //TODO: do we need direction, it can be calculated?
     super();
 
     this.base = base;
@@ -52,6 +52,10 @@ A—————B
   get labelPosition() {
     return centroid(this.base.vertices);
   }
+
+  translate(by) { return new Cube(this.base.translate(by), this.direction); }
+  rotate(by,around) { return new Cube(this.base.rotate(by,around), this.direction.rotate(by,around));  }
+  scale(by) { return new Cube(this.base.scale(by), this.direction.scale(by)); }
 
   project(projectionData, projection) {
     return [

@@ -52,7 +52,6 @@ const inputText = fs.readFileSync('app/gics.txt', 'utf-8');
 const lexingResult = gicsLexer.tokenize(inputText);
 gicsParser.input = lexingResult.tokens;
 
-//TODO: add verbose option
 log.info('-----PARSING-----');
 gicsParser.PROGRAM();
 if (gicsParser.errors.length > 0) {
@@ -60,5 +59,5 @@ if (gicsParser.errors.length > 0) {
 }
 
 log.info('-----DRAWING SCENE-----');
-const svgOutput = new SvgOutput('./test.svg');
+const svgOutput = new SvgOutput('./gics.svg');
 globalScene.drawScene(svgOutput);

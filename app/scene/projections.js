@@ -23,7 +23,7 @@ class Projection {
   screenPlane(camera, volume) {
     // Assume screen is behind the viewing volume
     // The screen is always perpendicular to Oz, so its normal vector is (0,0,-1)
-    return new Plane(new Point(0,0,volume.d + 300), new Vector(0,0,-1));
+    return new Plane(new Point(0,0,-100), new Vector(0,0,-1));
   }
 
   screenSize(camera, volume) {
@@ -50,7 +50,7 @@ export class CabinetProjection extends Projection {
   angle = Math.PI/180*45; //Math.atan(2);
   shortening = 0.5;
 
-  direction = new Vector(0.5,0,1);
+  //direction = new Vector(0.5,0,1);
 
   //TODO: log cutoff points
   projectPoint(p, { camera, volume }) {

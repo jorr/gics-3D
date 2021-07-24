@@ -20,7 +20,6 @@ export class Scene{
   names = {};
   draw = [];
 
-  anonIndex = 0;
   //the origin is assumed to be at (w/2, h/2, 0), the volume extends towards Oz+
   volume = {
     w: 1000,
@@ -28,7 +27,7 @@ export class Scene{
     d: 1000,
   };
   //the camera is only used for perspective at this point
-  camera = new Point(100,100,-300);
+  camera = new Point(100,100,-1000);
   projection = new CabinetProjection(); //projection = new PerspectiveProjection();
   defaultStyle = new Style();
   autolabel = false;

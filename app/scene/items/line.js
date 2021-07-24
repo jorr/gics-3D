@@ -91,6 +91,10 @@ export class Line extends Item {
     return this.pt;
   }
 
+  translate(by) { return new Line(this.pt.translate(by), this.u); }
+  rotate(by,around) { return new Line(this.pt.rotate(by,around), this.u.rotate(around.u,by));  }
+  scale(by) { return new Line(this.pt, this.u); } //we don't scale with respect to the origin, so this stays the same
+
    project(projectionData, projection) {
     // we need to project the points where the line crosses the volume walls
     let { volume } = { ...projectionData };

@@ -16,7 +16,7 @@ export class RegularPolygon extends Polygon {
     return this.vertices[0].vectorTo(this.vertices[1]).norm;
   }
 
-  pointsToTransform() {
-    return this.vertices;
-  }
+  translate(by) { return new RegularPolygon(this.vertices.map(v => v.translate(by))); }
+  rotate(by,around) { return new RegularPolygon(this.vertices.map(v => v.rotate(by,around)));  }
+  scale(by) { return new RegularPolygon(this.vertices.map(v => v.add(v.vectorTo(this.cen).scale(by)))); }
 }

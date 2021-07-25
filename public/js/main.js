@@ -6,7 +6,7 @@ $(function() {
       data: input,
       success: (output) => {
         $('.gics-svg').html(output.result);
-        $('.gics-logs').html(output.logs.replace(/[\x00-\x08\x0E-\x1F]/g, ''));
+        $('.gics-logs').html(output.logs.replace(/[\x00-\x08\x0E-\x1F]/g, '').replace(/\[\d+m/g,''));
       },
       method: 'POST',
       contentType: 'text/plain'

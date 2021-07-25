@@ -1,4 +1,4 @@
-import { globalScene } from './scene/scene.js';
+import { globalScene, resetScene } from './scene/scene.js';
 import { SvgOutput } from './output/options/svg.js';
 import { inspect } from 'util';
 
@@ -51,7 +51,8 @@ log.enableAll();
 /***** LAUNCH GICS ******/
 
 export function doGics(inputText) {
-  const lexingResult = gicsLexer.tokenize(inputText);
+  resetScene();
+  let lexingResult = gicsLexer.tokenize(inputText);
   gicsParser.input = lexingResult.tokens;
 
   log.info('-----PARSING-----');
@@ -61,13 +62,13 @@ export function doGics(inputText) {
   }
 
   log.info('-----DRAWING SCENE-----');
-  const svgOutput = new SvgOutput();
+  let svgOutput = new SvgOutput();
   globalScene.drawScene(svgOutput);
   return svgOutput.flushOutput();
 }
 
 if (args.console) {
-  const inputText = fs.readFileSync('app/gics.txt', 'utf-8');
+  let inputText = fs.readFileSync('app/gics.txt', 'utf-8');
   let outputText = doGics(inputText);
   fs.writeFileSync('./gics.svg', outputText, 'utf-8');
 }

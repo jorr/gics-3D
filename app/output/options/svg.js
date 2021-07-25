@@ -13,7 +13,7 @@ export class SvgOutput extends OutputOption {
     width;
     height;
 
-    constructor(width = 1000, height = 1000) {
+    constructor(width = 800, height = 800) {
       super();
       this.width = width;
       this.height = height;

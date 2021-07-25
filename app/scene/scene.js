@@ -130,4 +130,7 @@ export class Scene{
 
 };
 
-export const globalScene = new Scene();
+export let globalScene = new Scene();
+export function resetScene() {
+  globalScene = new Scene();
+}

@@ -65,42 +65,55 @@ h1 {
     text-align: center;
 }
 
+::placeholder {
+   color: rgba(159, 80, 27, 0.2);
+}
+
 #main {
     margin: 2em;
     display:  flex;
     flex-direction: row;
+    height: calc(2em + 805px);
 }
 
 #main .col {
+    margin: 1em;
     display: flex;
     flex-direction: column;
     align-content: space-between;
 }
-
-#main * {
-    margin: 1em;
-}
-
 
 textarea {
     resize: none;
     overflow-y: auto;
     height:  400px;
     border: 1px solid red;
+    text-shadow: 0.2px 0.2px 1px black;
+    padding: 1em;
+    outline: none;
+}
+
+button {
+    font-weight: bold;
+}
+
+.do-gics {
+    margin: 1em 0;
 }
 
 .gics-svg {
-    width: 800px;
-    height: 800px;
+    width: 805px;
+    height: 805px;
     border: 1px solid red;
 }
 
-
 .gics-logs {
-    height: 300px;
+    flex-grow: 1;
     overflow-y: auto;
     border: 1px solid red;
-    white-space: pre-line;
+    white-space: pre-wrap;
+    text-shadow: 0.2px 0.2px 1px black;
+    padding: 1em;
 }
 
 

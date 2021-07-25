@@ -8,12 +8,17 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
 
         <link rel="stylesheet" href="css/normalize.min.css">
+        <!--Import Google Icon Font-->
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <!--Import materialize.css-->
+        <link rel="stylesheet" href="css/materialize.min.css"/>
         <link rel="stylesheet" href="css/main.css">
 
         <script src="js/vendor/modernizr-2.6.2.min.js"></script>
         <script src="js/vendor/jquery-3.6.0.min.js"></script>
+        <script src="js/vendor/materialize.min.js"></script>
     </head>
-    <body>
+    <body class="amber lighten-5">
         <!--[if lt IE 7]>
             <p class="browsehappy">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
         <![endif]-->
@@ -22,11 +27,13 @@
 
         <div id="main">
             <div class="col">
-                <textarea class="gics-program" placeholder="Go GICS-ing!" cols="60"></textarea>
-                <button class="do-gics">GO</button>
-                <div class="gics-logs"></div>
+                <textarea class="gics-program amber lighten-4 z-depth-2" placeholder="Вашият код" cols="60"></textarea>
+                <button class="do-gics brown-text waves-effect amber darken-2 btn">Нарисувай</button>
+                <div class="gics-logs amber lighten-4 z-depth-2"></div>
             </div>
-            <div class="gics-svg"></div>
+            <div class="col">
+                <div class="gics-svg z-depth-2"></div>
+            </div>
         </div>
 
         <script src="js/main.js"></script>

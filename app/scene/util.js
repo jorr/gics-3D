@@ -109,7 +109,7 @@ export function pointInTriangle(p, p1, p2, p3) {
 export function pointInPolygon(p, vertices) {
   let v = vertices[0], n = vertices.length;
   for (let i = 1 ; i < n ; i++) {
-    if (!pointInTriangle(p,v,vertices[i],vertices[(i+1)%n])) return false;
+    if (pointInTriangle(p,v,vertices[i],vertices[(i+1)%n])) return true;
   }
-  return true;
+  return false;
 }

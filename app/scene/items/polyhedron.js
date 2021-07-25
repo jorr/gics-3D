@@ -45,12 +45,15 @@ export class Polyhedron extends Item {
   }
 
   intersect(arg) {
+    let crossings = [];
     if (arg instanceof Line) {
-      let crossings = this.faces.map(f => {
+      for (let f of this.faces) {
         let c = f.intersect(arg);
-        if (!(c instanceof Point)) return c; //line lies on one of the faces or is parallel
-        return pointInPolygon(c, f.vertices) ? c : null;
-      }).filter(c => !!c); //remove null crossings
+        if (c instanceof Segment) return c; //line lies on one of the faces or is parallel, so Segment or null
+        else if (c instanceof Point && pointInPolygon(c, f.vertices)) crossings.push(c);
+        if (crossings.length == 2) break;
+      }
+
       if (crossings.length == 1) return crossings[0];
       else if (crossings.length >= 2) return new Segment(crossings[0], crossings[1]);
       else return null;

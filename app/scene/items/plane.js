@@ -119,40 +119,6 @@ export class Plane extends Item {
     let volumeCube = Cube.volumeCube(volume);
     let projectedPlane = volumeCube.intersect(this);
 
-    // let leftCross = this.intersect(Plane.Oyz.parallelThrough(new Point(-volume.w/2,0,0))),
-    // rightCross = this.intersect(Plane.Oyz.parallelThrough(new Point(volume.w/2,0,0))),
-    // frontCross = this.intersect(Plane.Oxy.parallelThrough(new Point(0,0,0))),
-    // backCross = this.intersect(Plane.Oxy.parallelThrough(new Point(0,0,volume.d))),
-    // topCross = this.intersect(Plane.Oxz.parallelThrough(new Point(0,volume.h/2,0))),
-    // bottomCross = this.intersect(Plane.Oxz.parallelThrough(new Point(0,-volume.h/2,0)));
-
-    // let crossings = [
-    //   leftCross && topCross ? leftCross.intersect(topCross) : null,
-    //   leftCross && bottomCross ? leftCross.intersect(bottomCross) : null,
-    //   leftCross && backCross ? leftCross.intersect(backCross) : null,
-    //   leftCross && frontCross ? leftCross.intersect(frontCross) : null,
-    //   rightCross && topCross ? rightCross.intersect(topCross) : null,
-    //   rightCross && bottomCross ? rightCross.intersect(bottomCross) : null,
-    //   rightCross && backCross ? rightCross.intersect(backCross) : null,
-    //   rightCross && frontCross ? rightCross.intersect(frontCross) : null,
-    //   topCross && frontCross ? topCross.intersect(frontCross) : null,
-    //   topCross && backCross ? topCross.intersect(backCross) : null,
-    //   bottomCross && frontCross ? bottomCross.intersect(frontCross) : null,
-    //   bottomCross && backCross ? bottomCross.intersect(backCross) : null
-    // ];
-
-    // crossings = sortVertices(_.uniqWith(
-    //   crossings.filter(c => c && pointInVolume(c,volume)),
-    //   (p,q) => p.equals(q)),
-    // this);
-
-    // if (crossings.length === 3) {
-    //   projectedPlane = new Triangle(...crossings);
-    // }
-    // else if (crossings.length >= 4)
-    //   projectedPlane = new Quad(...crossings.slice(0,4));
-    // else throw new ImpossibleOperationError("Plane crosses volume in a weird way");
-
     projectedPlane = projectedPlane.shrink(SHRINK_FACTOR);
 
     let color = { r: Math.round(Math.random()*255), b: Math.round(Math.random()*255) };

@@ -2,6 +2,7 @@ import { Item, Segment2D } from '../item.js';
 import { Point } from './point.js';
 import { Plane } from './plane.js';
 import { Segment } from './segment.js';
+import { Cube } from './cube.js';
 import { Vector } from '../vectors.js';
 import { ImpossibleOperationError } from '../../errors.js';
 import { pointInVolume } from '../util.js';
@@ -98,6 +99,12 @@ export class Line extends Item {
     // we need to project the points where the line crosses the volume walls
     let { volume } = { ...projectionData };
 
+    // we can cross the volumeCube like in plane.js but too much work to get the arrow of Oy properly
+    // let volumeCube = Cube.volumeCube(volume);
+    // let projectedLine = volumeCube.intersect(this);
+
+    // return Object.assign(projectedLine.project(projectionData, projection), { drawAsArrow: this.drawAsArrow });
+
     let crossings = [
       this.intersect(Plane.Oyz.parallelThrough(new Point(-volume.w/2,0,0))),
       this.intersect(Plane.Oyz.parallelThrough(new Point(volume.w/2,0,0))),
@@ -107,47 +114,8 @@ export class Line extends Item {
       this.intersect(Plane.Oxz.parallelThrough(new Point(0,volume.h/2,0,0))),
     ].filter(c => c && pointInVolume(c, volume)).map(c => projection.projectPoint(c, projectionData));
 
-    // there should be just two at this point
+    //there should be just two at this point, unless special cases that we dont handle
     return Object.assign(new Segment2D(crossings[0], crossings[1]), { drawAsArrow: this.drawAsArrow });
-
-    // alternative calculation, commented out
-    /*let p, crossings = [];
-
-    //calculations use the parametric equation of the line: p = pt + s.u
-    if (this.u.y !== 0) {
-      //crossing top wall (y = volume.h/2)
-      p = this.getPointAtParam((volume.h/2 - this.pt.y) / this.u.y);
-      if (Math.abs(p.x) <= volume.w/2 && p.z >= 0) crossings.push(p);
-      //crossing bottom wall (y = -volume.h/2)
-      p = this.getPointAtParam((-volume.h/2 - this.pt.y) / this.u.y);
-      if (Math.abs(p.x) <= volume.w/2 && p.z >= 0) crossings.push(p);
-    }
-    //no need to continue if we have two crossings
-    if (this.u.x !== 0 && crossings.length < 2) {
-      //crossing left wall (x = -volume.w/2)
-      p = this.getPointAtParam((-volume.w/2 - this.pt.x) / this.u.x);
-      if (Math.abs(p.y) <= volume.h/2 && p.z >= 0) crossings.push(p);
-      //crossing right wall (x = volume.w/2)
-      p = this.getPointAtParam((volume.w/2 - this.pt.x) / this.u.x);
-      if (crossings.length < 2 && Math.abs(p.y) <= volume.h/2 && p.z >= 0) crossings.push(p);
-    }
-    //no need to continue if we have two crossings
-    if (this.u.z !== 0 && crossings.length < 2) {
-      //crossing front wall (z = 0)
-      p = this.getPointAtParam(-this.pt.z / this.u.z);
-      if (Math.abs(p.y) <= volume.h/2 && Math.abs(p.x) <= volume.w/2) crossings.push(p);
-      //crossing back wall (z = volume.d)
-      p = this.getPointAtParam((volume.d - this.pt.z) / this.u.z);
-      if (crossings.length < 2 && Math.abs(p.y) <= volume.h/2  && Math.abs(p.x) <= volume.w/2) crossings.push(p);
-    }
-
-    //we should now have two points in crossings
-    const projectedP1 = projection.projectPoint(crossings[0], projectionData),
-        projectedP2 = projection.projectPoint(crossings[1], projectionData);
-    return Object.assign(new Segment2D(projectedP1, projectedP2), {
-      label,
-      color
-    });*/
    }
 
 }

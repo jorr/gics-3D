@@ -16,7 +16,7 @@ export class Square extends Quad {
     // this.A = A; this.B = B; this.C = C;
     // this.D = A.add(B.vectorTo(C));
     super(A,B,C,A.add(B.vectorTo(C)));
-    log.debug(this.A)
+//    log.debug(this.A)
    }
 
   get cen() {

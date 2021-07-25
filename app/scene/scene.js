@@ -111,13 +111,15 @@ export class Scene{
       map(item => {
         let projected = item.project(projectionData, this.projection);
         if (Array.isArray(projected)) {
-          return projected.map(p => Object.assign(p, {style: item.style || this.defaultStyle}));
+          return projected.map(p => Object.assign(p, {style: p.style || item.style || this.defaultStyle}));
         } else {
           return Object.assign(projected, {style: item.style || this.defaultStyle});
         }
       }).
       flattenDeep().
       value();
+
+    log.info(projectedElements)
 
     let infoStyle = {stroke: 1, linetype: 'dotted', color: 'rgba(64,128,64,0.5)'};
     let infoItems = [

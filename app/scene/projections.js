@@ -44,13 +44,20 @@ class Projection {
     };
     return size;
   }
+
+  projectionVector(p, {camera, volume}) {
+    throw new MethodNotImplemented('projectPoint', this);
+    //return Vector
+  }
 }
 
 export class CabinetProjection extends Projection {
-  angle = Math.PI/180*45; //Math.atan(2);
-  shortening = 0.5;
+  angle = Math.PI/180*45;
+  shortening = 0.5; // = 1/Math.tan(Math.atan(2));
 
-  //direction = new Vector(0.5,0,1);
+  projectionVector(p, {camera, volume}) {
+    return new Vector(3,4,-10); //from Applied Geometry for CG and CAD
+  }
 
   //TODO: log cutoff points
   projectPoint(p, { camera, volume }) {
@@ -120,6 +127,10 @@ export class CabinetProjection extends Projection {
 }
 
 export class PerspectiveProjection extends Projection {
+
+  projectionVector(p, {camera, volume}) {
+    return p.vectorTo(camera);
+  }
 
   projectPoint(p, { camera, volume }, in3D = false) {
     // log.debug('projecting: ', p);

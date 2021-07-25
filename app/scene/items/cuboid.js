@@ -1,4 +1,5 @@
-import { Item, Polygon2D, Segment2D } from '../item.js';
+//import { Item, Polygon2D, Segment2D } from '../item.js';
+import { Polyhedron } from './polyhedron.js';
 import { Point } from './point.js';
 import { Segment } from './segment.js';
 import { Vector } from '../vectors.js';
@@ -6,7 +7,7 @@ import { Square, Rectangle } from './regularquad.js';
 
 import log from 'loglevel';
 
-export class Cuboid extends Item {
+export class Cuboid extends Polyhedron {
 /**
  * Cube type definition
 
@@ -35,16 +36,24 @@ A—————B
       intersect(new Segment(this.base.B, this.base.D.add(this.direction.asVector())));
   }
 
-  // get faces() {
-  //   return [
-  //   ];
-  // }
+  get faces() {
+    return [
+      this.base,
+      this.base.translate(this.direction.asVector()),
+      ...this.base.edges.map(e => new Rectangle(e.p1, e.p2, e.p2.add(this.direction.asVector())))
+    ];
+  }
 
-  // get edges() {
-  //   return [
-
-  //   ];
-  // }
+  get edges() {
+    return [
+      // first wall
+      ...this.base.edges,
+      // second wall
+      ...this.base.translate(this.direction.asVector()).edges,
+      // connecting edges
+      this.base.vertices.map(v => new Segment(v, v.add(this.direction.asVector())))
+    ];
+  }
 
   get vertices() {
     return this.base.vertices.concat(this.base.vertices.map(v => v.add(this.direction.asVector())));
@@ -58,15 +67,15 @@ A—————B
   rotate(by,around) { return new Cuboid(this.base.rotate(by,around), this.direction.rotate(by,around));  }
   scale(by) { return new Cuboid(this.base.scale(by), this.direction.scale(by)); }
 
-  project(projectionData, projection) {
-    return [
-      // first wall
-      this.base.project(projectionData, projection),
-      // second wall
-      new Polygon2D(this.base.vertices.map(v => projection.projectPoint(v.add(this.direction.asVector()), projectionData))),
-      // connecting edges
-      this.base.vertices.map(v => new Segment(v, v.add(this.direction.asVector())).project(projectionData, projection)),
-    ];
-  }
+  // project(projectionData, projection) {
+  //   return [
+  //     // first wall
+  //     this.base.project(projectionData, projection),
+  //     // second wall
+  //     new Polygon2D(this.base.vertices.map(v => projection.projectPoint(v.add(this.direction.asVector()), projectionData))),
+  //     // connecting edges
+  //     this.base.vertices.map(v => new Segment(v, v.add(this.direction.asVector())).project(projectionData, projection)),
+  //   ];
+  // }
 
 }

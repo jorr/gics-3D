@@ -91,6 +91,11 @@
 #triangle(pr2.base2.D,H,pr2.base2.A) -> .
 #prism(sq,sq2) -> pr3
 
+triangle(["Oxz"]) -> -ptr
+prism(ptr,100,"-") -> prr
+#quad(["Oyz"]) -> -q
+#pyramid(q,200) -> qpyr
+
 #cube(sq) -> .
 #pyramid(sq,200) -> pyr
 #altitude(pyr) -> .
@@ -98,8 +103,8 @@
 #cylinder(c, 90) -> C
 
 #triangle(p1,p2,d) -> tr
-
-#triangle([-100,0,0],[100,0,0],[100,0,300]) -> t[A,B,C]
+#autolabel("on")
+#triangle([-100,0,0],[100,0,0],[100,0,300]) -> -t[A,B,C]
 #color(t,"blue")
 #bisector(t,A) -> BSC
 #altitude(t,"B") -> .
@@ -144,12 +149,15 @@
 
 #---------------------------
 
-cube(200*sqrt(2)) -> cb
-normal(cb.base,cb.base.cen) -> n1
-intersect(["Oy"],cb.base.plane) -> X
-label("X",X)
-autolabel("on")
-translate(cb.base,0,-100,0) -> ha
-autolabel("off")
-rotate(ha,d:45,["Oz"]) -> he
+#projectionmode("perspective")
+#cube(200*sqrt(2)) -> cb
+#normal(cb.base,cb.base.cen) -> n1
+#intersect(["Oy"],cb.base.plane) -> X
+#label("X",X)
+#autolabel("on")
+#translate(cb.base,0,-100,0) -> ha
+#autolabel("off")
+#rotate(ha,d:45,["Oz"]) -> he
 #scale(ha,2) -> ho
+
+projectionmode("perspective")

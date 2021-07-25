@@ -6,8 +6,6 @@ import fs from 'fs';
 import log from 'loglevel';
 
 export class SvgOutput extends OutputOption {
-
-    fileName;
     svg = '';
     stroke = 'black';
     strokeWidth = 1;
@@ -15,9 +13,8 @@ export class SvgOutput extends OutputOption {
     width;
     height;
 
-    constructor(fileName, width = 1000, height = 1000) {
+    constructor(width = 1000, height = 1000) {
       super();
-      this.fileName = fileName;
       this.width = width;
       this.height = height;
     }
@@ -193,7 +190,7 @@ export class SvgOutput extends OutputOption {
       this.svg = `${this.svg}
 </g>
 </svg>`;
-      fs.writeFileSync(this.fileName, this.svg, 'utf-8');
+      return this.svg; //fs.writeFileSync(this.fileName, this.svg, 'utf-8');
     }
 
     symbols = {

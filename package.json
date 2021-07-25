@@ -5,7 +5,8 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node app/gics3d.js",
+    "start": "node app/gics3d.js -- -console",
+    "server": "node server.js",
     "test": "npm test"
   },
   "repository": {
@@ -20,12 +21,14 @@
   "homepage": "https://github.com/jorr/gics-3D#readme",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "capture-console": "^1.0.1",
     "chalk": "^4.1.1",
     "chevrotain": "^7.0.1",
     "express": "^4.17.1",
     "lodash": "^4.17.21",
     "loglevel": "^1.7.1",
     "loglevel-plugin-prefix": "^0.8.4",
+    "minimist": "^1.2.5",
     "serve-favicon": "^2.5.0"
   }
 }

@@ -8,6 +8,9 @@ import chalk from 'chalk';
 import fs from 'fs';
 import path from 'path';
 
+import parseArgs from 'minimist';
+let args = parseArgs(process.argv);
+
 /****************** COMMANDS ******************/
 
 let commands = {};
@@ -37,27 +40,34 @@ const colors = {
 };
 
 prefix.reg(log);
-log.enableAll();
-
 prefix.apply(log, {
-  format(level, name, timestamp) {
-    return `${colors[level.toUpperCase()](level)}`;
-  },
-});
+    format(level, name, timestamp) {
+      return `${colors[level.toUpperCase()](level)}`;
+    },
+  });
+
+log.enableAll();
 
 /***** LAUNCH GICS ******/
 
-//TODO: temporary, switch to API endpoint
-const inputText = fs.readFileSync('app/gics.txt', 'utf-8');
-const lexingResult = gicsLexer.tokenize(inputText);
-gicsParser.input = lexingResult.tokens;
+export function doGics(inputText) {
+  const lexingResult = gicsLexer.tokenize(inputText);
+  gicsParser.input = lexingResult.tokens;
 
-log.info('-----PARSING-----');
-gicsParser.PROGRAM();
-if (gicsParser.errors.length > 0) {
-  log.error(inspect(gicsParser.errors, false, null));
+  log.info('-----PARSING-----');
+  gicsParser.PROGRAM();
+  if (gicsParser.errors.length > 0) {
+    log.error(inspect(gicsParser.errors, false, null));
+  }
+
+  log.info('-----DRAWING SCENE-----');
+  const svgOutput = new SvgOutput();
+  globalScene.drawScene(svgOutput);
+  return svgOutput.flushOutput();
 }
 
-log.info('-----DRAWING SCENE-----');
-const svgOutput = new SvgOutput('./gics.svg');
-globalScene.drawScene(svgOutput);
+if (args.console) {
+  const inputText = fs.readFileSync('app/gics.txt', 'utf-8');
+  let outputText = doGics(inputText);
+  fs.writeFileSync('./gics.svg', outputText, 'utf-8');
+}

@@ -13,7 +13,7 @@ export class OutputOption {
       else if (element instanceof Text2D) this.renderText(element);
       else if (element instanceof Angle2D) this.renderAnglemark(element);
     }
-    this.flushOutput();
+    //this.flushOutput();
   }
 
   initScreen() {}

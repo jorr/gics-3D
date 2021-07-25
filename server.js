@@ -1,17 +1,13 @@
 import path from 'path';
 import express from 'express'
-// middleware that allows you to parse request body, json, etc.
-import bodyParser from 'body-parser';
-// middleware to serve a favicon prior to all other assets/routes
 import favicon from 'serve-favicon';
+import capture from 'capture-console';
+import { doGics } from './app/gics3d.js';
 
 const __dirname = path.dirname(new URL(import.meta.url).pathname);
 const app = express();
 
-app.use(bodyParser.urlencoded({
-  extended: true
-}));
-app.use(bodyParser.json());
+app.use(express.text());
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -22,9 +18,19 @@ app.get('/', (req, res) => {
 });
 
 app.post('/gics', (req, res) => {
-  res.sendFile(`${__dirname}/public/index.html`);
-})
+  let logs = '';
+  capture.startCapture(process.stdout, stdout => logs += stdout);
+  capture.startCapture(process.stderr, stderr => logs += stderr);
 
-//Input API endpoint ADD HERE
+  let output = doGics(req.body);
+
+  capture.stopCapture(process.stdout);
+  capture.stopCapture(process.stderr);
+
+  res.send({
+    result: output,
+    logs: logs
+  });
+});
 
 console.log('GICS awaiting a program on port: ', process.env.PORT || 6105);

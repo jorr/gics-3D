@@ -156,7 +156,7 @@ export class PerspectiveProjection extends Projection {
     if (screenPlane.isParallelTo(c.plane)) {
       log.debug('CIRCLE PARALLEL TO SCREEN')
       // in the simple case, the center is preserved in the projection
-      let direction = camera.vectorTo(project(camera, screenPlane)).perpendicular(c.plane).unit();
+      let direction = camera.vectorTo(camera.projectionOn(screenPlane)).perpendicular(c.plane).unit();
       p1 = c.cen.add(direction.scale(c.rad));
       p2 = c.cen.add(direction.scale(-c.rad));
       let conjugateDiamDirection = c.cen.vectorTo(p1).perpendicular(c.plane).unit();

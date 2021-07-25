@@ -23,6 +23,13 @@ export class Cone extends Item {
   rotate(by,around) { return new Cone(this.base.rotate(by,around), this.apex.rotate(by,around));  }
   scale(by) { return new Cone(this.base.scale(by), this.base.cen.add(this.base.cen.vectorTo(this.apex).scale(by))); }
 
+  intersect(arg) {
+    if (arg instanceof Line) {
+      return null; //to be implemented
+    }
+    else throw new ImpossibleOperationError("Cones can only be intersected by lines");
+  }
+
   project(projectionData, projection, label) {
     let mainAxisProjectionOut = {p1: null, p2: null};
     let baseProjection = this.base.project(projectionData, projection, mainAxisProjectionOut);

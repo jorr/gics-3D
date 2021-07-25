@@ -180,10 +180,17 @@
 #intersect(["Oz"],alpha) -> Z
 #label("Z[0,0,100]",Z)
 
-quad(["Oxz"]) -> -q
-pyramid(q,[0,300,0]) -> p
+#quad(["Oxz"]) -> -q
+#pyramid(q,[0,300,0]) -> p
 #plane(["Oy"],["Oyz"],d:45) -> test
-line([[0,300,0],q.cen]) -> -test
-intersect(test,p) -> i
-altitude(p) -> ap
+#line([[0,300,0],q.cen]) -> -test
+#intersect(test,p) -> i
+#altitude(p) -> ap
 #label("&{alpha}",i)
+
+#-----------------
+
+sphere([0,0,0],200) -> sp
+plane([0,100,0],["Oxz"]) -> -p
+intersect(p,sp) -> spp
+intersect(["Oy"],spp) -> .

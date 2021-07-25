@@ -119,8 +119,6 @@ export class Scene{
       flattenDeep().
       value();
 
-    log.info(projectedElements)
-
     let infoStyle = {stroke: 1, linetype: 'dotted', color: 'rgba(64,128,64,0.5)'};
     let infoItems = [
       Point.Origin, new Label(Point.Origin, 'O', 'SW', 25),

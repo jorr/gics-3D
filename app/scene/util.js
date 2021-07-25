@@ -11,8 +11,6 @@ import log from 'loglevel';
 import _ from 'lodash';
 import util from 'util';
 
-// CALCULATIONS
-
 //arg2 is always the vaster object
 export function dist(arg1, arg2) {
   if (arg1 instanceof Point && arg2 instanceof Point) {
@@ -48,8 +46,6 @@ export function angle(arg1, arg2) {
     return angle(arg1.n, arg2.n);
 }
 
-// CONSTRUCTS
-
 export function midpoint(p1, p2) {
   return new Point(
     (p1.x + p2.x) / 2,
@@ -63,15 +59,10 @@ export function centroid(vertices) {
   return sum.scale(1/vertices.length).toPoint();
 }
 
-//TODO: doesnt really work :( check random quad in plane
+
 //sorts vertices to form convex polygon in the given plane
 export function sortVertices(vertices, plane) {
-  // let centre = centroid(vertices); //TODO: check that all vertices and the centroid lie on the same plane
-  // let axis = plane.getCoplanarVector().unit();
-  // return vertices.sort((a,b) => {
-  //   return ((angle(centre.vectorTo(a), axis) - angle(centre.vectorTo(b), axis)) * Math.PI/180 + 360) % 360;
-  // });
-
+  //TODO: switch to signed areas
   let sorted = [vertices.pop()], last = sorted[0];
   while (vertices.length) {
     let [newlast] = _.remove(vertices,
@@ -84,15 +75,41 @@ export function sortVertices(vertices, plane) {
   return sorted;
 }
 
-export function shrinkPolygon(polygon, factor) {
-  let centre = centroid(polygon.vertices);
-  return new polygon.constructor(...polygon.vertices.map(v => v.add(v.vectorTo(centre).scale(factor))));
-}
+export function convexHull(vertices, plane) {
+  let hull = [vertices.pop()], last = hull[0];
+  do {
+    let [newlast] = vertices.splice(
+      vertices.findIndex(v => vertices.every(w => w.equals(v) || orientation(last,v,w,plane.n) > 0)),
+      1);
+    if (!newlast) throw new ImpossibleOperationError('Cannot construct convex hull of vertices');
+    hull.push(newlast);
+    last = newlast;
+    if (last.equals(hull[0])) break;
+  } while (vertices.length);
 
-// CHECKS
+  return hull;
+}
 
 export function pointInVolume(p, v) {
   return Math.abs(p.x) - v.w/2 <= EPSILON  &&
     Math.abs(p.y) - v.h/2 <= EPSILON &&
     p.z >= 0 && Math.abs(p.z) - v.d <= EPSILON;
+}
+
+export function orientation(p1, p2, p3, n) {
+  return p1.vectorTo(p2).triple(p1.vectorTo(p3), n);
+}
+
+export function pointInTriangle(p, p1, p2, p3) {
+  let n = p1.vectorTo(p2).cross(p1.vectorTo(p3));
+  let o = [orientation(p,p1,p2,n), orientation(p,p2,p3,n), orientation(p,p3,p1,n)];
+  return o.every(o => o >= 0) || o.every(o => o <= 0);
+}
+
+export function pointInPolygon(p, vertices) {
+  let v = vertices[0], n = vertices.length;
+  for (let i = 1 ; i < n ; i++) {
+    if (!pointInTriangle(p,v,vertices[i],vertices[(i+1)%n])) return false;
+  }
+  return true;
 }

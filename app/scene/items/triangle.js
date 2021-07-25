@@ -10,14 +10,10 @@ export class Triangle extends Polygon {
    constructor(A, B, C) {
     let n = A.vectorTo(B).cross(A.vectorTo(C)).unit();
     if (n.y < 0) n = n.scale(-1); //TODO: check rhs vs lhs in a smarter way
-    super(3, new Plane(A, n));
+    super([A,B,C], new Plane(A, n));
 
     this.A = A; this.B = B; this.C = C;
    }
-
-  get vertices() {
-    return [this.A, this.B, this.C];
-  }
 
   get a() {
     return new Segment(this.B, this.C);

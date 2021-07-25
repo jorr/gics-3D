@@ -2,26 +2,20 @@ import { Item, Ellipse2D, Point2D, Segment2D } from '../item.js';
 import { Point } from './point.js';
 import { Line } from './line.js';
 import { Plane } from './plane.js';
+import { dist } from '../util.js';
 
 import log from 'loglevel';
 
 export class Circle extends Item {
-  /**
-   * Circle type definition
-   * @property {Point} cen
-   * @property {Point} p1
-   * @property {Point} p2
-   */
+
    cen; rad; plane;
 
    constructor(cen, rad, plane) {
     super();
 
     this.cen = cen;
-    // this.p1 = p1;
-    // this.p2 = p2;
-    this.rad = rad; //cen.vectorTo(p1).norm;
-    this.plane = plane; //new Plane(cen, cen.vectorTo(p1).cross(cen.vectorTo(p2)).unit());
+    this.rad = rad;
+    this.plane = plane;
    }
 
    get diam() {
@@ -35,6 +29,29 @@ export class Circle extends Item {
 
    hasPoint(p) {
     return dist(p,this.cen) == this.rad && this.plane.hasPoint(p);
+   }
+
+   intersect(arg) {
+      if (arg instanceof Line) {
+        if (this.plane.isParallelTo(arg)) {
+          if (this.plane.hasPoint(arg.pt)) {
+            //this implements: https://www.scratchapixel.com/lessons/3d-basic-rendering/minimal-ray-tracer-rendering-simple-shapes/ray-sphere-intersection
+            let d = dist(this.cen, arg);
+            if (d > this.rad) return null; //the line doesn't cross the circle
+            if (d == this.rad) return this.cen.projectionOn(arg); //line is tangent to circle
+            //line actually crosses the circle, we need to find the segment
+            let P = this.cen.projectionOn(arg);
+            let PP1 = Math.sqrt(this.rad**2 - d**2);
+            let PPt = dist(arg.pt, P);
+            //note that we store lines with unit vectors and so we can use the lengths as params
+            return new Segment(arg.getPointAtParam(PPt-PP1), arg.getPointAtParam(PPt+PP1));
+          } else return null; //line is parallel to but not lying in this plane
+        } else return arg.intersect(this.plane);
+      } else if (arg instanceof Plane) {
+        let crossLine = this.plane.intersect(arg);
+        return crossLine ? this.intersect(crossLine) : null;
+      }
+      else throw new ImpossibleOperationError("Bodies can only be intersected by lines and planes");
    }
 
   translate(by) { return new Circle(this.cen.add(by), this.rad, this.plane.translate(by)); }

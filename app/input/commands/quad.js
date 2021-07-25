@@ -6,7 +6,7 @@ import { CreationCommand, Angle } from '../command.js';
 import { Point } from '../../scene/items/point.js';
 import { Plane } from '../../scene/items/plane.js';
 import { Quad } from '../../scene/items/quad.js';
-import { sortVertices } from '../../scene/util.js';
+import { sortVertices, pointInTriangle, convexHull } from '../../scene/util.js';
 import { globalScene } from '../../scene/scene.js';
 import { WrongParamsError, WrongPatternError, NotFeasibleError } from '../../errors.js';
 
@@ -41,12 +41,14 @@ export default class QuadCommand extends CreationCommand {
     // quad([<plane>]) - a random quad lying in Oxy or the given plane
     else if (params.length <= 1) {
       let plane = params[0] && params[0] instanceof Plane ? params[0] : Plane.Oxy;
-      let points = [];
-      while (points.length < 4) {
-        let p = plane.getRandomPoint();
-        if (!_.find(points, pp => p.equals(pp))) points.push(p);
+      let points = [1,2,3,4].map(a => plane.getRandomPoint()), hull = convexHull(points, plane);
+      while (hull.length < 4) {
+        //we need 4 points whose convexHull coincides with them in order to have a real quad
+        points = points.map(a => plane.getRandomPoint());
+        hull = convexHull(points, plane);
       }
-      this.item = new Quad(...sortVertices(points, plane));
+
+      this.item = new Quad(...hull);
     }
     else throw new WrongParamsError(params, this);
   }

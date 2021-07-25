@@ -1,15 +1,18 @@
 import { Item, Polygon2D, Angle2D } from '../item.js';
 import { Segment } from './segment.js';
-import { centroid } from '../util.js';
+import { Line } from './line.js';
+import { Plane } from './plane.js';
+import { centroid, pointInPolygon } from '../util.js';
+import { ImpossibleOperationError } from '../../errors.js';
 
 import log from 'loglevel';
 
 export class Polygon extends Item {
-  plane; n; // number of vertices
+  vertices; plane;
 
-  constructor(n, plane) {
+  constructor(vertices, plane) {
     super();
-    this.n = n;
+    this.vertices = vertices;
     this.plane = plane;
 
     return new Proxy(this, {
@@ -33,6 +36,34 @@ export class Polygon extends Item {
 
   get cen() {
     return centroid(this.vertices);
+  }
+
+  intersect(arg) {
+    if (arg instanceof Line) {
+      let p = arg.intersect(this.plane);
+      if (!p) {
+        //line is parallel to polygon
+        if (this.plane.hasPoint(arg.pt)) {
+          //line lies in polygon
+          let crossings = this.edges.map(e => e.intersect(arg)).filter(c => !!c);
+          if (crossings.length == 0) return null;
+          else if (crossings.length == 1) return crossings[0];
+          return new Segment(crossings[0], crossings[1]);
+        }
+        else return null;
+      }
+      return pointInPolygon(p, this.vertices) ? p : null;
+    }
+    else if (arg instanceof Plane) {
+      let crossLine = this.plane.intersect(arg);
+      return crossLine ? this.intersect(crossLine) : null;
+    }
+    else throw new ImpossibleOperationError("Bodies can only be intersected by lines and planes");
+  }
+
+  shrink(factor) {
+    let centre = this.cen;
+    return new Polygon(this.vertices.map(v => v.add(v.vectorTo(centre).scale(factor))));
   }
 
   project(projectionData, projection) {

@@ -35,6 +35,9 @@ export default class IntersectCommand extends CreationCommand {
     }
   }
 
-  //TODO: bindElements can be useful but too much effort
+  bindElements(elems, commands) {
+    let cname = this.item.constructor.name.toLowerCase();
+    Object.getPrototypeOf(commands[cname]).bindElements.call({item:this.item},elems);
+  }
 
 };

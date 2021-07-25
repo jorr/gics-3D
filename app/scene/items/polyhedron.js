@@ -1,6 +1,10 @@
 import { Item, Polygon2D, Angle2D } from '../item.js';
 import { Segment } from './segment.js';
-import { centroid } from '../util.js';
+import { Line } from './line.js';
+import { Plane } from './plane.js';
+import { Point } from './point.js';
+import { Polygon } from './polygon.js';
+import { centroid, pointInPolygon, convexHull } from '../util.js';
 
 import _ from 'lodash';
 import log from 'loglevel';
@@ -23,25 +27,53 @@ export class Polyhedron extends Item {
     let visibleEdges = [], hiddenEdges = [];
     for (let face of this.faces) {
       let projectionVector = projection.projectionVector(face.cen, projectionData);
-      log.info('PROJ VECTOR', projectionVector)
       let outwardNormal = face.plane.n;
       if (face.cen.vectorTo(this.cen).dot(outwardNormal) > 0) {
         //normal is actually inward
         outwardNormal = outwardNormal.scale(-1);
       }
-      log.info('NORMAL', outwardNormal)
       if (projectionVector.dot(outwardNormal) >= 0) {
-
         //the face must be facing the camera
         visibleEdges.push(...face.edges);
       } else {
-        log.info('pushing to hidden: ',face)
         hiddenEdges.push(...face.edges);
       }
     }
     //if an edge is both hidden and visible, it should be visible
     _.pullAllWith(hiddenEdges, visibleEdges, edgeComparator);
     return { visibleEdges, hiddenEdges };
+  }
+
+  intersect(arg) {
+    if (arg instanceof Line) {
+      let crossings = this.faces.map(f => {
+        let c = f.intersect(arg);
+        if (!(c instanceof Point)) return c; //line lies on one of the faces or is parallel
+        return pointInPolygon(c, f.vertices) ? c : null;
+      }).filter(c => !!c); //remove null crossings
+      if (crossings.length == 1) return crossings[0];
+      else if (crossings.length >= 2) return new Segment(crossings[0], crossings[1]);
+      else return null;
+    }
+    else if (arg instanceof Plane) {
+      let crossings = [];
+      for (let f of this.faces) {
+        if (arg.isParallelTo(f.plane)) {
+          if (f.plane.hasPoint(arg.pt)) return f; //if plane lies on one of the faces then that face is the intersection
+          //otherwise, this doesn't participate in the intersection
+        } else {
+          let crossLine = arg.intersect(f.plane);
+          let intersection = f.intersect(crossLine);
+          if (intersection instanceof Point) crossings.push(intersection);
+          else if (intersection instanceof Segment) crossings.push(intersection.p1, intersection.p2);
+          //otherwise, do nothing
+        }
+      }
+      crossings = _.uniqWith(crossings, (p1,p2) => p1.equals(p2));
+
+      return new Polygon(convexHull(crossings,arg), arg);
+    }
+    else throw new ImpossibleOperationError("Bodies can only be intersected by lines and planes");
   }
 
   project(projectionData, projection) {

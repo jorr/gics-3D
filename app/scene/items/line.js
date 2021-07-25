@@ -22,7 +22,7 @@ export class Line extends Item {
    constructor(pt, u, drawAsArrow = false) {
     super();
     this.pt = pt;
-    this.u = u;
+    this.u = u.unit();
     this.drawAsArrow = drawAsArrow;
    }
 
@@ -69,7 +69,6 @@ export class Line extends Item {
    }
 
    intersect(arg) {
-    //TODO: bodies
     if (arg instanceof Line) {
       //check if the lines actually intersect
       if (this.u.cross(arg.u).isZero() || this.u.triple(arg.u, this.pt.vectorTo(arg.pt)) !== 0) {
@@ -82,7 +81,7 @@ export class Line extends Item {
     } else if (arg instanceof Plane) {
       if (this.u.dot(arg.n) === 0) return null; //parallel
       return this.pt.add(this.u.scale(-arg.n.dot(arg.pt.vectorTo(this.pt))/arg.n.dot(this.u)));
-    } else if (arg instanceof Segment) {
+    } else {
       return arg.intersect(this);
     }
    }

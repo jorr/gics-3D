@@ -1,47 +1,50 @@
 <?xml version="1.0" standalone="no"?>
-<svg version="1.1" baseProfile="full" width="1000" height="1000" viewBox="0 0 900 900" xmlns="http://www.w3.org/2000/svg">
+<svg version="1.1" baseProfile="full" width="1000" height="1000" viewBox="0 0 1353.553390593274 1353.5533905932737" xmlns="http://www.w3.org/2000/svg">
 <style>
   text {
-    font-size: 14px;
+    font-size: 18.535533905932738px;
   }
 
   @media (max-width: 600px) {
     text {
-      font-size: 35px;
+      font-size: 50.11844635310913px;
     }
   }
 
   @media (max-width: 800px) {
     text {
-      font-size: 65px;
+      font-size: 95.23689270621826px;
     }
   }
 </style>
 <rect width="100%" height="100%" fill="#fff" />
-<g id="scene" transform="translate(450 450)">
-<circle cx="10" cy="-10" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
-<text x="-15" y="15">O</text>
-<line x1="-440" x2="460" y1="-10" y2="-10" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
-<circle cx="-440" cy="-10" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
-<polygon points="460,-10 451.5427664129268,-6.921818710068981 451.5427664129268,-13.078181289931019" stroke="rgba(64,128,64,0.5)"  stroke-width="0.9" fill="rgba(64,128,64,0.5)"/>
-<line x1="10" x2="10" y1="440" y2="-460" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
-<circle cx="10" cy="440" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
-<polygon points="10,-460 13.078181289931019,-451.5427664129268 6.921818710068981,-451.5427664129268" stroke="rgba(64,128,64,0.5)"  stroke-width="0.9" fill="rgba(64,128,64,0.5)"/>
-<line x1="10" x2="55.00000000000001" y1="-10" y2="-55.00000000000001" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
-<circle cx="10" cy="-10" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
-<polygon points="55.00000000000001,-55.00000000000001 51.19643564433371,-46.84322991667016 46.84322991667016,-51.19643564433371" stroke="rgba(64,128,64,0.5)"  stroke-width="0.9" fill="rgba(64,128,64,0.5)"/>
-<line x1="146.16416683405825" x2="173.51589130713248" y1="-100" y2="-100"  stroke="black" stroke-width="0.9"/>
-<line x1="173.51589130713248" x2="73.04538761104648" y1="-100" y2="-100"  stroke="black" stroke-width="0.9"/>
-<line x1="73.04538761104648" x2="146.16416683405825" y1="-100" y2="-100"  stroke="black" stroke-width="0.9"/>
-<line x1="146.16416683405825" x2="173.51589130713248" y1="-12.379113259039926" y2="-22.73933821170496"  stroke="black" stroke-width="0.9"/>
-<line x1="173.51589130713248" x2="173.51589130713248" y1="-22.73933821170496" y2="-100"  stroke="black" stroke-width="0.9"/>
-<line x1="173.51589130713248" x2="146.16416683405825" y1="-100" y2="-100"  stroke="black" stroke-width="0.9"/>
-<line x1="146.16416683405825" x2="146.16416683405825" y1="-100" y2="-12.379113259039926"  stroke="black" stroke-width="0.9"/>
-<line x1="73.04538761104648" x2="146.16416683405825" y1="-24.240848244470232" y2="-12.379113259039926"  stroke="black" stroke-width="0.9"/>
-<line x1="146.16416683405825" x2="146.16416683405825" y1="-12.379113259039926" y2="-100"  stroke="black" stroke-width="0.9"/>
-<line x1="146.16416683405825" x2="73.04538761104648" y1="-100" y2="-100"  stroke="black" stroke-width="0.9"/>
-<line x1="73.04538761104648" x2="73.04538761104648" y1="-100" y2="-24.240848244470232"  stroke="black" stroke-width="0.9"/>
-<line x1="173.51589130713248" x2="73.04538761104648" y1="-22.73933821170496" y2="-24.240848244470232" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="0.9"/>
-<line x1="173.51589130713248" x2="73.04538761104648" y1="-22.73933821170496" y2="-24.240848244470232" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="0.9"/>
+<g id="scene" transform="translate(676.776695296637 676.7766952966368)">
+<circle cx="0" cy="0" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
+<text x="-25" y="25">O</text>
+<line x1="-500" x2="500" y1="0" y2="0" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
+<circle cx="-500" cy="0" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
+<polygon points="500,0 491.5427664129268,3.0781812899310186 491.5427664129268,-3.0781812899310186" stroke="rgba(64,128,64,0.5)"  stroke-width="1.353553390593274" fill="rgba(64,128,64,0.5)"/>
+<line x1="0" x2="0" y1="500" y2="-500" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
+<circle cx="0" cy="500" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
+<polygon points="0,-500 3.0781812899310186,-491.5427664129268 -3.0781812899310186,-491.5427664129268" stroke="rgba(64,128,64,0.5)"  stroke-width="1.353553390593274" fill="rgba(64,128,64,0.5)"/>
+<line x1="0" x2="353.5533905932738" y1="0" y2="-353.5533905932737" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
+<circle cx="0" cy="0" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
+<polygon points="353.5533905932738,-353.5533905932737 349.74982623760746,-345.3966205099439 345.39662050994394,-349.7498262376074" stroke="rgba(64,128,64,0.5)"  stroke-width="1.353553390593274" fill="rgba(64,128,64,0.5)"/>
+<line x1="387.0646250028822" x2="68.27842211032826" y1="-91.52227255521727" y2="-22.858098497209433"  stroke="black" stroke-width="1.353553390593274"/>
+<line x1="68.27842211032826" x2="0" y1="-22.858098497209433" y2="-300"  stroke="black" stroke-width="1.353553390593274"/>
+<line x1="0" x2="387.0646250028822" y1="-300" y2="-91.52227255521727"  stroke="black" stroke-width="1.353553390593274"/>
+<line x1="252.2905670293429" x2="387.0646250028822" y1="-81.0592782391586" y2="-91.52227255521727" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.353553390593274"/>
+<line x1="68.27842211032826" x2="161.24652325677363" y1="-22.858098497209433" y2="-64.9276135377801" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.353553390593274"/>
+<line x1="161.24652325677363" x2="252.2905670293429" y1="-64.9276135377801" y2="-81.0592782391586" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.353553390593274"/>
+<line x1="252.2905670293429" x2="387.0646250028822" y1="-81.0592782391586" y2="-91.52227255521727" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.353553390593274"/>
+<line x1="0" x2="252.2905670293429" y1="-300" y2="-81.0592782391586" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.353553390593274"/>
+<line x1="68.27842211032826" x2="161.24652325677363" y1="-22.858098497209433" y2="-64.9276135377801" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.353553390593274"/>
+<line x1="161.24652325677363" x2="0" y1="-64.9276135377801" y2="-300" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.353553390593274"/>
+<line x1="161.24652325677363" x2="252.2905670293429" y1="-64.9276135377801" y2="-81.0592782391586" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.353553390593274"/>
+<line x1="252.2905670293429" x2="0" y1="-81.0592782391586" y2="-300" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.353553390593274"/>
+<line x1="0" x2="161.24652325677363" y1="-300" y2="-64.9276135377801" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.353553390593274"/>
+<polygon points="642.9378605318051,282.0621394681949 33.838834764831844,441.16116523516814 33.838834764831844,-458.83883476483186 642.9378605318051,-617.9378605318051" stroke="black"  stroke-width="1" fill="rgba(96,240,120,0.5)"/>
+<polygon points="141.88429302069488,-209.95264862087575 334.8747648795753,-87.47058621411692 177.9349400854111,-46.47729584175055" stroke="black"  stroke-width="1" fill="none"/>
+<text x="223.64554622426687" y="-109.21929666320797">&#x3B1;</text>
 </g>
 </svg>

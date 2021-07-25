@@ -67,6 +67,13 @@ A—————B
   rotate(by,around) { return new Cube(this.base.rotate(by,around), this.direction.rotate(by,around));  }
   scale(by) { return new Cube(this.base.scale(by), this.direction.scale(by)); }
 
+  static volumeCube(volume) {
+    return new Cube(
+      new Square(new Point(-volume.w/2,-volume.h/2,0), new Point(-volume.w/2, volume.h/2, 0), new Point(volume.w/2, volume.h/2, 0)),
+      new Vector(0,0,volume.d)
+    );
+  }
+
   // project(projectionData, projection) {
   //   return [
   //     // first wall

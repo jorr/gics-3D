@@ -91,8 +91,8 @@
 #triangle(pr2.base2.D,H,pr2.base2.A) -> .
 #prism(sq,sq2) -> pr3
 
-triangle(["Oxz"]) -> -ptr
-prism(ptr,100,"-") -> prr
+#triangle(["Oxz"]) -> -ptr
+#prism(ptr,100,"-") -> prr
 #quad(["Oyz"]) -> -q
 #pyramid(q,200) -> qpyr
 
@@ -149,15 +149,39 @@ prism(ptr,100,"-") -> prr
 
 #---------------------------
 
-#projectionmode("perspective")
 #cube(200*sqrt(2)) -> cb
 #normal(cb.base,cb.base.cen) -> n1
-#intersect(["Oy"],cb.base.plane) -> X
+#intersect(["Oy"],cb.base) -> X
 #label("X",X)
 #autolabel("on")
 #translate(cb.base,0,-100,0) -> ha
+#intersect(["Oy"],ha) -> XA
+#label("XA",XA)
 #autolabel("off")
 #rotate(ha,d:45,["Oz"]) -> he
 #scale(ha,2) -> ho
+#intersect(["Oz"],cb) -> -XC[x1c,x2c]
+#label("x1c",x1c)
+#plane([-50,0,0],["Oyz"]) -> -pl
+#intersect(pl,cb) -> inter
+#plane("Oxz") -> .
 
-projectionmode("perspective")
+#projectionmode("perspective")
+
+#point(200,300,300) -> p2
+#plane([0,100,0],["Oxz"]) -> xzparallel
+#project(p2,xzparallel) -> p2'
+#intersect(["Oy"],xzparallel) -> O'
+#segment(p2,p2') -> .
+
+#autolabel("off")
+#plane([0,0,100],["Oxy"]) -> alpha
+#label("&{alpha}",alpha,"NEE",100)
+#intersect(["Oz"],alpha) -> Z
+#label("Z[0,0,100]",Z)
+
+#quad(["Oxz"]) -> -q
+#pyramid(q,[0,300,0]) -> p
+#plane(["Oy"],["Oyz"],d:45) -> test
+#intersect(test,p) -> i
+#label("&{alpha}",i)

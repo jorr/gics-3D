@@ -50,7 +50,7 @@ export class Polyhedron extends Item {
       for (let f of this.faces) {
         let c = f.intersect(arg);
         if (c instanceof Segment) return c; //line lies on one of the faces or is parallel, so Segment or null
-        else if (c instanceof Point && pointInPolygon(c, f.vertices)) crossings.push(c);
+        else if (c instanceof Point && !crossings.find(cc => cc.equals(c))) crossings.push(c);
         if (crossings.length == 2) break;
       }
 

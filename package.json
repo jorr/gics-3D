@@ -5,7 +5,7 @@
   "main": "server.js",
   "type": "module",
   "scripts": {
-    "start": "node app/gics3d.js -- -console",
+    "start": "node app/gics3d.js --console",
     "server": "node server.js",
     "test": "npm test"
   },

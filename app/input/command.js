@@ -5,6 +5,7 @@ import { Point } from '../scene/items/point.js';
 import { Plane } from '../scene/items/plane.js';
 import { Line } from '../scene/items/line.js';
 import { Segment } from '../scene/items/segment.js';
+import { Triangle } from '../scene/items/triangle.js';
 import { SyntaxError, MethodNotImplemented, WrongPatternError, MissingPatternError } from '../errors.js';
 
 export class Command {

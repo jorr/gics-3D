@@ -13,7 +13,7 @@ export class SvgOutput extends OutputOption {
     width;
     height;
 
-    constructor(width = 800, height = 800) {
+    constructor(width = 1000, height = 1000) {
       super();
       this.width = width;
       this.height = height;
@@ -31,6 +31,8 @@ export class SvgOutput extends OutputOption {
   text {
     font-size: ${screen.w/100+5}px;
   }
+
+  path { fill: none; }
 
   @media (max-width: 600px) {
     text {
@@ -90,7 +92,6 @@ export class SvgOutput extends OutputOption {
     }
 
     renderEllipse(e) {
-      log.debug(e)
       let st = this.parseStyle(e.style);
       this.svg = `${this.svg}
 <ellipse cx="${e.c.x}" cy="${-e.c.y}" rx="${e.rx}" ry="${e.ry}" transform="rotate(${e.rotate},${e.c.x},${-e.c.y})" ${st.linetype} stroke="${st.color}" stroke-width="${st.strokeWidth}" fill="none"/>`;

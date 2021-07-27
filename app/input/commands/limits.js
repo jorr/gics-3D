@@ -16,6 +16,7 @@ export default class LimitsCommand extends Command {
 
   execute(params, pattern) {
     super.execute(params, pattern);
+    //limits(width,height,depth)
     if (params.length !== 3 || typeof params[0] !== 'number' || typeof params[1] !== 'number' || typeof params[2] !== 'number') {
       throw new WrongParamsError(params, this);
     }

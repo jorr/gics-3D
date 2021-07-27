@@ -1,5 +1,3 @@
-// COMMAND SYNTAX: 
-
 import { Command, Angle } from '../command.js';
 import { WrongParamsError } from '../../errors.js';
 import { angle } from '../../scene/util.js';
@@ -20,6 +18,7 @@ export default class AngleCommand extends Command {
     if (params.length !== 2) {
       throw new WrongParamsError(params, this);
     }
+    //angle(<line|segment|plane>,<line|segment|plane>)
     return new Angle(angle(...params));
   }
 

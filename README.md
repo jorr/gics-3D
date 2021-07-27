@@ -4,8 +4,16 @@
 
 Requires Node v12+ (tested with Node v14)  
 Install, clone, run `npm install`  
-Edit file `app/gics.txt` (for now)  
+
+OPTION 1: 
+Edit file `app/gics.txt`
 Run `npm start`
+Load `gics.svg` in your browser for the result
+
+OPTION 2:
+Run `npm run server`
+Load `localhost:6105` in your browser
+Experiment
 
 ## Environment
 

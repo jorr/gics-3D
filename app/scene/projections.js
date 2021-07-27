@@ -59,34 +59,25 @@ export class CabinetProjection extends Projection {
     return new Vector(3,4,-10); //from Applied Geometry for CG and CAD
   }
 
-  //TODO: log cutoff points
   projectPoint(p, { camera, volume }) {
     // if (!pointInVolume(p, volume)) return null;
-    let projection = { x: p.x + this.shortening*p.z*Math.cos(this.angle),
-        y: p.y + this.shortening*p.z*Math.sin(this.angle) };
+    // let projection = { x: p.x + this.shortening*p.z*Math.cos(this.angle),
+        // y: p.y + this.shortening*p.z*Math.sin(this.angle) };
 
-    // // TODO: do we need the lines below for SVG?
-    // // normalize px and py to [0,1]
-    // px = (px + 0.5*screen.w) / screen.w;
-    // py = (py + 0.5*screen.h) / screen.h;
-    // // move to raster space
-    // px = Math.floor(px * screen.w);
-    // py = Math.floor(py * screen.h);
-
-    // return Object.assign(new Point2D, {x: px, y: py});
-    // let plane = this.screenPlane(camera, volume);
-    // let projection = p.add(this.direction.scale(-plane.n.dot(plane.pt.vectorTo(p))/plane.n.dot(this.direction)));
-    // log.debug('projecting: ', p.x, p.y, p.z);
-    // log.debug('projected at: ', projection.x, projection.y);
+    let direction = this.projectionVector(p, {camera,volume});
+    let plane = this.screenPlane(camera, volume);
+    let projection = p.add(direction.scale(-plane.n.dot(plane.pt.vectorTo(p))/plane.n.dot(direction)));
 
     return Object.assign(new Point2D, projection);
   }
 
   projectCircle(c, { camera, volume }, mainAxisProjectionOut = null) {
-    let screenPlane = this.screenPlane(camera, volume), p1, p2,
+    // this implements https://math.stackexchange.com/a/2412079
+        let screenPlane = this.screenPlane(camera, volume), p1, p2,
         projectedP1, projectedP2, projectedCen, rx, ry, mainAxisSegment;
-    let direction = screenPlane.n.perpendicular(c.plane).unit();
 
+    //let screenPlane = this.screenPlane(camera, volume);
+    let direction = screenPlane.n.perpendicular(c.plane).unit();
     p1 = c.cen.add(direction.scale(c.rad));
     p2 = c.cen.add(direction.scale(-c.rad));
     let conjugateDiamDirection = direction.perpendicular(c.plane).unit();
@@ -99,29 +90,74 @@ export class CabinetProjection extends Projection {
     let projectedP4 = this.projectPoint(p4, { camera, volume });
     projectedCen = this.projectPoint(c.cen, { camera, volume });
 
-    // log.debug('original centre ', c.cen)
-    // log.debug('projected cen ', projectedCen)
-
     rx = dist2D(projectedP1, projectedP2)/2;
     ry = dist2D(projectedP3, projectedP4)/2;
     mainAxisSegment = Vector2D.fromPoints(projectedP1, projectedP2);
+
+    if (mainAxisProjectionOut) {
+      mainAxisProjectionOut.p1 = projectedP1;
+      mainAxisProjectionOut.p2 = projectedP2;
+    }
+
+    // let ellipseParams = ellipseConvertConjugateDiametersToAxes(
+    //   projectedCen, new Segment2D(projectedP1, projectedP2), new Segment2D(projectedP3, projectedP4),
+    //   mainAxisProjectionOut
+    // );
+
+    // delete ellipseParams.mainAxisProjectionOut;
+
+    /*
+    let screenPlane = this.screenPlane(camera, volume);
+    let direction = screenPlane.n.perpendicular(c.plane).unit();
+
+
+    let d1 = c.cen.add(direction.scale(c.rad));
+    let d2 = c.cen.add(direction.scale(-c.rad));
+
+    let directionPerp = direction.perpendicular(c.plane).unit();
+
+    let p1 = c.cen.add(directionPerp.scale(c.rad));
+    let p2 = c.cen.add(directionPerp.scale(-c.rad));
+
+    //let F = Plane.Oxy.intersect(new Line(p1, p1.vectorTo(p2)));
+
+    //let conjugateDiamDirection = direction.perpendicular(c.plane).unit();
+    //let p3 = c.cen.add(conjugateDiamDirection.scale(c.rad));
+    //let p4 = c.cen.add(conjugateDiamDirection.scale(-c.rad));
+
+    let projectedP1 = this.projectPoint(p1, { camera, volume });
+    let projectedP2 = this.projectPoint(p2, { camera, volume });
+    let projectedCen = this.projectPoint(c.cen, { camera, volume });
+
+    let projectedD1 = this.projectPoint(d1, { camera, volume });
+    let projectedD2 = this.projectPoint(d2, { camera, volume });
+
+    let crossDirectionVector = Vector2D.fromPoints(projectedD1, projectedD2).unit();
+    //let conjugateRadius = dist2D(projectedCen,projectedP1) * 
+
+    let projectedP3 = projectedCen.add(crossDirectionVector.scale(conjugateRadius));
+    let projectedP4 = projectedCen.add(crossDirectionVector.scale(-conjugateRadius));
+
+    //rx = dist2D(projectedP1, projectedP2)/2;
+    //ry = dist2D(projectedP3, projectedP4)/2;
+    //mainAxisSegment = Vector2D.fromPoints(projectedP1, projectedP2);
 
     let ellipseParams = ellipseConvertConjugateDiametersToAxes(
       projectedCen, new Segment2D(projectedP1, projectedP2), new Segment2D(projectedP3, projectedP4),
       mainAxisProjectionOut
     );
 
-    delete ellipseParams.mainAxisProjectionOut;
+    //delete ellipseParams.mainAxisProjectionOut; */
 
     return Object.assign(new Ellipse2D, {
       c: projectedCen,
-      ...ellipseParams
-      // rx,
-      // ry,
-      // rotate: angle2D( // the angle between a radius of the ellipse and Ox in 2D
-      //   mainAxisSegment,
-      //   new Vector2D(1,0)
-      // )
+      // ...ellipseParams
+      rx,
+      ry,
+      rotate: angle2D( // the angle between a radius of the ellipse and Ox in 2D
+        mainAxisSegment,
+        new Vector2D(1,0)
+      )
     });
   }
 }
@@ -133,127 +169,79 @@ export class PerspectiveProjection extends Projection {
   }
 
   projectPoint(p, { camera, volume }, in3D = false) {
-    // log.debug('projecting: ', p);
-    // if (!pointInVolume(p, volume)) return null; // this doesnt seem to be necessary
     let direction = camera.vectorTo(p);
     let plane = this.screenPlane(camera, volume);
 
-     // log.debug('camera to p, ', direction);
     let projection = p.add(direction.scale(-plane.n.dot(plane.pt.vectorTo(p))/plane.n.dot(direction)));
-    // log.debug('projected: ', projection);
 
     if (in3D) return projection;
     else return Object.assign(new Point2D, {x: projection.x, y: projection.y});
   }
 
 
-  projectCircle(c, { camera, volume }) {
+  projectCircle(c, { camera, volume }, mainAxisProjectionOut = null) {
     // this implements https://math.stackexchange.com/a/2412079
 
-    let screenPlane = this.screenPlane(camera, volume), p1, p2,
-        projectedP1, projectedP2, projectedCen, rx, ry, mainAxisSegment;
+    let screenPlane = this.screenPlane(camera, volume);
+    let direction = screenPlane.n.perpendicular(c.plane).unit();
+    //this is where the screenplane meets c.plane or any vector if they are parallel
+
+    let directionPerp = direction.perpendicular(c.plane).unit();
+
+    let d1 = c.cen.add(directionPerp.scale(c.rad));
+    let d2 = c.cen.add(directionPerp.scale(-c.rad));
+
+    //let p1 = c.cen.add(directionPerp.scale(c.rad));
+    //let p2 = c.cen.add(directionPerp.scale(-c.rad));
+    //let conjugateDiamDirection = direction.perpendicular(c.plane).unit();
+    //let p3 = c.cen.add(conjugateDiamDirection.scale(c.rad));
+    //let p4 = c.cen.add(conjugateDiamDirection.scale(-c.rad));
+
+    //let projectedP1 = this.projectPoint(p1, { camera, volume });
+    //let projectedP2 = this.projectPoint(p2, { camera, volume });
+    let projectedCen = this.projectPoint(c.cen, { camera, volume });
+
+    let projectedD1 = this.projectPoint(d1, { camera, volume });
+    let projectedD2 = this.projectPoint(d2, { camera, volume });
 
     if (screenPlane.isParallelTo(c.plane)) {
-      log.debug('CIRCLE PARALLEL TO SCREEN')
-      // in the simple case, the center is preserved in the projection
-      let direction = camera.vectorTo(camera.projectionOn(screenPlane)).perpendicular(c.plane).unit();
-      p1 = c.cen.add(direction.scale(c.rad));
-      p2 = c.cen.add(direction.scale(-c.rad));
-      let conjugateDiamDirection = c.cen.vectorTo(p1).perpendicular(c.plane).unit();
-      let p3 = c.cen.add(conjugateDiamDirection.scale(c.rad));
-      let p4 = c.cen.add(conjugateDiamDirection.scale(-c.rad));
 
-      projectedP1 = this.projectPoint(p1, { camera, volume }, true);
-      projectedP2 = this.projectPoint(p2, { camera, volume }, true);
-      let projectedP3 = this.projectPoint(p3, { camera, volume }, true);
-      let projectedP4 = this.projectPoint(p4, { camera, volume }, true);
-      projectedCen = this.projectPoint(c.cen, { camera, volume }, true);
+      let p1 = c.cen.add(direction.scale(c.rad));
+      let p2 = c.cen.add(direction.scale(-c.rad));
 
-      rx = dist(projectedP1, projectedP2);
-      ry = dist(projectedP3, projectedP4);
-      mainAxisSegment = new Segment(projectedP1, projectedP2);
+      let projectedP1 = this.projectPoint(p1, { camera, volume });
+      let projectedP2 = this.projectPoint(p2, { camera, volume });
 
-      if (rx>ry) {
-        let temp = rx; rx=ry; ry=temp;
-        mainAxisSegment = new Segment(projectedP3, projectedP4);
-      }
+      let rx = dist2D(projectedP1,projectedP2)/2;
+      let ry = dist2D(projectedD1,projectedD2)/2;
+
+      return Object.assign(new Ellipse2D, {
+        c: projectedCen,
+        rx, ry,
+        rotate: rx === ry ? 0 : angle2D( // the angle between a radius of the ellipse and Ox in 2D
+          new Vector2D(1,0),
+          Vector2D.fromPoints(projectedP1,projectedP2)
+        )
+      });
 
     } else {
-      let planesIntersect = screenPlane.intersect(c.plane); log.debug(planesIntersect)
-      let diamVector = planesIntersect.u.perpendicular(c.plane).unit();
-      //TODO: extract intersecting from lines
-      let diamVectorCrossesPlanesIntersectAt = new Line(c.cen, diamVector).intersect(planesIntersect);
+      let F = Plane.Oxy.intersect(new Line(d1, d1.vectorTo(d2)));
 
-      let p1 = c.cen.add(diamVector.scale(c.rad))
-      let p2 = c.cen.add(diamVector.scale(-c.rad)); //.perpendicular(c.plane)); log.debug(dist(p2,c.cen)); log.debug(p2)
+      let crossDirectionVector = direction;// Vector2D.fromPoints(projectedP1, projectedP2).unit();
+      let conjugateRadius = dist2D(projectedCen,projectedD1) * Math.sqrt(dist(d1,F)*dist(d2,F)) / dist(camera,F);
 
-      projectedP1 = this.projectPoint(p1, { camera, volume }, true);
-      projectedP2 = this.projectPoint(p2, { camera, volume }, true);
+      let projectedP1 = projectedCen.add(crossDirectionVector.scale(conjugateRadius));
+      let projectedP2 = projectedCen.add(crossDirectionVector.scale(-conjugateRadius));
 
-      projectedCen = midpoint(projectedP1, projectedP2);
+      let ellipseParams = ellipseConvertConjugateDiametersToAxes(
+        projectedCen, new Segment2D(projectedD1, projectedD2), new Segment2D(projectedP1, projectedP2),
+        mainAxisProjectionOut
+      );
 
-      if (projectedP1.equals(projectedP2)) {
-        log.debug('CIRCLE PARALLEL TO SIGHT')
-        // this means the camera sight is parallel to the circle so we need to draw as segment
-
-        let direction = camera.vectorTo(project(camera, screenPlane)).perpendicular(c.plane).unit();
-        p1 = c.cen.add(direction.scale(c.rad));
-        p2 = c.cen.add(direction.scale(-c.rad));
-
-        projectedP1 = this.projectPoint(p1, { camera, volume });
-        projectedP2 = this.projectPoint(p2, { camera, volume });
-
-        return Object.assign(new Segment2D, {p1:projectedP1, p2:projectedP2});
-      } else {
-
-        log.debug('CIRCLE SHOULD BE ELLIPSE')
-
-        let conjugateDiamDirection = planesIntersect.u.unit();
-        let conjugateRadius =
-          dist(projectedCen, projectedP1) *
-          Math.sqrt(
-            dist(p1,diamVectorCrossesPlanesIntersectAt) *
-            dist(p2,diamVectorCrossesPlanesIntersectAt)
-          ) /
-          dist (camera, diamVectorCrossesPlanesIntersectAt);
-
-        log.debug('congjugate radius, ', conjugateRadius)
-
-        let projectedCD1 = projectedCen.add(conjugateDiamDirection.scale(conjugateRadius)),
-            projectedCD2 = projectedCen.add(conjugateDiamDirection.scale(-conjugateRadius));
-
-        let auxiliaryLine = projectedCD1.vectorTo(projectedCD2).perpendicular(screenPlane).unit();
-        log.debug(auxiliaryLine)
-        let auxQ1 = projectedP2.add(auxiliaryLine.scale(conjugateRadius)),
-            auxQ  = projectedP2.add(auxiliaryLine.scale(-conjugateRadius));
-
-        log.debug("POINTS " , dist(projectedCen, auxQ), dist(projectedCen, auxQ1))
-        log.debug("ANGLE ", angle(projectedCen.vectorTo(projectedP2),auxiliaryLine) / Math.PI * 180)
-
-        if (dist(projectedCen, auxQ1) < dist(projectedCen, auxQ)) {
-          let temp = auxQ1; auxQ1 = auxQ; auxQ = temp;
-        }
-
-        let bisector = projectedCen.vectorTo(auxQ).unit().add(projectedCen.vectorTo(auxQ1).unit());
-        //TODO: check, this isnt probably right
-        rx = dist(projectedCen, auxQ1) + dist(projectedCen, auxQ);
-        ry = dist(projectedCen, auxQ1) - dist(projectedCen, auxQ);
-
-        mainAxisSegment = new Segment(projectedCen, projectedCen.add(bisector.unit().scale(rx)));
-      }
+      return Object.assign(new Ellipse2D, {
+        c: projectedCen,
+        ...ellipseParams
+      });
     }
-
-    return Object.assign(new Ellipse2D, {
-      c: projectedCen.to2D(),
-      rx,
-      ry,
-      rotate: angle2D( // the angle between a radius of the ellipse and Ox in 2D
-        mainAxisSegment.to2D(),
-        Object.assign(new Segment2D, {
-          p1:Object.assign(new Point2D, {x:0,y:0}),
-          p2:Object.assign(new Point2D, {x:1,y:0})
-        })
-      )
-    });
   }
 }

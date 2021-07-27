@@ -20,9 +20,7 @@ export default class RotateCommand extends CreationCommand {
     if (params.length !== 3 || !(params[0] instanceof Item) || !(params[2] instanceof Line) || !(params[1] instanceof Angle)) {
       throw new WrongParamsError(params, this);
     }
-//    log.debug(params[0])
     this.item = params[0].rotate(params[1].value, params[2]);
-    //log.debug(this.item)
   }
 
   bindElements(elems, commands) {

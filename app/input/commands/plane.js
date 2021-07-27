@@ -41,9 +41,9 @@ export default class PlaneCommand extends CreationCommand {
     else if (params.length == 2 && params[0] instanceof Point && params[1] instanceof Plane) {
       this.item = new Plane(params[0], params[1].n);
     }
-    //plane(<line>,<plane>,[angle]) - a plane through the line, at angle to the given plane (defaults to parallel)
+    //plane(<line>,<plane>[,angle]) - a plane through the line, at angle to the given plane (defaults to parallel)
     else if (params.length >= 2 && params[0] instanceof Line && params[1] instanceof Plane) {
-      let angle = params[2].value || 0;
+      let angle = params[2]?.value || 0;
       this.item = new Plane(params[0].pt, params[1].n.rotate(params[0].u, angle));
     }
     //plane(Oxy|Oxz|Oyz) - one of the axial planes

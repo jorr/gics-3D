@@ -20,6 +20,7 @@ export default class ArrowmarkCommand extends Command {
     super.execute(params, pattern);
 
     //TODO: support arrow modes
+    //arrowmark(<segment>)
     if (params[0] instanceof Segment) {
       params[0].drawAsArrow = true;
     }

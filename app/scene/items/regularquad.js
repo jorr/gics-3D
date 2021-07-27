@@ -5,18 +5,9 @@ import { centroid } from '../util.js';
 import log from 'loglevel';
 
 export class Square extends Quad {
-  /**
-   * Square type definition
-   * @property {Point} A, B, C, D
-   */
 
    constructor(A, B, C) {
-    // super(4, new Plane(A, A.vectorTo(B).cross(A.vectorTo(C))));
-
-    // this.A = A; this.B = B; this.C = C;
-    // this.D = A.add(B.vectorTo(C));
     super(A,B,C,A.add(B.vectorTo(C)));
-//    log.debug(this.A)
    }
 
   get cen() {

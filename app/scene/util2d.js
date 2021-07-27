@@ -36,19 +36,18 @@ export function ellipseConvertConjugateDiametersToAxes(cen, diam1, diam2, mainAx
   // this implements https://math.stackexchange.com/a/2412079
 
   let auxLine = Vector2D.fromPoints(diam2.p1, diam2.p2).perpendicular().unit().scale(diam2.len/2);
-  let aux1 = translateWith(diam1.p2, auxLine), aux2 = translateWith(diam1.p2, auxLine.scale(-1));
+  let aux1 = diam1.p2.add(auxLine), aux2 = diam1.p2.add(auxLine.scale(-1));
   let cenAux1 = Vector2D.fromPoints(cen, aux1), cenAux2 = Vector2D.fromPoints(cen, aux2);
 
+  // cenAux1.add(cenAux2) is the bisector betwee cenAux1 and cenAux2 if taken as unit vectors (diagonal of rhomb)
   let mainAxisProjection = cenAux1.unit().add(cenAux2.unit()).unit(),
   rx = (cenAux1.norm + cenAux2.norm)/2, ry = Math.abs(cenAux1.norm - cenAux2.norm)/2;
 
   // we use this as an out parameter, in order to pass up the angle between the main axis in the projection and in the original plane
   if (mainAxisProjectionOut) {
-    mainAxisProjectionOut.p1 = translateWith(cen, mainAxisProjection.scale(rx));
-    mainAxisProjectionOut.p2 = translateWith(cen, mainAxisProjection.scale(-rx));
+    mainAxisProjectionOut.p1 = cen.add(mainAxisProjection.scale(rx));
+    mainAxisProjectionOut.p2 = cen.add(mainAxisProjection.scale(-rx));
   }
-
-  // cenAux1.add(cenAux2) is the bisector betwee cenAux1 and cenAux2
 
   return {
     rx,

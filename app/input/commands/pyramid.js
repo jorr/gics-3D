@@ -62,8 +62,8 @@ export default class PyramidCommand extends CreationCommand {
     if (elems.length !== 2) {
       throw new WrongPatternError('[base,apex]', this);
     }
-    globalScene.addBinding(this.item.base, elems[0].name, elems[0].suppress);
-    globalScene.addBinding(this.item.apex, elems[1].name, elems[1].suppress);
+    globalScene.bindElement(this.item.base, elems[0].name, elems[0].suppress);
+    globalScene.bindElement(this.item.apex, elems[1].name, elems[1].suppress);
   }
 
 };

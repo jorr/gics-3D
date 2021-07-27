@@ -71,7 +71,7 @@
 #point(0,95,0) -> d
 #line(d,["Oz"],d:90) -> ll
 
-#circle([0,0,0],40,["Oxz"]) -> c
+#circle([0,0,0],200,["Oxz"]) -> -c
 
 #sphere(c) -> sp
 
@@ -112,7 +112,7 @@
 #pyramid(t,150) -> p
 
 #cone(c,d) -> CN
-#cone(c,200) -> -CN2
+#cone(c,200) -> CN2
 #cone(t,"a") -> CN3
 #height(CN) -> H
 #produce(CN2)
@@ -150,6 +150,8 @@
 #---------------------------
 
 #cube(200*sqrt(2)) -> cb
+#square([[0,0,0],[200,0,0]],["Oxz"]) -> -sq
+#cube(sq,200) -> cb
 #normal(cb.base,cb.base.cen) -> n1
 #intersect(["Oy"],cb.base) -> X
 #label("X",X)
@@ -160,7 +162,15 @@
 #autolabel("off")
 #rotate(ha,d:45,["Oz"]) -> he
 #scale(ha,2) -> ho
-#intersect(["Oz"],cb) -> -XC[x1c,x2c]
+#point(200,100,100) -> P
+#line([[0,200,200],[200,200,200]]) -> x
+#line([[0,0,0],[200,100,100]]) -> l
+#linestyle(l,1.0,"dotted")
+#intersect(["Ox"],cb) -> XC[x1c,x2c]
+#intersect(l,cb) -> L
+#label("P",L.p2,"SE",20)
+#intersect(l,x) -> Q
+#label("Q",Q,"SE",20)
 #label("x1c",x1c)
 #plane([-50,0,0],["Oyz"]) -> -pl
 #intersect(pl,cb) -> inter
@@ -190,7 +200,59 @@
 
 #-----------------
 
-sphere([0,0,0],200) -> sp
-plane([0,100,0],["Oxz"]) -> -p
-intersect(p,sp) -> spp
-intersect(["Oy"],spp) -> .
+#projectionmode("perspective")
+#sphere([0,0,0],200) -> sp
+#plane([0,100,0],["Oxz"]) -> -p
+#intersect(p,sp) -> spp
+#intersect(["Oy"],spp) -> .
+
+#------------------
+
+#projectionmode("perspective")
+#line([0,200,0],["Oz"]) -> l
+#plane(l,["Oxz"]) -> p
+
+#--------------------
+
+#Задача [BUL]
+#projectionmode("perspective")
+#plane([0,40,0],["Oxz"]) -> alpha
+#label("&{alpha}",alpha,"NEE",250)
+#autolabel("on")
+#point(150,300,350) -> M
+#point(-50,40,500) -> A
+#point(80,40,220) -> B
+#point(200,40,250) -> C
+#point(220,40,450) -> D
+#autolabel("off")
+#triangle(A,B,M) -> ABM
+#triangle(C,D,M) -> CDM
+#autolabel("on")
+#project(M,alpha) -> O
+#altitude(ABM,M) -> .[P]
+#altitude(CDM,M) -> .[Q]
+#autolabel("off")
+#segment(M,O) -> .
+#segment(O,P) -> op
+#segment(O,Q) -> oq
+#linestyle(op,0.5,"dotted")
+#linestyle(oq,0.5,"dotted")
+#anglemark(M,O,P,".)",10)
+#anglemark(M,Q,C,".)",10)
+#anglemark(A,P,M,".)",10)
+
+#---------------------------------
+
+#Задача [ARCH]
+cube(200) -> CB
+translate(CB.base.D,0,200,0) -> D1
+label("D1",D1,"N",30)
+segment(CB.base.A,D1) -> d1
+linestyle(d1,0.5,"dashed")
+segment(CB.base.C,D1) -> d2
+linestyle(d2,0.5,"dashed")
+segment(CB.base.A,CB.base.C) -> d3
+linestyle(d3,0.5,"dashed")
+anglemark(CB.base.A,D1,CB.base.C,"))")
+#projectionmode("perspective")
+#viewpoint([0,0,-1000]);

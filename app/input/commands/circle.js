@@ -27,28 +27,24 @@ export default class CircleCommand extends CreationCommand {
   createItem(params) {
     //circle(<point>,rad,[plane]) - a circle with a centre at the point and the given radius
     if (params.length >= 2 && params[0] instanceof Point && typeof params[1] === 'number') {
-      // let cen = params[0], rad = params[1];
-      let plane = params[2] || Plane.Oxy; //new Plane(cen, Vector.random());
-      // let cenp1 = plane.getCoplanarVector(), cenp2 = intersect(plane, new Plane(cen, cenp1)).u;
+      let plane = params[2] || Plane.Oxy;
 
-      this.item = new Circle(params[0], params[1], plane); //cen.add(cenp1.scale(rad)), cen.add(cenp2.scale(rad)));
+      this.item = new Circle(params[0], params[1], plane);
     }
     // circle(<point>,<point>,[plane]) - a circle with a centre at the first point and a radius on the segment formed by the two points
     else if (params.length >= 2 && params[0] instanceof Point && params[1] instanceof Point) {
       let cen = params[0], p1 = params[1], cenp1 = cen.vectorTo(p1);
       let plane = params[2] || new Plane(cen, cenp1.perpendicular());
-      //let cenp2 = intersect(plane, new Plane(cen, cenp1)).u;
 
-      this.item = new Circle(cen, cenp1.norm, plane); //p1, cen.add(cenp2.scale(dist(cen,p1))));
+      this.item = new Circle(cen, cenp1.norm, plane);
     }
     // circle(<segment>,[plane]) - a circle with a diameter on the segment
     else if (params.length >=1 && params[0] instanceof Segment) {
       let cen = midpoint(params[0].p1, params[0].p2);
       let p1 = params[0].p1, cenp1 = cen.vectorTo(p1);
       let plane = params[1] instanceof Plane ? params[1] : new Plane(cen, cenp1.perpendicular());
-      //let cenp2 = intersect(plane, new Plane(cen, cenp1)).u;
 
-      this.item = new Circle(cen, cenp1.norm, plane); // p1, cen.add(cenp2.scale(dist(cen,p1))));
+      this.item = new Circle(cen, cenp1.norm, plane);
     }
     // circle([plane]) - a random circle, plane defaults to Oxy
     else if (params.length === 0 || params.length === 1 && params[0] instanceof Plane) {
@@ -56,8 +52,6 @@ export default class CircleCommand extends CreationCommand {
       let cen = plane.getRandomPoint(), p1;
       do { p1 = plane.getRandomPoint(); } while (cen.equals(p1));
       let cenp1 = cen.vectorTo(p1);
-      //let cenp2 = intersect(plane, new Plane(cen, cenp1));
-      //let p2 = cen.add(cenp2.u.unit().scale(cenp1.norm));
 
       this.item = new Circle(cen, cenp1.norm, plane); //p1, p2);
     }

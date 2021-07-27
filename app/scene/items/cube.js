@@ -36,7 +36,7 @@ A—————B
     return this.base.A.add(new Vector(this.base.side/2, this.base.side/2, this.base.side/2));
   }
 
-  get faces() {// log.debug(this.base.edges)
+  get faces() {
     return [
       this.base,
       this.base.translate(this.direction.asVector()),

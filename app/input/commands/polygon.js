@@ -74,8 +74,6 @@ export default class RegularPolygonCommand extends CreationCommand {
       let vertices = [plane.getRandomPoint()];
       for (let i = 1; i < n; i++) {
         vertices.push(vertices[vertices.length-1].add(side));
-        // let test = side.rotate(plane.n, 2*Math.PI/n);
-        // log.debug(angle(side, test) / Math.PI * 180);
         side = side.rotate(plane.n, 2*Math.PI/n);
       }
       vertices = sortVertices(vertices, plane);

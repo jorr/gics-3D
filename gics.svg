@@ -1,62 +1,46 @@
 <?xml version="1.0" standalone="no"?>
-<svg version="1.1" baseProfile="full" width="1000" height="1000" viewBox="0 0 1300 1400" xmlns="http://www.w3.org/2000/svg">
+<svg version="1.1" baseProfile="full" width="1000" height="1000" viewBox="0 0 900 900" xmlns="http://www.w3.org/2000/svg">
 <style>
   text {
-    font-size: 18px;
+    font-size: 14px;
   }
 
   path { fill: none; }
 
   @media (max-width: 600px) {
     text {
-      font-size: 48.333333333333336px;
+      font-size: 35px;
     }
   }
 
   @media (max-width: 800px) {
     text {
-      font-size: 91.66666666666667px;
+      font-size: 65px;
     }
   }
 </style>
 <rect width="100%" height="100%" fill="#fff" />
-<g id="scene" transform="translate(650 700)">
-<circle cx="30" cy="-40" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
-<text x="5" y="-15">O</text>
-<line x1="-470" x2="530" y1="-40" y2="-40" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
-<circle cx="-470" cy="-40" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
-<polygon points="530,-40 521.5427664129268,-36.92181871006898 521.5427664129268,-43.07818128993102" stroke="rgba(64,128,64,0.5)"  stroke-width="1.3" fill="rgba(64,128,64,0.5)"/>
-<line x1="30" x2="30" y1="460" y2="-540" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
-<circle cx="30" cy="460" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
-<polygon points="30,-540 33.07818128993102,-531.5427664129268 26.921818710068983,-531.5427664129268" stroke="rgba(64,128,64,0.5)"  stroke-width="1.3" fill="rgba(64,128,64,0.5)"/>
-<line x1="30" x2="330" y1="-40" y2="-440" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
-<circle cx="30" cy="-40" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
-<polygon points="330,-440 327.38820487970094,-431.38730435638286 322.46311481581125,-435.08112190430006" stroke="rgba(64,128,64,0.5)"  stroke-width="1.3" fill="rgba(64,128,64,0.5)"/>
-<line x1="-100" x2="100" y1="-100" y2="-100"  stroke="black" stroke-width="1.3"/>
-<line x1="100" x2="160" y1="-100" y2="-180"  stroke="black" stroke-width="1.3"/>
-<line x1="160" x2="-40" y1="-180" y2="-180"  stroke="black" stroke-width="1.3"/>
-<line x1="-40" x2="-100" y1="-180" y2="-100"  stroke="black" stroke-width="1.3"/>
-<line x1="-100" x2="100" y1="100" y2="100"  stroke="black" stroke-width="1.3"/>
-<line x1="100" x2="100" y1="100" y2="-100"  stroke="black" stroke-width="1.3"/>
-<line x1="100" x2="-100" y1="-100" y2="-100"  stroke="black" stroke-width="1.3"/>
-<line x1="-100" x2="-100" y1="-100" y2="100"  stroke="black" stroke-width="1.3"/>
-<line x1="100" x2="160" y1="100" y2="20"  stroke="black" stroke-width="1.3"/>
-<line x1="160" x2="160" y1="20" y2="-180"  stroke="black" stroke-width="1.3"/>
-<line x1="160" x2="100" y1="-180" y2="-100"  stroke="black" stroke-width="1.3"/>
-<line x1="100" x2="100" y1="-100" y2="100"  stroke="black" stroke-width="1.3"/>
-<line x1="160" x2="-40" y1="20" y2="20" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.3"/>
-<line x1="-40" x2="-100" y1="20" y2="100" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.3"/>
-<line x1="160" x2="-40" y1="20" y2="20" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.3"/>
-<line x1="-40" x2="-40" y1="20" y2="-180" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.3"/>
-<line x1="-40" x2="-100" y1="20" y2="100" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.3"/>
-<line x1="-40" x2="-40" y1="-180" y2="20" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="1.3"/>
-<circle cx="-40" cy="-180" r="1" stroke="black" stroke-width="1" fill="black"/>
-<text x="-40" y="-210">D1</text>
-<line x1="-100" x2="-40" y1="100" y2="-180" stroke-dasharray="4 2" stroke="black" stroke-width="0.5"/>
-<line x1="160" x2="-40" y1="20" y2="-180" stroke-dasharray="4 2" stroke="black" stroke-width="0.5"/>
-<line x1="-100" x2="160" y1="100" y2="20" stroke-dasharray="4 2" stroke="black" stroke-width="0.5"/>
-<path d="M -46.285872661926206 -150.6659275776777 A 30 30 0 0 0 -18.786796564403577 -158.78679656440357
-         M -45.65728539573358 -153.59933481990993 A 27 27 0 0 0 -20.90811690796322 -160.90811690796323"
-   stroke="black" stroke-width="2"/>
+<g id="scene" transform="translate(450 450)">
+<circle cx="10" cy="-10" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
+<text x="-15" y="15">O</text>
+<line x1="-440" x2="460" y1="-10" y2="-10" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
+<circle cx="-440" cy="-10" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
+<polygon points="460,-10 451.5427664129268,-6.921818710068981 451.5427664129268,-13.078181289931019" stroke="rgba(64,128,64,0.5)"  stroke-width="0.9" fill="rgba(64,128,64,0.5)"/>
+<line x1="10" x2="10" y1="440" y2="-460" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
+<circle cx="10" cy="440" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
+<polygon points="10,-460 13.078181289931019,-451.5427664129268 6.921818710068981,-451.5427664129268" stroke="rgba(64,128,64,0.5)"  stroke-width="0.9" fill="rgba(64,128,64,0.5)"/>
+<line x1="10" x2="55.00000000000001" y1="-10" y2="-55.00000000000001" stroke-dasharray="1 6" stroke-linecap="round" stroke="rgba(64,128,64,0.5)" stroke-width="2"/>
+<circle cx="10" cy="-10" r="1" stroke="rgba(64,128,64,0.5)" stroke-width="1" fill="rgba(64,128,64,0.5)"/>
+<polygon points="55.00000000000001,-55.00000000000001 51.19643564433371,-46.84322991667016 46.84322991667016,-51.19643564433371" stroke="rgba(64,128,64,0.5)"  stroke-width="0.9" fill="rgba(64,128,64,0.5)"/>
+<ellipse cx="10" cy="-10" rx="180" ry="180" transform="rotate(90,10,-10)"  stroke="black" stroke-width="0.9" fill="none"/>
+<ellipse cx="10" cy="-10" rx="180" ry="26.516504294495533" transform="rotate(180,10,-10)" stroke-dasharray="1 6" stroke-linecap="round" stroke="black" stroke-width="0.9" fill="none"/>
+<ellipse cx="10" cy="-100" rx="155.88457268119896" ry="16.070574503216385" transform="rotate(0,10,-100)"  stroke="black" stroke-width="1" fill="none"/>
+<ellipse cx="100" cy="-169.23076923076923" rx="138.46153846153842" ry="10.909090909090907" transform="rotate(135,100,-169.23076923076923)"  stroke="black" stroke-width="0.9" fill="none"/>
+<line x1="197.9070927796758" x2="206.72886391002413" y1="-267.137862010445" y2="-19.89086414953398"  stroke="black" stroke-width="0.9"/>
+<line x1="2.092907220324207" x2="206.72886391002413" y1="-71.32367645109342" y2="-19.89086414953398"  stroke="black" stroke-width="0.9"/>
+<ellipse cx="100" cy="-169.23076923076923" rx="138.46153846153842" ry="10.909090909090907" transform="rotate(135,100,-169.23076923076923)"  stroke="black" stroke-width="0.9" fill="none"/>
+<ellipse cx="197.90709277967582" cy="-71.32367645109343" rx="138.46153846153848" ry="16.075917362268004" transform="rotate(135,197.90709277967582,-71.32367645109343)"  stroke="black" stroke-width="0.9" fill="none"/>
+<line x1="197.9070927796758" x2="295.81418555935164" y1="-267.137862010445" y2="-169.23076923076925"  stroke="black" stroke-width="0.9"/>
+<line x1="2.092907220324207" x2="100.00000000000001" y1="-71.32367645109342" y2="26.583416328582373"  stroke="black" stroke-width="0.9"/>
 </g>
 </svg>

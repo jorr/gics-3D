@@ -6,6 +6,7 @@ import { CreationCommand } from '../command.js';
 import { Segment } from '../../scene/items/segment.js';
 import { Line } from '../../scene/items/line.js';
 import { WrongParamsError, NotFeasibleError } from '../../errors.js';
+import { globalScene } from '../../scene/scene.js';
 
 import log from 'loglevel';
 

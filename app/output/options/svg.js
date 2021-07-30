@@ -92,6 +92,24 @@ export class SvgOutput extends OutputOption {
     }
 
     renderEllipse(e) {
+      //log.debug(e);
+      // this.renderPoly(e)
+//       let start = {x: e.c.x + e.aprim.x, y: -e.c.y - e.aprim.y};
+
+// //       this.svg=`${this.svg}
+// // <path d="M ${start.x} ${start.y} `;
+
+//       this.svg=`${this.svg}
+// <polygon points="`;
+
+//       for (let fi = 0; fi < 4*Math.PI; fi = fi + 0.01) {
+//         this.svg=`${this.svg}
+// ${e.c.x+e.aprim.x*Math.cos(fi)+e.bprim.x*Math.sin(fi)},${-e.c.y-e.aprim.y*Math.cos(fi)-e.bprim.y*Math.sin(fi)} `
+//       }
+
+//       this.svg=`${this.svg}" fill="none" stroke="black" stroke-width="1"/>`;
+
+
       let st = this.parseStyle(e.style);
       this.svg = `${this.svg}
 <ellipse cx="${e.c.x}" cy="${-e.c.y}" rx="${e.rx}" ry="${e.ry}" transform="rotate(${e.rotate},${e.c.x},${-e.c.y})" ${st.linetype} stroke="${st.color}" stroke-width="${st.strokeWidth}" fill="none"/>`;

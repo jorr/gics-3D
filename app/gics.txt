@@ -149,6 +149,7 @@
 
 #---------------------------
 
+#projectionmode("perspective")
 #cube(200*sqrt(2)) -> cb
 #square([[0,0,0],[200,0,0]],["Oxz"]) -> -sq
 #cube(sq,200) -> cb
@@ -160,7 +161,8 @@
 #intersect(["Oy"],ha) -> XA
 #label("XA",XA)
 #autolabel("off")
-#rotate(ha,d:45,["Oz"]) -> he
+#line(ha.cen,["Oz"]) -> -Ozparallel
+#rotate(ha,d:45,Ozparallel) -> he
 #scale(ha,2) -> ho
 #point(200,100,100) -> P
 #line([[0,200,200],[200,200,200]]) -> x
@@ -201,9 +203,9 @@
 #-----------------
 
 #projectionmode("perspective")
-#sphere([0,0,0],200) -> sp
-#plane([0,100,0],["Oxz"]) -> -p
-#intersect(p,sp) -> spp
+sphere([0,0,0],200) -> sp
+plane([0,100,0],["Oxz"]) -> -p
+intersect(p,sp) -> spp
 #intersect(["Oy"],spp) -> .
 
 #------------------
@@ -244,15 +246,37 @@
 #---------------------------------
 
 #Задача [ARCH]
-cube(200) -> CB
-translate(CB.base.D,0,200,0) -> D1
-label("D1",D1,"N",30)
-segment(CB.base.A,D1) -> d1
-linestyle(d1,0.5,"dashed")
-segment(CB.base.C,D1) -> d2
-linestyle(d2,0.5,"dashed")
-segment(CB.base.A,CB.base.C) -> d3
-linestyle(d3,0.5,"dashed")
-anglemark(CB.base.A,D1,CB.base.C,"))")
+#cube(200) -> CB
+#translate(CB.base.D,0,200,0) -> D1
+#label("D1",D1,"N",30)
+#segment(CB.base.A,D1) -> d1
+#linestyle(d1,0.5,"dashed")
+#segment(CB.base.C,D1) -> d2
+#linestyle(d2,0.5,"dashed")
+#segment(CB.base.A,CB.base.C) -> d3
+#linestyle(d3,0.5,"dashed")
+#anglemark(CB.base.A,D1,CB.base.C,"))")
 #projectionmode("perspective")
-#viewpoint([0,0,-1000]);
+##viewpoint([0,0,-1000]);
+
+#----------------------------------
+
+projectionmode("perspective")
+#cube(200*sqrt(2)) -> cb
+#translate(cb.base,0,-100,0) -> ha
+#line(ha.cen,["Oz"]) -> -Ozparallel
+#rotate(ha,d:45,Ozparallel) -> he
+
+#----------------------------------
+
+point(100,200,300) -> -P
+line([P,[100,200,100]]) -> -L
+plane(L,["Oyz"],d:45) -> -alpha
+square(["Oxz"]) -> -sq
+circle(P,200,alpha) -> -cr
+#cube(200) -> cb
+pyramid(sq,cr.cen) -> -pyr
+cone(cr,pyr.base.A) -> cn
+cylinder(cr,200) -> .
+#transversal(L,["Ox"]) -> tr[A,B]
+#autolabel("on")

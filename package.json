@@ -28,7 +28,7 @@
     "lodash": "^4.17.21",
     "loglevel": "^1.7.1",
     "loglevel-plugin-prefix": "^0.8.4",
-    "minimist": "^1.2.5",
+    "minimist": "^1.2.6",
     "serve-favicon": "^2.5.0"
   }
 }

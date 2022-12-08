@@ -20,11 +20,11 @@
   },
   "homepage": "https://github.com/jorr/gics-3D#readme",
   "dependencies": {
-    "body-parser": "^1.19.0",
+    "body-parser": "^1.20.1",
     "capture-console": "^1.0.1",
     "chalk": "^4.1.1",
     "chevrotain": "^7.0.1",
-    "express": "^4.17.1",
+    "express": "^4.18.2",
     "lodash": "^4.17.21",
     "loglevel": "^1.7.1",
     "loglevel-plugin-prefix": "^0.8.4",
